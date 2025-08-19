@@ -1,0 +1,420 @@
+# Portfolio Monorepo .gitignore
+
+
+
+# ===================================
+# ENVIRONMENT & SECRETS
+# ===================================
+# Environment files (NEVER commit these)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+.env.prod
+*.env
+
+# AWS and cloud credentials
+.aws/
+aws-exports.js
+awsconfiguration.json
+
+# Firebase credentials and config
+firebase-adminsdk-*.json
+serviceAccountKey.json
+google-services.json
+GoogleService-Info.plist
+
+# API keys and secrets
+secrets/
+config/secrets.json
+credentials.json
+
+# ===================================
+# DEPENDENCIES & PACKAGES
+# ===================================
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+.yarn-integrity
+.pnp
+.pnp.js
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+backend/venv/
+backend/env/
+
+# Pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# ===================================
+# BUILD OUTPUTS & ARTIFACTS
+# ===================================
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+
+# React/JavaScript builds
+build/
+dist/
+*.tsbuildinfo
+
+# Static file generation
+public/sitemap.xml
+public/robots.txt
+
+# Bundle analysis
+frontend/.next/analyze/
+
+# ===================================
+# DEVELOPMENT & TESTING
+# ===================================
+# Testing
+coverage/
+*.cover
+*.py,cover
+.nyc_output
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+cover/
+htmlcov/
+.tox/
+.nox/
+.coverage.*
+junit.xml
+
+# Jest
+jest-coverage/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ===================================
+# LOGS & DEBUGGING
+# ===================================
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Python logs
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Debug files
+*.pdb
+debug.log
+error.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ===================================
+# EDITOR & IDE
+# ===================================
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# IntelliJ IDEA
+.idea/
+*.swp
+*.swo
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Atom
+.atom/
+
+# ===================================
+# OPERATING SYSTEM
+# ===================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===================================
+# CLOUD & DEPLOYMENT
+# ===================================
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+terraform.tfplan
+terraform.tfplan.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Docker
+.dockerignore
+Dockerfile.prod
+docker-compose.override.yml
+docker-compose.prod.yml
+
+# Serverless Framework
+.serverless/
+
+# CDK
+cdk.out/
+cdk.context.json
+
+# ===================================
+# TEMPORARY & CACHE FILES
+# ===================================
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# ===================================
+# MEDIA & UPLOADS
+# ===================================
+# Large media files (unless required)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+
+# High-resolution images (keep optimized versions)
+*-original.*
+*-raw.*
+*@4x.*
+
+# User uploaded content (if storing locally)
+uploads/
+user-content/
+tmp-uploads/
+
+# ===================================
+# DATABASE & DATA
+# ===================================
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+dump.rdb
+
+# Data files
+*.csv
+*.json
+*.xml
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.js
+!tailwind.config.js
+
+# Backup files
+*.bak
+*.backup
+*.sql
+
+# ===================================
+# DOCUMENTATION (OPTIONAL)
+# ===================================
+# Generated documentation (uncomment if you generate docs)
+# docs/_build/
+# docs/site/
+
+# ===================================
+# PROJECT SPECIFIC
+# ===================================
+# Portfolio specific ignores
+portfolio-assets/original/
+design-assets/
+mockups/
+wireframes/
+
+# Local development files
+local-config.json
+dev-notes.md
+todo.md
+
+# Performance analysis
+bundle-analyzer-report.html
+lighthouse-reports/
+
+# ===================================
+# SECURITY SCANNING
+# ===================================
+# Security scan results
+security-report.json
+vulnerability-scan.json
+
+# ===================================
+# MONITORING & ANALYTICS
+# ===================================
+# Local monitoring data
+monitoring-data/
+analytics-cache/
+
+# APM traces
+traces/
+*.trace
+
+# ===================================
+# COMMENTS FOR TEAM
+# ===================================
+# This .gitignore is designed for a professional portfolio project
+# It covers all major frameworks, tools, and sensitive files
+#
+# Key things to remember:
+# 1. NEVER commit .env files or credentials
+# 2. Keep build artifacts out of version control
+# 3. Exclude OS-specific files that don't belong in the repo
+# 4. Be careful with media files - optimize before committing
+# 5. Regularly review and update this file as the project grows
