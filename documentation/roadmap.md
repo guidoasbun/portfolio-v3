@@ -1,19 +1,22 @@
 # Portfolio Development Roadmap
 
 ## Overview
+
 This roadmap breaks down the portfolio development into 8 phases with small, actionable tasks. Each task is estimated to take 1-4 hours.
 
 ## Phase 1: Foundation & Setup (Week 1)
 
 ### 1.1 Project Configuration
-- [ ] Clean up default Next.js starter files
-- [ ] Create .env.local file with placeholder variables
-- [ ] Update metadata in layout.tsx (title, description)
-- [ ] Configure ESLint rules for the project
-- [ ] Set up prettier configuration
-- [ ] Create folder structure for src/components, src/lib, src/hooks, src/types
+
+- [x] Clean up default Next.js starter files
+- [x] Create .env.local file with placeholder variables
+- [x] Update metadata in layout.tsx (title, description)
+- [x] Configure ESLint rules for the project
+- [x] Set up prettier configuration
+- [x] Create folder structure for src/components, src/lib, src/hooks, src/types
 
 ### 1.2 Dependencies Installation
+
 - [ ] Install Framer Motion for animations
 - [ ] Install React Hook Form and validation libraries (yup, @hookform/resolvers)
 - [ ] Install React Icons
@@ -22,6 +25,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create package.json scripts for type checking
 
 ### 1.3 Tailwind Configuration
+
 - [ ] Configure glass morphism color palette
 - [ ] Add custom animations (fade-in, slide-up, float)
 - [ ] Configure backdrop blur utilities
@@ -30,14 +34,16 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create globals.css with base styles
 
 ### 1.4 TypeScript Setup
+
 - [ ] Create types/index.ts with Project interface
 - [ ] Create Experience interface
 - [ ] Create Skill interface
 - [ ] Create Message interface
 - [ ] Create Resume interface
-- [ ] Configure path aliases in tsconfig.json (@/*)
+- [ ] Configure path aliases in tsconfig.json (@/\*)
 
 ### 1.5 Utility Functions
+
 - [ ] Create lib/utils.ts with cn() function for classNames
 - [ ] Create lib/constants.ts with app constants
 - [ ] Create lib/animations.ts with Framer Motion variants
@@ -47,6 +53,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 2: Design System & UI Components (Week 2)
 
 ### 2.1 Base Components
+
 - [ ] Create Button component with variants (primary, secondary, ghost)
 - [ ] Create GlassCard component with glass morphism effect
 - [ ] Create Container component for consistent padding
@@ -55,6 +62,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create Text component with size variants
 
 ### 2.2 Form Components
+
 - [ ] Create Input component with glass morphism
 - [ ] Create Textarea component
 - [ ] Create Select component
@@ -63,6 +71,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create Label component
 
 ### 2.3 Layout Components
+
 - [ ] Create Navbar component with glass effect
 - [ ] Create MobileMenu component with hamburger
 - [ ] Create Footer component
@@ -71,6 +80,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create ScrollToTop component
 
 ### 2.4 Loading & Feedback
+
 - [ ] Create LoadingSpinner component
 - [ ] Create Skeleton loader component
 - [ ] Create Toast notification component
@@ -78,6 +88,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create ErrorBoundary component
 
 ### 2.5 Modal System
+
 - [ ] Create Modal component with backdrop
 - [ ] Create ModalHeader component
 - [ ] Create ModalBody component
@@ -86,6 +97,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create useModal hook
 
 ### 2.6 Icon Components
+
 - [ ] Set up social media icons (GitHub, LinkedIn, Twitter)
 - [ ] Create IconButton component
 - [ ] Add hover animations to icons
@@ -94,6 +106,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 3: Public Pages Structure (Week 3)
 
 ### 3.1 Hero Section
+
 - [ ] Create HeroSection component structure
 - [ ] Add hero title and subtitle
 - [ ] Create animated text effect
@@ -103,6 +116,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Implement scroll indicator animation
 
 ### 3.2 About Section
+
 - [ ] Create AboutSection component
 - [ ] Add bio/introduction text area
 - [ ] Create education info card
@@ -111,6 +125,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add download resume button
 
 ### 3.3 Projects Section (Static)
+
 - [ ] Create ProjectsSection component
 - [ ] Create ProjectCard component (2D version first)
 - [ ] Add project filtering tabs (All, Web, Mobile, etc.)
@@ -121,6 +136,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add image carousel for project images
 
 ### 3.4 Experience Timeline
+
 - [ ] Create ExperienceSection component
 - [ ] Create TimelineItem component
 - [ ] Add timeline connector line
@@ -131,6 +147,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create timeline animations
 
 ### 3.5 Skills Section
+
 - [ ] Create SkillsSection component (2D version)
 - [ ] Create SkillCard component
 - [ ] Group skills by category
@@ -140,6 +157,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Implement skill search/filter
 
 ### 3.6 Contact Section
+
 - [ ] Create ContactSection component
 - [ ] Add contact information cards
 - [ ] Create contact form structure
@@ -149,6 +167,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create location map placeholder
 
 ### 3.7 Resume Page
+
 - [ ] Create app/resume/page.tsx
 - [ ] Add resume viewer placeholder
 - [ ] Create download button
@@ -159,6 +178,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 4: Three.js Integration (Week 4)
 
 ### 4.1 Three.js Setup
+
 - [ ] Install three, @react-three/fiber, @react-three/drei
 - [ ] Install @types/three
 - [ ] Create components/three directory
@@ -168,6 +188,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add performance monitoring in dev
 
 ### 4.2 Performance Optimization Setup
+
 - [ ] Create useThreePerformance hook
 - [ ] Add device capability detection
 - [ ] Create useReducedMotion hook
@@ -176,6 +197,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add FPS monitoring utility
 
 ### 4.3 Hero Background 3D
+
 - [ ] Create HeroBackground component
 - [ ] Create FloatingParticles component
 - [ ] Implement particle animation loop
@@ -186,6 +208,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create mobile-optimized version
 
 ### 4.4 Project Cards 3D
+
 - [ ] Create ProjectCard3D component
 - [ ] Add hover rotation effect
 - [ ] Implement click interaction
@@ -196,6 +219,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create loading state for 3D cards
 
 ### 4.5 Skills Visualization 3D
+
 - [ ] Create SkillsVisualization component
 - [ ] Implement orbital layout
 - [ ] Add skill spheres with sizes based on proficiency
@@ -206,6 +230,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create 2D fallback version
 
 ### 4.6 Interactive Elements
+
 - [ ] Create InteractiveElements component
 - [ ] Add mouse-following objects
 - [ ] Create scroll-triggered animations
@@ -214,6 +239,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create Easter egg animations
 
 ### 4.7 Loading & Transitions
+
 - [ ] Create LoadingAnimation3D component
 - [ ] Add scene transition effects
 - [ ] Implement lazy loading for 3D components
@@ -224,6 +250,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 5: Firebase & Backend (Week 5)
 
 ### 5.1 Firebase Setup
+
 - [ ] Create Firebase project
 - [ ] Enable Authentication service
 - [ ] Enable Firestore database
@@ -233,6 +260,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create lib/firebase.ts
 
 ### 5.2 Authentication Implementation
+
 - [ ] Create lib/auth.ts with auth utilities
 - [ ] Implement login functionality
 - [ ] Implement logout functionality
@@ -242,6 +270,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add auth context provider
 
 ### 5.3 Database Services
+
 - [ ] Create lib/db.ts with DatabaseService class
 - [ ] Implement getProjects method
 - [ ] Implement addProject method
@@ -253,6 +282,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create methods for Resume
 
 ### 5.4 API Routes - Projects
+
 - [ ] Create app/api/projects/route.ts
 - [ ] Implement GET /api/projects
 - [ ] Implement POST /api/projects
@@ -263,6 +293,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add validation middleware
 
 ### 5.5 API Routes - Experience
+
 - [ ] Create app/api/experience/route.ts
 - [ ] Implement GET /api/experience
 - [ ] Implement POST /api/experience
@@ -271,6 +302,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Implement DELETE /api/experience/[id]
 
 ### 5.6 API Routes - Others
+
 - [ ] Create app/api/skills/route.ts with CRUD
 - [ ] Create app/api/messages/route.ts
 - [ ] Create app/api/resume/route.ts
@@ -279,6 +311,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add CORS configuration
 
 ### 5.7 Storage Setup
+
 - [ ] Configure Firebase Storage buckets
 - [ ] Create upload utilities
 - [ ] Implement image optimization
@@ -289,6 +322,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 6: Admin Dashboard (Week 6)
 
 ### 6.1 Admin Layout
+
 - [ ] Create app/admin/layout.tsx
 - [ ] Create AdminSidebar component
 - [ ] Create AdminHeader component
@@ -298,6 +332,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create breadcrumb navigation
 
 ### 6.2 Admin Authentication
+
 - [ ] Create app/admin/login/page.tsx
 - [ ] Create LoginForm component
 - [ ] Add form validation
@@ -307,6 +342,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Implement auth redirects
 
 ### 6.3 Admin Dashboard
+
 - [ ] Create app/admin/page.tsx
 - [ ] Create StatsCard component
 - [ ] Display total projects count
@@ -316,6 +352,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add charts/graphs placeholder
 
 ### 6.4 Project Management
+
 - [ ] Create app/admin/projects/page.tsx
 - [ ] Create ProjectsTable component
 - [ ] Create app/admin/projects/new/page.tsx
@@ -327,6 +364,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add rich text editor for descriptions
 
 ### 6.5 Experience Management
+
 - [ ] Create app/admin/experience/page.tsx
 - [ ] Create ExperienceTable component
 - [ ] Create ExperienceForm component
@@ -336,6 +374,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create sorting functionality
 
 ### 6.6 Skills Management
+
 - [ ] Create app/admin/skills/page.tsx
 - [ ] Create SkillsGrid component
 - [ ] Create SkillForm component
@@ -345,6 +384,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create skill icons upload
 
 ### 6.7 Messages Management
+
 - [ ] Create app/admin/messages/page.tsx
 - [ ] Create MessagesTable component
 - [ ] Add read/unread status
@@ -357,6 +397,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 7: Advanced Features (Week 7)
 
 ### 7.1 Resume Management
+
 - [ ] Create app/admin/resume/page.tsx
 - [ ] Implement PDF upload
 - [ ] Create version management
@@ -366,6 +407,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add download tracking
 
 ### 7.2 Contact Form Integration
+
 - [ ] Connect contact form to API
 - [ ] Add email notifications
 - [ ] Implement spam protection
@@ -374,6 +416,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add form analytics
 
 ### 7.3 Search & Filtering
+
 - [ ] Implement global search
 - [ ] Add project filtering by technology
 - [ ] Create skill filtering
@@ -383,6 +426,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create filter persistence
 
 ### 7.4 Analytics Integration
+
 - [ ] Add Google Analytics
 - [ ] Implement event tracking
 - [ ] Create custom events for 3D interactions
@@ -391,6 +435,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create analytics dashboard
 
 ### 7.5 SEO Implementation
+
 - [ ] Add dynamic meta tags
 - [ ] Create sitemap.xml generation
 - [ ] Implement robots.txt
@@ -400,6 +445,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Add canonical URLs
 
 ### 7.6 Accessibility
+
 - [ ] Add ARIA labels
 - [ ] Implement keyboard navigation
 - [ ] Add focus indicators
@@ -409,6 +455,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Implement high contrast mode
 
 ### 7.7 Progressive Enhancement
+
 - [ ] Add offline support placeholder
 - [ ] Implement lazy loading for images
 - [ ] Add intersection observer for animations
@@ -419,6 +466,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Phase 8: Polish & Deployment (Week 8)
 
 ### 8.1 Performance Optimization
+
 - [ ] Optimize images with Sharp
 - [ ] Implement image CDN
 - [ ] Minimize CSS bundle
@@ -428,6 +476,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Optimize Three.js assets
 
 ### 8.2 Responsive Design
+
 - [ ] Test on mobile devices
 - [ ] Fix responsive breakpoints
 - [ ] Optimize touch interactions
@@ -437,6 +486,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Test on different screen sizes
 
 ### 8.3 Cross-browser Testing
+
 - [ ] Test on Chrome
 - [ ] Test on Firefox
 - [ ] Test on Safari
@@ -446,6 +496,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Test WebGL support
 
 ### 8.4 Error Handling
+
 - [ ] Add error boundaries
 - [ ] Create 404 page
 - [ ] Create 500 error page
@@ -455,6 +506,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Create error logging
 
 ### 8.5 Testing
+
 - [ ] Write unit tests for utilities
 - [ ] Test form validations
 - [ ] Test API endpoints
@@ -464,6 +516,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Test authentication flows
 
 ### 8.6 Documentation
+
 - [ ] Update README.md
 - [ ] Document API endpoints
 - [ ] Create deployment guide
@@ -473,6 +526,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Update CLAUDE.md with final architecture
 
 ### 8.7 Deployment Preparation
+
 - [ ] Set up Vercel project
 - [ ] Configure environment variables
 - [ ] Set up custom domain
@@ -482,6 +536,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [ ] Test production build locally
 
 ### 8.8 Launch
+
 - [ ] Deploy to production
 - [ ] Verify all features work
 - [ ] Submit sitemap to Google
@@ -493,6 +548,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Testing Checkpoints
 
 ### After Each Phase:
+
 - [ ] Run build command to check for errors
 - [ ] Test on mobile device
 - [ ] Check performance metrics
@@ -511,6 +567,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 ## Fallback Strategies
 
 ### For 3D Components:
+
 - Static images for low-power devices
 - CSS animations as fallback
 - Reduced particle count on mobile
@@ -518,6 +575,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - Progressive enhancement approach
 
 ### For Advanced Features:
+
 - Basic HTML forms if JavaScript fails
 - Static content if database unavailable
 - Local storage for offline support

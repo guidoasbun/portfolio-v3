@@ -1,4 +1,5 @@
 ### Three.js Components
+
 - `HeroBackground` - 3D animated background
 - `ProjectCard3D` - 3D project thumbnails
 - `SkillsVisualization` - 3D skills display
@@ -12,6 +13,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
 ## Technology Stack
 
 ### Frontend
+
 - **Next.js 14+** (App Router)
 - **TypeScript**
 - **Tailwind CSS** (for styling and glass morphism effects)
@@ -19,6 +21,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
 - **React Hook Form** (for forms)
 
 ### Backend & Services
+
 - **Next.js API Routes** (serverless functions)
 - **Firebase**
   - Authentication (admin login)
@@ -27,6 +30,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
 - **Vercel** (deployment)
 
 ### Additional Libraries
+
 - **React Icons** (icon library)
 - **React PDF** (resume viewer)
 - **Sharp** (image optimization)
@@ -37,6 +41,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
 ## Features Specification
 
 ### Public Features
+
 1. **Hero Section**
    - Professional photo
    - Name and title
@@ -72,6 +77,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
    - Social media links
 
 ### Admin Features
+
 1. **Authentication**
    - Secure admin login
    - Protected admin routes
@@ -106,6 +112,7 @@ A modern, responsive portfolio website for a Computer Science senior to showcase
 ### Collections in Firestore
 
 #### Projects
+
 ```typescript
 interface Project {
   id: string;
@@ -124,10 +131,11 @@ interface Project {
 ```
 
 #### Experience
+
 ```typescript
 interface Experience {
   id: string;
-  type: 'work' | 'internship' | 'education';
+  type: "work" | "internship" | "education";
   title: string;
   company: string;
   location: string;
@@ -141,6 +149,7 @@ interface Experience {
 ```
 
 #### Skills
+
 ```typescript
 interface Skill {
   id: string;
@@ -152,6 +161,7 @@ interface Skill {
 ```
 
 #### Messages
+
 ```typescript
 interface Message {
   id: string;
@@ -165,6 +175,7 @@ interface Message {
 ```
 
 #### Resume
+
 ```typescript
 interface Resume {
   id: string;
@@ -226,6 +237,7 @@ portfolio/
 ## Design System
 
 ### Glass Morphism Theme
+
 - **Primary Colors**: Whites and grays with transparency
 - **Accent Colors**: Subtle blues and purples
 - **Background**: Gradient backgrounds with blur effects
@@ -233,6 +245,7 @@ portfolio/
 - **Borders**: Subtle borders with low opacity
 
 ### Tailwind Configuration
+
 ```javascript
 // tailwind.config.js
 module.exports = {
@@ -240,26 +253,27 @@ module.exports = {
     extend: {
       colors: {
         glass: {
-          light: 'rgba(255, 255, 255, 0.1)',
-          medium: 'rgba(255, 255, 255, 0.2)',
-          dark: 'rgba(0, 0, 0, 0.1)',
-        }
+          light: "rgba(255, 255, 255, 0.1)",
+          medium: "rgba(255, 255, 255, 0.2)",
+          dark: "rgba(0, 0, 0, 0.1)",
+        },
       },
       backdropBlur: {
-        xs: '2px',
+        xs: "2px",
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-      }
-    }
-  }
-}
+        "fade-in": "fadeIn 0.5s ease-in-out",
+        "slide-up": "slideUp 0.5s ease-out",
+      },
+    },
+  },
+};
 ```
 
 ## Development Phases
 
 ### Phase 1: Setup & Basic Structure (Week 1)
+
 - [ ] Initialize Next.js project
 - [ ] Set up Firebase
 - [ ] Configure Tailwind CSS
@@ -267,6 +281,7 @@ module.exports = {
 - [ ] Implement authentication
 
 ### Phase 2: Public Pages (Week 2)
+
 - [ ] Hero section with 3D background
 - [ ] About section
 - [ ] Projects showcase (static data)
@@ -274,6 +289,7 @@ module.exports = {
 - [ ] Contact form
 
 ### Phase 3: Admin Dashboard & 3D Enhancements (Week 3)
+
 - [ ] Admin layout and navigation
 - [ ] Project management CRUD
 - [ ] Experience management
@@ -282,6 +298,7 @@ module.exports = {
 - [ ] Enhanced 3D project cards
 
 ### Phase 4: Polish & Optimization (Week 4)
+
 - [ ] Responsive design
 - [ ] Performance optimization (including 3D performance)
 - [ ] SEO implementation
@@ -313,6 +330,7 @@ ADMIN_EMAIL=
 ## Key Components to Build
 
 ### Reusable UI Components
+
 - `GlassCard` - Main card component with glass effect
 - `Button` - Various button styles
 - `Modal` - Modal dialogs
@@ -320,6 +338,7 @@ ADMIN_EMAIL=
 - `LoadingSpinner` - Loading indicators
 
 ### Section Components
+
 - `HeroSection` - Landing hero
 - `ProjectGrid` - Projects showcase
 - `ExperienceTimeline` - Experience display
@@ -327,6 +346,7 @@ ADMIN_EMAIL=
 - `SkillsCloud` - Skills visualization
 
 ### Admin Components
+
 - `AdminLayout` - Admin page wrapper
 - `DataTable` - Generic data table
 - `ProjectForm` - Project add/edit form
@@ -336,23 +356,27 @@ ADMIN_EMAIL=
 ## API Endpoints
 
 ### Projects API
+
 - `GET /api/projects` - Get all projects
 - `POST /api/projects` - Create project
 - `PUT /api/projects/[id]` - Update project
 - `DELETE /api/projects/[id]` - Delete project
 
 ### Experience API
+
 - `GET /api/experience` - Get all experience
 - `POST /api/experience` - Create experience
 - `PUT /api/experience/[id]` - Update experience
 - `DELETE /api/experience/[id]` - Delete experience
 
 ### Messages API
+
 - `GET /api/messages` - Get all messages (admin)
 - `POST /api/messages` - Send message (public)
 - `PUT /api/messages/[id]` - Mark as read
 
 ### Resume API
+
 - `GET /api/resume` - Get current resume
 - `POST /api/resume` - Upload new resume
 

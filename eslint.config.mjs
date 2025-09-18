@@ -20,6 +20,26 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      // React rules
+      "react/jsx-curly-brace-presence": ["warn", "never"],
+      "react/self-closing-comp": "warn",
+      "react/jsx-boolean-value": ["warn", "never"],
+
+      // TypeScript rules
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/consistent-type-imports": "warn",
+
+      // General rules
+      "prefer-const": "warn",
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+      eqeqeq: ["warn", "always"],
+    },
+  },
 ];
 
 export default eslintConfig;
