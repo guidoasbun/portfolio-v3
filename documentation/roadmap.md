@@ -44,22 +44,22 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 1.5 Utility Functions
 
-- [ ] Create lib/utils.ts with cn() function for classNames
-- [ ] Create lib/constants.ts with app constants
-- [ ] Create lib/animations.ts with Framer Motion variants
-- [ ] Set up error handling utilities
-- [ ] Create date formatting utilities
+- [x] Create lib/utils.ts with cn() function for classNames
+- [x] Create lib/constants.ts with app constants
+- [x] Create lib/animations.ts with Framer Motion variants
+- [x] Set up error handling utilities
+- [x] Create date formatting utilities
 
 ## Phase 2: Design System & UI Components (Week 2)
 
 ### 2.1 Base Components
 
-- [ ] Create Button component with variants (primary, secondary, ghost)
-- [ ] Create GlassCard component with glass morphism effect
-- [ ] Create Container component for consistent padding
-- [ ] Create Section component for page sections
-- [ ] Create Heading components (H1, H2, H3)
-- [ ] Create Text component with size variants
+- [x] Create Button component with variants (primary, secondary, ghost)
+- [x] Create GlassCard component with glass morphism effect
+- [x] Create Container component for consistent padding
+- [x] Create Section component for page sections
+- [x] Create Heading components (H1, H2, H3)
+- [x] Create Text component with size variants
 
 ### 2.2 Form Components
 

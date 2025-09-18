@@ -53,8 +53,41 @@
   --animate-glow: glow 2s ease-in-out infinite alternate;
 }
 
+/* Dark theme - applied via class */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* Adjust glass colors for dark mode */
+  --glass-light: rgba(255, 255, 255, 0.05);
+  --glass-medium: rgba(255, 255, 255, 0.1);
+  --glass-heavy: rgba(255, 255, 255, 0.15);
+  --glass-dark: rgba(0, 0, 0, 0.3);
+
+  /* Darker border colors */
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --border-glass-dark: rgba(255, 255, 255, 0.05);
+}
+
+/* Light theme - explicit class */
+.light {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Glass morphism colors */
+  --glass-light: rgba(255, 255, 255, 0.1);
+  --glass-medium: rgba(255, 255, 255, 0.2);
+  --glass-heavy: rgba(255, 255, 255, 0.3);
+  --glass-dark: rgba(0, 0, 0, 0.1);
+
+  /* Border colors */
+  --border-glass: rgba(255, 255, 255, 0.18);
+  --border-glass-dark: rgba(255, 255, 255, 0.1);
+}
+
+/* System preference fallback */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light):not(.dark) {
     --background: #0a0a0a;
     --foreground: #ededed;
 
@@ -115,6 +148,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Glass morphism utility classes */
@@ -168,16 +202,29 @@ html {
     background: rgba(255, 255, 255, 0.9);
   }
 
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .dark .glass-light {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .dark .glass-heavy {
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  /* System preference fallback for backdrop-filter */
   @media (prefers-color-scheme: dark) {
-    .glass {
+    :root:not(.light):not(.dark) .glass {
       background: rgba(0, 0, 0, 0.8);
     }
 
-    .glass-light {
+    :root:not(.light):not(.dark) .glass-light {
       background: rgba(0, 0, 0, 0.6);
     }
 
-    .glass-heavy {
+    :root:not(.light):not(.dark) .glass-heavy {
       background: rgba(0, 0, 0, 0.9);
     }
   }
