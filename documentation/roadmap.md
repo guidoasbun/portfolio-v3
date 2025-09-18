@@ -17,12 +17,12 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 1.2 Dependencies Installation
 
-- [ ] Install Framer Motion for animations
-- [ ] Install React Hook Form and validation libraries (yup, @hookform/resolvers)
-- [ ] Install React Icons
-- [ ] Install clsx and tailwind-merge for className utilities
-- [ ] Install date-fns for date formatting
-- [ ] Create package.json scripts for type checking
+- [x] Install Framer Motion for animations
+- [x] Install React Hook Form and validation libraries (yup, @hookform/resolvers)
+- [x] Install React Icons
+- [x] Install clsx and tailwind-merge for className utilities
+- [x] Install date-fns for date formatting
+- [x] Create package.json scripts for type checking
 
 ### 1.3 Tailwind Configuration
 
