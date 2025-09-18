@@ -35,12 +35,12 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 1.4 TypeScript Setup
 
-- [ ] Create types/index.ts with Project interface
-- [ ] Create Experience interface
-- [ ] Create Skill interface
-- [ ] Create Message interface
-- [ ] Create Resume interface
-- [ ] Configure path aliases in tsconfig.json (@/\*)
+- [x] Create types/index.ts with Project interface
+- [x] Create Experience interface
+- [x] Create Skill interface
+- [x] Create Message interface
+- [x] Create Resume interface
+- [x] Configure path aliases in tsconfig.json (@/\*)
 
 ### 1.5 Utility Functions
 
