@@ -26,12 +26,12 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 1.3 Tailwind Configuration
 
-- [ ] Configure glass morphism color palette
-- [ ] Add custom animations (fade-in, slide-up, float)
-- [ ] Configure backdrop blur utilities
-- [ ] Add custom breakpoints if needed
-- [ ] Set up CSS variables for dynamic theming
-- [ ] Create globals.css with base styles
+- [x] Configure glass morphism color palette
+- [x] Add custom animations (fade-in, slide-up, float)
+- [x] Configure backdrop blur utilities
+- [x] Add custom breakpoints if needed
+- [x] Set up CSS variables for dynamic theming
+- [x] Create globals.css with base styles
 
 ### 1.4 TypeScript Setup
 
