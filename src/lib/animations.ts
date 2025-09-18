@@ -1,4 +1,4 @@
-import { Variants } from "framer-motion"
+import type { Variants } from "framer-motion"
 import { ANIMATION_DURATION } from "./constants"
 
 export const fadeIn: Variants = {

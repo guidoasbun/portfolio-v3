@@ -87,7 +87,7 @@ export function handleError(error: unknown): AppError {
   return new AppError("An unexpected error occurred", 500, false)
 }
 
-export function logError(error: Error | AppError, context?: Record<string, any>) {
+export function logError(error: Error | AppError, context?: Record<string, unknown>) {
   const errorInfo = {
     message: error.message,
     stack: error.stack,
