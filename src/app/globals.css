@@ -3,6 +3,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Glass morphism colors */
+  --glass-light: rgba(255, 255, 255, 0.1);
+  --glass-medium: rgba(255, 255, 255, 0.2);
+  --glass-heavy: rgba(255, 255, 255, 0.3);
+  --glass-dark: rgba(0, 0, 0, 0.1);
+
+  /* Accent colors for glass morphism */
+  --accent-blue: rgba(59, 130, 246, 0.5);
+  --accent-purple: rgba(147, 51, 234, 0.5);
+  --accent-cyan: rgba(6, 182, 212, 0.5);
+
+  /* Border colors */
+  --border-glass: rgba(255, 255, 255, 0.18);
+  --border-glass-dark: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
@@ -10,17 +25,160 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Glass morphism color system */
+  --color-glass-light: var(--glass-light);
+  --color-glass-medium: var(--glass-medium);
+  --color-glass-heavy: var(--glass-heavy);
+  --color-glass-dark: var(--glass-dark);
+
+  /* Accent colors */
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-cyan: var(--accent-cyan);
+
+  /* Border colors */
+  --color-border-glass: var(--border-glass);
+  --color-border-glass-dark: var(--border-glass-dark);
+
+  /* Custom backdrop blur utilities */
+  --blur-xs: 2px;
+  --blur-glass: 12px;
+  --blur-heavy: 24px;
+
+  /* Custom animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Adjust glass colors for dark mode */
+    --glass-light: rgba(255, 255, 255, 0.05);
+    --glass-medium: rgba(255, 255, 255, 0.1);
+    --glass-heavy: rgba(255, 255, 255, 0.15);
+    --glass-dark: rgba(0, 0, 0, 0.3);
+
+    /* Darker border colors */
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-glass-dark: rgba(255, 255, 255, 0.05);
   }
 }
 
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+}
+
+/* Base styles */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Glass morphism utility classes */
+.glass {
+  background: var(--glass-medium);
+  backdrop-filter: blur(var(--blur-glass));
+  border: 1px solid var(--border-glass);
+}
+
+.glass-light {
+  background: var(--glass-light);
+  backdrop-filter: blur(var(--blur-xs));
+  border: 1px solid var(--border-glass-dark);
+}
+
+.glass-heavy {
+  background: var(--glass-heavy);
+  backdrop-filter: blur(var(--blur-heavy));
+  border: 1px solid var(--border-glass);
+}
+
+/* Smooth scrolling and performance optimizations */
+html {
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Ensure proper backdrop-filter support */
+@supports (backdrop-filter: blur(10px)) {
+  .glass,
+  .glass-light,
+  .glass-heavy {
+    background: var(--glass-medium);
+  }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .glass-light {
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .glass-heavy {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .glass {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .glass-light {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .glass-heavy {
+      background: rgba(0, 0, 0, 0.9);
+    }
+  }
 }
