@@ -3,14 +3,10 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-
-interface ParticleSystemProps {
-  count?: number
-  theme: 'light' | 'dark'
-}
+import type { ParticleSystemProps, PointsRef } from '@/types/three'
 
 export function ParticleSystem({ count = 1000, theme }: ParticleSystemProps) {
-  const meshRef = useRef<THREE.Points>(null)
+  const meshRef = useRef<PointsRef>(null)
 
   // Generate particle positions and attributes
   const particlesData = useMemo(() => {
