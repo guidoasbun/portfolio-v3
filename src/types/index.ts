@@ -34,9 +34,10 @@ export interface Skill {
   id: string;
   name: string;
   category: string;
-  proficiency: number; // 1-5 scale
+  proficiency?: number; // 1-5 scale (optional - not displayed to users)
   icon?: string;
   color?: string;
+  featured?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

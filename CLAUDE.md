@@ -143,6 +143,10 @@ interface Experience {
 - **Cards**: Transparent with backdrop-blur
 - **Borders**: Subtle borders with low opacity
 
+### Important Design Decisions
+
+- **NO Skill Proficiency Meters**: Do NOT show percentage meters or progress bars for skills (e.g., "78% C++"). Users should never see numerical proficiency indicators as this creates unnecessary expectations. Instead, skills should be displayed as tags or badges without proficiency levels.
+
 ### Tailwind Configuration (Planned)
 
 ```javascript
