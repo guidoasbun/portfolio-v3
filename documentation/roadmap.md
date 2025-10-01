@@ -261,7 +261,7 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [x] Add mobile device detection
 - [x] Implement graceful degradation for low-end devices
 
-### 4.3 Hero Background 3D
+### 4.3 Hero Background 3D ✅ COMPLETED
 
 - [x] Create HeroBackground component
 - [x] Create ParticleSystem component (1000 particles)
@@ -271,9 +271,9 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [x] Integrate theme-aware particle colors
 - [x] Add SSR detection and client-side rendering
 - [x] Optimize with responsive pixel ratio
-- [ ] Add mouse interaction for particles
-- [ ] Add gradient fog effect
-- [ ] Create mobile-optimized version with reduced particles
+- [x] Add mouse interaction for particles (with repulsion effect, disabled on mobile)
+- [x] Add gradient fog effect (theme-aware: dark=#0a0a0a, light=#f8fafc)
+- [x] Create mobile-optimized version with reduced particles (500 particles on low-tier devices)
 
 ### 4.4 Project Cards 3D
 
