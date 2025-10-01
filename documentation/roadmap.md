@@ -81,11 +81,11 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 2.4 Loading & Feedback
 
-- [ ] Create LoadingSpinner component
-- [ ] Create Skeleton loader component
-- [ ] Create Toast notification component
-- [ ] Create ProgressBar component
-- [ ] Create ErrorBoundary component
+- [x] Create LoadingSpinner component
+- [x] Create Skeleton loader component
+- [x] Create Toast notification component
+- [x] Create ProgressBar component
+- [x] Create ErrorBoundary component
 
 ### 2.5 Modal System
 
