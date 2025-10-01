@@ -51,6 +51,12 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           top: offsetTop,
           behavior: 'smooth'
         })
+      } else if (targetId === 'home') {
+        // If home link and element not found, scroll to top
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
       }
     }, 300)
   }

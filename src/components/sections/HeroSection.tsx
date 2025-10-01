@@ -14,7 +14,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       <HeroBackground className="absolute inset-0 w-full h-full" />
 
