@@ -20,8 +20,15 @@ export function HeroBackground({ className = '' }: HeroBackgroundProps) {
 
   const particleCount = getOptimalParticleCount(performanceTier)
 
+  // Theme-based fog color
+  const fogColor = actualTheme === 'dark' ? '#0a0a0a' : '#f8fafc'
+  const fogDensity = actualTheme === 'dark' ? 0.02 : 0.015
+
   return (
     <Scene className={className}>
+      {/* Fog effect for atmospheric depth */}
+      <fogExp2 attach="fog" args={[fogColor, fogDensity]} />
+
       {/* Camera */}
       <PerspectiveCamera makeDefault position={[0, 0, 15]} fov={75} />
 
