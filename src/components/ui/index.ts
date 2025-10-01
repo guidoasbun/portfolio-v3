@@ -22,5 +22,14 @@ export { ToastProvider, useToast } from './Toast'
 export { ProgressBar, IndeterminateProgressBar } from './ProgressBar'
 export { ErrorBoundary } from './ErrorBoundary'
 
+// Modal Components
+export { Modal, ModalBody, ModalFooter } from './Modal'
+export { ConfirmModal } from './ConfirmModal'
+export { ImageModal } from './ImageModal'
+
+// Icon Components
+export * from './icons'
+export { IconButton, IconButtonGroup } from './IconButton'
+
 // Layout Components
 export * from '../layout'
