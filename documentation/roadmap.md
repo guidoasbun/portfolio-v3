@@ -63,21 +63,21 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 2.2 Form Components
 
-- [ ] Create Input component with glass morphism
-- [ ] Create Textarea component
-- [ ] Create Select component
-- [ ] Create FormField wrapper with error handling
-- [ ] Create FormError component
-- [ ] Create Label component
+- [x] Create Input component with glass morphism
+- [x] Create Textarea component
+- [x] Create Select component
+- [x] Create FormField wrapper with error handling
+- [x] Create FormError component
+- [x] Create Label component
 
 ### 2.3 Layout Components
 
-- [ ] Create Navbar component with glass effect
-- [ ] Create MobileMenu component with hamburger
-- [ ] Create Footer component
-- [ ] Create Layout wrapper component
-- [ ] Add animated gradient background to Layout
-- [ ] Create ScrollToTop component
+- [x] Create Navbar component with glass effect
+- [x] Create MobileMenu component with hamburger
+- [x] Create Footer component
+- [x] Create Layout wrapper component
+- [x] Add animated gradient background to Layout
+- [x] Create ScrollToTop component
 
 ### 2.4 Loading & Feedback
 
