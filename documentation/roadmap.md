@@ -89,19 +89,33 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 2.5 Modal System
 
-- [ ] Create Modal component with backdrop
-- [ ] Create ModalHeader component
-- [ ] Create ModalBody component
-- [ ] Create ModalFooter component
-- [ ] Add modal animations with Framer Motion
-- [ ] Create useModal hook
+- [x] Create Modal component with backdrop
+- [x] Create ModalHeader component
+- [x] Create ModalBody component
+- [x] Create ModalFooter component
+- [x] Add modal animations with Framer Motion
+- [x] Create useModal hook
+- [x] Create ConfirmModal component with variants
+- [x] Create ImageModal component for gallery viewing
+- [x] Create useModalWithData hook for typed data
+- [x] Create ModalProvider context for global modals
+- [x] Add portal rendering and body scroll lock
+- [x] Create comprehensive documentation
 
 ### 2.6 Icon Components
 
-- [ ] Set up social media icons (GitHub, LinkedIn, Twitter)
-- [ ] Create IconButton component
-- [ ] Add hover animations to icons
-- [ ] Create skill category icons
+- [x] Set up social media icons (GitHub, LinkedIn, Twitter, Email, Instagram, YouTube, Website)
+- [x] Create base Icon component with TypeScript types
+- [x] Create technology/development icons (Code, Database, Terminal, Server, etc.)
+- [x] Create UI/action icons (Menu, Close, Chevron, Arrow, Search, etc.)
+- [x] Create 70+ total icons with proper accessibility
+- [x] Implement theme-aware icon system using currentColor
+- [x] Add barrel exports for easy importing
+- [x] Create IconButton component with variants and loading state
+- [x] Create IconButtonGroup component for grouping buttons
+- [x] Add hover animations to icons (14 animation presets)
+- [x] Create AnimatedIcon wrapper with framer-motion
+- [x] Implement icon animation variants (hover, rotate, bounce, shake, pulse, glow, spin, float, wiggle, slide)
 
 ## Phase 3: Public Pages Structure (Week 3)
 
