@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth } from './config'
 
@@ -27,6 +28,7 @@ const getAuthErrorMessage = (errorCode: string): string => {
     'auth/invalid-credential': 'Invalid email or password.',
     'auth/too-many-requests': 'Too many failed login attempts. Please try again later.',
     'auth/network-request-failed': 'Network error. Please check your connection.',
+    'auth/missing-email': 'Please provide an email address.',
   }
 
   return errorMessages[errorCode] || 'An error occurred during authentication.'
@@ -146,4 +148,20 @@ export const waitForAuth = (): Promise<User | null> => {
       resolve(user)
     })
   })
+}
+
+/**
+ * Send password reset email
+ * @param email - Email address to send reset link to
+ * @throws AuthError if sending fails
+ */
+export const resetPassword = async (email: string): Promise<void> => {
+  try {
+    await sendPasswordResetEmail(auth, email)
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error) {
+      throw new AuthError(error.code as string)
+    }
+    throw new AuthError('auth/unknown', 'An unexpected error occurred while sending password reset email.')
+  }
 }

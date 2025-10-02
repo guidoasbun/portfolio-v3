@@ -21,6 +21,7 @@ import {
   signInWithEmail,
   signOut as firebaseSignOut,
   onAuthStateChange,
+  resetPassword as firebaseResetPassword,
   AuthError,
 } from '@/lib/firebase/auth'
 
@@ -33,6 +34,7 @@ interface AuthContextState {
   error: string | null
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
   isAdmin: boolean
   clearError: () => void
 }
@@ -46,6 +48,7 @@ const initialState: AuthContextState = {
   error: null,
   signIn: async () => {},
   signOut: async () => {},
+  resetPassword: async () => {},
   isAdmin: false,
   clearError: () => {},
 }
@@ -144,6 +147,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   /**
+   * Password reset handler
+   */
+  const resetPassword = useCallback(async (email: string) => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      await firebaseResetPassword(email)
+    } catch (err) {
+      if (err instanceof AuthError) {
+        setError(err.message)
+      } else {
+        setError('An unexpected error occurred while sending password reset email.')
+      }
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  /**
    * Clear error message
    */
   const clearError = useCallback(() => {
@@ -159,6 +183,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     error,
     signIn,
     signOut,
+    resetPassword,
     isAdmin,
     clearError,
   }

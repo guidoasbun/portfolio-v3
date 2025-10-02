@@ -21,6 +21,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { Container } from '@/components/ui/Container'
 import { Heading } from '@/components/ui/Heading'
 import { FiLock } from 'react-icons/fi'
+import Link from 'next/link'
 
 // Login form validation schema
 const loginSchema = yup.object({
@@ -159,11 +160,17 @@ export default function AdminLoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-3">
+            <Link
+              href="/admin/forgot-password"
+              className="block text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+            >
+              Forgot your password?
+            </Link>
             <button
               type="button"
               onClick={() => router.push('/')}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="block w-full text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Back to Home
             </button>
