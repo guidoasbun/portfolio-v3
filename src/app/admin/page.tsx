@@ -2,6 +2,7 @@
  * Admin Dashboard Home Page
  *
  * Main dashboard for admin users with overview and quick links.
+ * Shows real-time statistics from Firestore.
  */
 
 'use client'
@@ -9,14 +10,17 @@
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { useAuth } from '@/hooks/useAuth'
+import { useAdminStats } from '@/hooks/useAdminStats'
 import Link from 'next/link'
 import {
   FiFolder,
   FiBriefcase,
   FiMail,
   FiFileText,
-  FiActivity
+  FiActivity,
+  FiAlertCircle
 } from 'react-icons/fi'
 
 interface QuickLinkCardProps {
@@ -46,6 +50,7 @@ function QuickLinkCard({ title, description, icon: Icon, href }: QuickLinkCardPr
 
 export default function AdminDashboardPage() {
   const { user } = useAuth()
+  const { stats, loading, error } = useAdminStats()
 
   const quickLinks = [
     {
@@ -86,13 +91,30 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
+      {/* Error message */}
+      {error && (
+        <GlassCard className="border-red-500/20 bg-red-500/10">
+          <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
+            <FiAlertCircle size={24} />
+            <div>
+              <p className="font-medium">Error loading statistics</p>
+              <p className="text-sm opacity-80">{error}</p>
+            </div>
+          </div>
+        </GlassCard>
+      )}
+
       {/* Stats overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <GlassCard>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Projects</p>
-              <p className="text-2xl font-bold">-</p>
+              {loading ? (
+                <LoadingSpinner size="sm" />
+              ) : (
+                <p className="text-2xl font-bold">{stats.projectsCount}</p>
+              )}
             </div>
             <FiFolder className="text-blue-500" size={32} />
           </div>
@@ -102,7 +124,11 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Experience</p>
-              <p className="text-2xl font-bold">-</p>
+              {loading ? (
+                <LoadingSpinner size="sm" />
+              ) : (
+                <p className="text-2xl font-bold">{stats.experienceCount}</p>
+              )}
             </div>
             <FiBriefcase className="text-purple-500" size={32} />
           </div>
@@ -112,7 +138,18 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Messages</p>
-              <p className="text-2xl font-bold">-</p>
+              {loading ? (
+                <LoadingSpinner size="sm" />
+              ) : (
+                <div className="flex items-baseline gap-2">
+                  <p className="text-2xl font-bold">{stats.messagesCount}</p>
+                  {stats.unreadMessagesCount > 0 && (
+                    <span className="px-2 py-0.5 text-xs font-medium bg-red-500 text-white rounded-full">
+                      {stats.unreadMessagesCount} new
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <FiMail className="text-green-500" size={32} />
           </div>
