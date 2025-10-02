@@ -436,14 +436,23 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [x] Add proper error responses and HTTP status codes
 - [x] Add validation on all endpoints
 
-### 5.7 Storage Setup
+### 5.7 Storage Setup ✅ COMPLETED
 
-- [ ] Configure Firebase Storage buckets
-- [ ] Create upload utilities
-- [ ] Implement image optimization
-- [ ] Add file type validation
-- [ ] Create download URL generation
-- [ ] Implement file deletion
+- [x] Configure Firebase Storage buckets
+- [x] Create storage service (lib/firebase/storage.ts)
+- [x] Create upload utilities (uploadFile, uploadMultipleFiles)
+- [x] Implement image optimization (lib/image-optimization.ts)
+- [x] Add file type validation (validateFileType, validateFileSize)
+- [x] Create download URL generation (getFileUrl)
+- [x] Implement file deletion (deleteFile, deleteMultipleFiles)
+- [x] Create useStorage hook for React components
+- [x] Create useImageUpload and useSingleImageUpload hooks
+- [x] Add image preview functionality
+- [x] Add progress tracking for uploads
+- [x] Implement file validation helpers
+- [x] Add image dimension validation
+- [x] Create thumbnail generation utility
+- [x] Verify build succeeds with no TypeScript errors
 
 ## Phase 6: Admin Dashboard (Week 6)
 
@@ -653,23 +662,31 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ### 8.7 Deployment Preparation
 
-- [ ] Set up Vercel project
-- [ ] Configure environment variables
-- [ ] Set up custom domain
-- [ ] Configure SSL certificate
-- [ ] Set up CI/CD pipeline
-- [ ] Create production build
-- [ ] Test production build locally
+- [ ] Install Firebase CLI (npm install -g firebase-tools)
+- [ ] Initialize Firebase Hosting (firebase init hosting)
+- [ ] Configure firebase.json for Next.js
+- [ ] Set up .firebaserc with project ID
+- [ ] Configure Cloud Functions (Gen 2) for API routes/SSR
+- [ ] Set up GitHub Actions CI/CD (firebase init hosting:github)
+- [ ] Configure environment variables in Firebase Console
+- [ ] Set up custom domain in Firebase Hosting
+- [ ] Configure SSL certificate (automatic with Firebase)
+- [ ] Create production build (npm run build)
+- [ ] Test production build locally (firebase emulators:start)
 
 ### 8.8 Launch
 
-- [ ] Deploy to production
-- [ ] Verify all features work
-- [ ] Submit sitemap to Google
-- [ ] Set up monitoring
-- [ ] Configure backup strategy
+- [ ] Deploy to Firebase Hosting (firebase deploy)
+- [ ] Verify all features work in production
+- [ ] Test API routes and Cloud Functions
+- [ ] Verify Firebase Authentication works
+- [ ] Submit sitemap to Google Search Console
+- [ ] Set up Firebase monitoring and alerts
+- [ ] Configure Firestore backup strategy
+- [ ] Monitor Cloud Functions performance
+- [ ] Check Firebase usage and quotas
 - [ ] Announce launch
-- [ ] Monitor initial performance
+- [ ] Monitor initial performance metrics
 
 ## Testing Checkpoints
 
