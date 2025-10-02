@@ -1,0 +1,74 @@
+rules_version = '2';
+
+/**
+ * Firebase Storage Security Rules
+ *
+ * These rules control access to your Firebase Storage buckets.
+ *
+ * Key principles:
+ * - Public can READ all files (for displaying images, downloading resume)
+ * - Only admin can WRITE (upload/delete) files
+ * - File size and type validation on uploads
+ *
+ * To deploy these rules:
+ * 1. Go to Firebase Console > Storage > Rules
+ * 2. Copy and paste these rules
+ * 3. Click "Publish"
+ *
+ * Or use Firebase CLI:
+ * firebase deploy --only storage
+ */
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check if user is admin
+    function isAdmin() {
+      // IMPORTANT: Before deploying, replace 'YOUR_ADMIN_UID_HERE' with your actual admin UID
+      // Get your admin UID from: Firebase Console > Authentication > Users
+      // Or from your .env.local file: NEXT_PUBLIC_ADMIN_UID
+      return request.auth != null && request.auth.uid == 'YOUR_ADMIN_UID_HERE';
+    }
+
+    // Helper function to validate image files
+    function isValidImage() {
+      return request.resource.size < 5 * 1024 * 1024 && // Max 5MB
+             request.resource.contentType.matches('image/(jpeg|jpg|png|webp|gif)');
+    }
+
+    // Helper function to validate PDF files
+    function isValidPDF() {
+      return request.resource.size < 10 * 1024 * 1024 && // Max 10MB
+             request.resource.contentType == 'application/pdf';
+    }
+
+    // Projects folder - for project images
+    match /projects/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidImage();
+    }
+
+    // Resume folder - for resume PDFs
+    match /resume/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidPDF();
+    }
+
+    // Profile folder - for profile images
+    match /profile/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidImage();
+    }
+
+    // Temp folder - for temporary uploads (can be cleaned up periodically)
+    match /temp/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && (isValidImage() || isValidPDF());
+    }
+
+    // Default deny all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
