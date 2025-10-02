@@ -309,26 +309,45 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [x] Add comprehensive documentation
 - [x] Verify build succeeds with no errors
 
-### 4.7 Loading & Transitions
+### 4.7 Loading & Transitions ✅ COMPLETED
 
-- [ ] Create LoadingAnimation3D component
-- [ ] Add scene transition effects
-- [ ] Implement lazy loading for 3D components
-- [ ] Create smooth fallbacks
-- [ ] Add progressive enhancement
-- [ ] Optimize bundle splitting for Three.js
+- [x] Create LoadingAnimation3D component (rotating torus with particles)
+- [x] Add scene transition effects (SceneTransition, CanvasFadeIn)
+- [x] Implement lazy loading for 3D components (useLazyThree hook, dynamic imports)
+- [x] Create smooth fallbacks (SkeletonLoader3D, MinimalSkeleton)
+- [x] Add progressive enhancement (performance-based loading)
+- [x] Optimize bundle splitting for Three.js (dynamic imports with Next.js)
+- [x] Create PageTransition and SectionTransition components
+- [x] Update Scene component with loading states and transitions
+- [x] Update HeroBackground with lazy loading optimization
+- [x] Create comprehensive documentation (loading-transitions.md)
+- [x] Create demo page at /demo/loading-transitions
+- [x] Verify build succeeds with no TypeScript errors
+- [x] Test theme integration (light/dark/system)
 
 ## Phase 5: Firebase & Backend (Week 5)
 
-### 5.1 Firebase Setup
+### 5.1 Firebase Setup ✅ COMPLETED
 
-- [ ] Create Firebase project
-- [ ] Enable Authentication service
-- [ ] Enable Firestore database
-- [ ] Enable Storage service
-- [ ] Configure security rules
-- [ ] Add Firebase config to .env.local
-- [ ] Create lib/firebase.ts
+- [x] Create Firebase project
+- [x] Enable Authentication service
+- [x] Enable Firestore database
+- [x] Enable Storage service
+- [x] Configure security rules (firestore.rules, storage.rules)
+- [x] Add Firebase config to .env.local
+- [x] Install Firebase dependencies (firebase, firebase-admin)
+- [x] Create lib/firebase/config.ts (client SDK)
+- [x] Create lib/firebase/admin.ts (server SDK)
+- [x] Create lib/firebase/auth.ts (authentication service)
+- [x] Create lib/firebase/db.ts (database service with TypeScript generics)
+- [x] Create lib/firebase/storage.ts (file upload/download service)
+- [x] Create lib/firebase/index.ts (barrel export)
+- [x] Create hooks/useAuth.ts (authentication hook)
+- [x] Create hooks/useFirestore.ts (real-time data hooks)
+- [x] Create context/auth-context.tsx (auth provider)
+- [x] Verify build passes with no TypeScript errors
+- [x] Fix all ESLint warnings
+- [x] Create comprehensive documentation (firebase-setup-guide.md)
 
 ### 5.2 Authentication Implementation
 
