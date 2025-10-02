@@ -13,10 +13,11 @@ This is a Next.js 15.5.3 portfolio website project featuring glass morphism desi
 - **TypeScript 5**
 - **Tailwind CSS 4**
 - **ESLint 9** with Next.js configuration
+- **Firebase Hosting** (deployment platform)
 
-### Planned Additional Libraries
+### Additional Libraries
 
-- **Firebase** (Authentication, Firestore, Storage)
+- **Firebase** (Authentication, Firestore, Storage, Hosting)
 - **Framer Motion** (animations)
 - **React Hook Form** (forms)
 - **Three.js & React Three Fiber** (3D graphics)
@@ -234,7 +235,7 @@ The project is currently at the initial Next.js setup stage with:
 - SEO implementation
 - 3D interaction refinements
 - Testing and bug fixes
-- Deployment
+- Deployment to Firebase Hosting
 
 ## Key Implementation Notes
 
@@ -244,3 +245,11 @@ The project is currently at the initial Next.js setup stage with:
 - Follow **glass morphism design patterns** for UI consistency
 - Refer to detailed specifications in `Documentation/` for implementation details
 - Test 3D performance across different devices early and often
+
+## Deployment Strategy
+
+- **Platform**: Firebase Hosting with Cloud Functions (Gen 2)
+- **CI/CD**: GitHub Actions (automated via `firebase init hosting:github`)
+- **API Routes**: Deployed as Cloud Functions for server-side execution
+- **Static Assets**: Served from Firebase Hosting CDN
+- **Integration**: Seamless with Firebase Auth, Firestore, and Storage services
