@@ -132,9 +132,9 @@ export default function SetupCheckPage() {
               <li>Go to Firebase Console: console.firebase.google.com</li>
               <li>Select your project: <strong>portfolio-v3-8ca49</strong></li>
               <li>Go to Authentication → Sign-in method</li>
-              <li>Enable "Email/Password" provider</li>
+              <li>Enable &quot;Email/Password&quot; provider</li>
               <li>Go to Authentication → Users</li>
-              <li>Click "Add user" and create an admin account</li>
+              <li>Click &quot;Add user&quot; and create an admin account</li>
               <li>Copy the UID from the user list</li>
               <li>Update <code className="bg-foreground/10 px-1 rounded">NEXT_PUBLIC_ADMIN_UID</code> in .env.local</li>
               <li>Restart the dev server</li>
