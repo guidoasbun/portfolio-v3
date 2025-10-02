@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AuthProvider } from "@/context/auth-context";
 import { Layout } from "@/components/layout";
 import "./globals.css";
 
@@ -34,7 +35,9 @@ export default function RootLayout({
           defaultTheme="system"
           storageKey="portfolio-theme"
         >
-          <Layout>{children}</Layout>
+          <AuthProvider>
+            <Layout>{children}</Layout>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
