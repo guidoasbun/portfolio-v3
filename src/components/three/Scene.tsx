@@ -8,16 +8,19 @@ import {
   getOptimalPixelRatio,
   shouldEnableAntialiasing,
 } from '@/lib/three/performance'
+import { CanvasFadeIn } from '@/components/transitions/SceneTransition'
+import { MinimalSkeleton } from '@/components/loading/SkeletonLoader3D'
 import type { SceneProps, PerformanceTier } from '@/types/three'
 
 /**
  * Scene wrapper component for Three.js Canvas
- * Handles performance detection, theme integration, and SSR compatibility
+ * Handles performance detection, theme integration, SSR compatibility, and transitions
  */
 export function Scene({ children, config, fallback, className = '' }: SceneProps) {
   const [mounted, setMounted] = useState(false)
   const [can3D, setCan3D] = useState(false)
   const [performanceTier, setPerformanceTier] = useState<PerformanceTier>('medium')
+  const [isReady, setIsReady] = useState(false)
 
   // Client-side only rendering to avoid SSR issues
   useEffect(() => {
@@ -28,12 +31,15 @@ export function Scene({ children, config, fallback, className = '' }: SceneProps
     if (canRender) {
       const tier = detectPerformanceTier()
       setPerformanceTier(tier)
+
+      // Small delay to ensure smooth transition
+      setTimeout(() => setIsReady(true), 150)
     }
   }, [])
 
-  // Show nothing during SSR
+  // Show loading skeleton during SSR
   if (!mounted) {
-    return fallback ? <>{fallback}</> : <div className={className} />
+    return fallback ? <>{fallback}</> : <MinimalSkeleton className={className} />
   }
 
   // Show fallback if 3D is not supported
@@ -41,12 +47,17 @@ export function Scene({ children, config, fallback, className = '' }: SceneProps
     return fallback ? <>{fallback}</> : <div className={className} />
   }
 
+  // Show skeleton while initializing
+  if (!isReady) {
+    return <MinimalSkeleton className={className} />
+  }
+
   // Get optimal settings based on performance tier
   const pixelRatio = config?.pixelRatio || getOptimalPixelRatio(performanceTier)
   const antialias = config?.antialias ?? shouldEnableAntialiasing(performanceTier)
 
   return (
-    <div className={className}>
+    <CanvasFadeIn className={className}>
       <Canvas
         gl={{
           antialias,
@@ -58,6 +69,6 @@ export function Scene({ children, config, fallback, className = '' }: SceneProps
       >
         <Suspense fallback={null}>{children}</Suspense>
       </Canvas>
-    </div>
+    </CanvasFadeIn>
   )
 }
