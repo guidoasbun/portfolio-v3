@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getProject, updateProject, deleteProject } from '@/lib/services'
+import { getProject, updateProject, deleteProject } from '@/lib/services/projects.service.admin'
 import { projectFormSchema } from '@/lib/validations'
 import type { ApiResponse, Project } from '@/types'
 

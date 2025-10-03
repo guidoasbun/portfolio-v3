@@ -88,10 +88,27 @@ export function ProjectForm({
 
   const currentImages = watch('images')
 
+  // Update form images field when previews change (for validation)
+  React.useEffect(() => {
+    if (!isEditMode && previews.length > 0) {
+      // Set placeholder URLs for validation (will be replaced with real URLs on submit)
+      // Use valid URL format to pass validation
+      setValue('images', previews.map((_, i) => `https://placeholder.com/image-${i}`))
+    } else if (!isEditMode && previews.length === 0) {
+      // Clear images when all previews are removed
+      setValue('images', [])
+    }
+  }, [previews.length, isEditMode, setValue])
+
   // Handle form submission
   const onFormSubmit = async (data: ProjectFormValues) => {
     try {
-      let imageUrls = [...currentImages]
+      let imageUrls: string[] = []
+
+      // In edit mode, keep existing images that aren't placeholders
+      if (isEditMode) {
+        imageUrls = currentImages.filter(url => !url.includes('placeholder.com'))
+      }
 
       // Upload new images if any
       if (previews.length > 0) {
@@ -290,7 +307,7 @@ export function ProjectForm({
           maxImages={10}
         />
 
-        {errors.images && (
+        {errors.images && currentImages.length === 0 && previews.length === 0 && (
           <p className="text-sm text-red-500 mt-2">{errors.images.message}</p>
         )}
       </GlassCard>

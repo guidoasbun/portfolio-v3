@@ -18,7 +18,8 @@ import {
   FiBriefcase,
   FiFolder,
   FiMail,
-  FiFileText
+  FiFileText,
+  FiCode
 } from 'react-icons/fi'
 import { useState } from 'react'
 import type { NavItem } from '@/types/admin'
@@ -31,6 +32,7 @@ const navItems: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: FiHome },
   { href: '/admin/projects', label: 'Projects', icon: FiFolder },
   { href: '/admin/experience', label: 'Experience', icon: FiBriefcase },
+  { href: '/admin/skills', label: 'Skills', icon: FiCode },
   { href: '/admin/messages', label: 'Messages', icon: FiMail },
   { href: '/admin/resume', label: 'Resume', icon: FiFileText }
 ]

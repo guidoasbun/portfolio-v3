@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getExperiences, addExperience } from '@/lib/services'
+import { getExperiences, addExperience, getExperiencesByType } from '@/lib/services/experience.service.admin'
 import { experienceFormSchema } from '@/lib/validations'
 import type { ApiResponse, Experience, ExperienceType, ExperienceFormData } from '@/types'
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
     const searchParams = request.nextUrl.searchParams
     const type = searchParams.get('type') as ExperienceType | null
 
-    const experiences = await getExperiences(type || undefined)
+    const experiences = type ? await getExperiencesByType(type) : await getExperiences()
 
     return NextResponse.json({
       success: true,

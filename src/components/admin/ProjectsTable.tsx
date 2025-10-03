@@ -90,6 +90,7 @@ export function ProjectsTable({ projects, onDelete, loading }: ProjectsTableProp
                             src={project.images[0]}
                             alt={project.title}
                             fill
+                            sizes="64px"
                             className="object-cover"
                           />
                         ) : (
@@ -191,6 +192,7 @@ export function ProjectsTable({ projects, onDelete, loading }: ProjectsTableProp
                     src={project.images[0]}
                     alt={project.title}
                     fill
+                    sizes="80px"
                     className="object-cover"
                   />
                 ) : (

@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getActiveResume } from '@/lib/services'
+import { getActiveResume } from '@/lib/services/resume.service.admin'
 import type { ApiResponse, Resume } from '@/types'
 
 /**

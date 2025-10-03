@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getSkills, addSkill } from '@/lib/services'
+import { getSkills, addSkill, getSkillsByCategory, getFeaturedSkills } from '@/lib/services/skills.service.admin'
 import { skillFormSchema } from '@/lib/validations'
 import type { ApiResponse, Skill, SkillCategory } from '@/types'
 
@@ -22,7 +22,15 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       ? searchParams.get('featured') === 'true'
       : undefined
 
-    const skills = await getSkills(category || undefined, featured)
+    let skills: Skill[]
+
+    if (featured) {
+      skills = await getFeaturedSkills()
+    } else if (category) {
+      skills = await getSkillsByCategory(category)
+    } else {
+      skills = await getSkills()
+    }
 
     return NextResponse.json({
       success: true,

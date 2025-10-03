@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getExperience, updateExperience, deleteExperience } from '@/lib/services'
+import { getExperience, updateExperience, deleteExperience } from '@/lib/services/experience.service.admin'
 import { experienceFormSchema } from '@/lib/validations'
 import type { ApiResponse, Experience, ExperienceFormData } from '@/types'
 
