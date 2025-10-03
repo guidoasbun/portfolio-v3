@@ -81,23 +81,41 @@ export function ContactSection({ className }: ContactSectionProps) {
     mode: 'onBlur',
   })
 
-  const onSubmit = async (_data: ContactFormValues) => {
+  const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true)
 
-    // Simulate API call - will be replaced with actual API in Phase 5
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: data.message,
+        }),
+      })
 
-    // TODO: Replace with actual API call in Phase 5
-    // API endpoint will send: _data.name, _data.email, _data.subject, _data.message
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
 
-    setIsSubmitting(false)
-    setSubmitSuccess(true)
-    reset()
+      setSubmitSuccess(true)
+      reset()
 
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      setSubmitSuccess(false)
-    }, 5000)
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false)
+      }, 5000)
+    } catch (error) {
+      console.error('Error sending message:', error)
+      // Show error to user (you could add an error state here)
+      alert('Failed to send message. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
