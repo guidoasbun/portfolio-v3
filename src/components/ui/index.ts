@@ -16,6 +16,7 @@ export { FormField } from './FormField'
 export { FormError } from './FormError'
 export { Badge } from './Badge'
 export { TagsInput } from './TagsInput'
+export { DescriptionPointsInput } from './DescriptionPointsInput'
 
 // Loading & Feedback Components
 export { LoadingSpinner } from './LoadingSpinner'
