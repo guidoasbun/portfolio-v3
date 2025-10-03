@@ -83,6 +83,13 @@ export async function PUT(
       abortEarly: false,
     })
 
+    // Transform null values to undefined for optional fields
+    const updateData = {
+      ...validatedData,
+      liveUrl: validatedData.liveUrl || undefined,
+      githubUrl: validatedData.githubUrl || undefined,
+    }
+
     // Check if project exists
     const existingProject = await getProject(id)
     if (!existingProject) {
@@ -96,7 +103,7 @@ export async function PUT(
     }
 
     // Update the project
-    await updateProject(id, validatedData)
+    await updateProject(id, updateData)
 
     return NextResponse.json({
       success: true,

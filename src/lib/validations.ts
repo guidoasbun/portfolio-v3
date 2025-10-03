@@ -64,12 +64,23 @@ export const projectFormSchema = yup.object({
     .of(yup.string().url('Must be a valid URL').required())
     .min(1, 'At least one image is required')
     .required('Images are required'),
-  liveUrl: yup.string().url('Must be a valid URL').optional(),
-  githubUrl: yup.string().url('Must be a valid URL').optional(),
+  liveUrl: yup.string().url('Must be a valid URL').notRequired(),
+  githubUrl: yup.string().url('Must be a valid URL').notRequired(),
   featured: yup.boolean().required('Featured status is required'),
 })
 
-export type ProjectFormValues = yup.InferType<typeof projectFormSchema>
+// Manually define the type to handle optional fields properly
+export interface ProjectFormValues {
+  title: string
+  description: string
+  longDescription: string
+  technologies: string[]
+  category: string
+  images: string[]
+  liveUrl?: string
+  githubUrl?: string
+  featured: boolean
+}
 
 // Experience Form Validation Schema
 export const experienceFormSchema = yup.object({

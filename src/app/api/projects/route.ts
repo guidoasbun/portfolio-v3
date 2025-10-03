@@ -64,8 +64,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
       abortEarly: false,
     })
 
+    // Transform null values to undefined for optional fields
+    const projectData = {
+      ...validatedData,
+      liveUrl: validatedData.liveUrl || undefined,
+      githubUrl: validatedData.githubUrl || undefined,
+    }
+
     // Add the project to the database
-    const id = await addProject(validatedData)
+    const id = await addProject(projectData)
 
     return NextResponse.json({
       success: true,
