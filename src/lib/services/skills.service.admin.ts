@@ -1,8 +1,8 @@
 /**
- * Skills Database Service
+ * Skills Database Service (Admin SDK)
  *
- * Provides typed database operations for skills management.
- * All methods use Firebase Firestore through the db utility layer.
+ * Provides typed database operations for skills management using Firebase Admin SDK.
+ * Use this ONLY in API routes and server-side code.
  */
 
 import type { Skill, SkillFormData, SkillCategory } from '@/types'
@@ -13,31 +13,15 @@ import {
   addDocument,
   updateDocument,
   deleteDocument,
-  queryHelpers,
-} from '@/lib/firebase/db'
+} from '@/lib/firebase/db-admin'
 
 /**
- * Get all skills with optional filtering
+ * Get all skills
  */
-export const getSkills = async (
-  category?: SkillCategory,
-  featured?: boolean
-): Promise<Skill[]> => {
-  const constraints = []
-
-  if (category && category !== 'other') {
-    constraints.push(queryHelpers.where('category', '==', category))
-  }
-
-  if (featured !== undefined) {
-    constraints.push(queryHelpers.where('featured', '==', featured))
-  }
-
-  // Order by name alphabetically
-  constraints.push(queryHelpers.orderBy('name', 'asc'))
-
-  const skills = await getCollection<Skill>(COLLECTIONS.SKILLS, constraints)
-  return skills
+export const getSkills = async (): Promise<Skill[]> => {
+  const skills = await getCollection<Skill>(COLLECTIONS.SKILLS)
+  // Sort by name alphabetically
+  return skills.sort((a, b) => a.name.localeCompare(b.name))
 }
 
 /**
@@ -52,14 +36,16 @@ export const getSkill = async (id: string): Promise<Skill | null> => {
  * Get featured skills only
  */
 export const getFeaturedSkills = async (): Promise<Skill[]> => {
-  return getSkills(undefined, true)
+  const skills = await getSkills()
+  return skills.filter(skill => skill.featured)
 }
 
 /**
  * Get skills by category
  */
 export const getSkillsByCategory = async (category: SkillCategory): Promise<Skill[]> => {
-  return getSkills(category)
+  const skills = await getSkills()
+  return skills.filter(skill => skill.category === category)
 }
 
 /**
@@ -86,12 +72,7 @@ export const updateSkill = async (
   id: string,
   data: Partial<SkillFormData>
 ): Promise<void> => {
-  const updateData: Partial<Skill> = {
-    ...data,
-    updatedAt: new Date(),
-  }
-
-  await updateDocument<Skill>(COLLECTIONS.SKILLS, id, updateData)
+  await updateDocument<Skill>(COLLECTIONS.SKILLS, id, data)
 }
 
 /**

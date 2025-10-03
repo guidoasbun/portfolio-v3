@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getProjects, addProject } from '@/lib/services'
+import { getProjects, addProject, getFeaturedProjects, getProjectsByCategory } from '@/lib/services/projects.service.admin'
 import { projectFormSchema } from '@/lib/validations'
 import type { ApiResponse, Project } from '@/types'
 
@@ -22,7 +22,15 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       ? searchParams.get('featured') === 'true'
       : undefined
 
-    const projects = await getProjects(category, featured)
+    let projects: Project[]
+
+    if (featured) {
+      projects = await getFeaturedProjects()
+    } else if (category) {
+      projects = await getProjectsByCategory(category)
+    } else {
+      projects = await getProjects()
+    }
 
     return NextResponse.json({
       success: true,

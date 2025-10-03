@@ -143,12 +143,34 @@ export const skillFormSchema = yup.object({
     ),
   proficiency: yup
     .number()
+    .transform((value, originalValue) => {
+      // Handle empty string or NaN
+      if (originalValue === '' || originalValue === null || originalValue === undefined || isNaN(value)) {
+        return undefined
+      }
+      return value
+    })
     .optional()
     .min(1, 'Proficiency must be at least 1')
     .max(5, 'Proficiency must be at most 5'),
-  icon: yup.string().optional(),
-  color: yup.string().optional(),
-  featured: yup.boolean().optional(),
+  icon: yup
+    .string()
+    .transform((value) => (value === '' || value === null) ? undefined : value)
+    .optional(),
+  color: yup
+    .string()
+    .transform((value) => (value === '' || value === null) ? undefined : value)
+    .optional(),
+  featured: yup
+    .boolean()
+    .transform((value, originalValue) => {
+      // Handle checkbox values
+      if (originalValue === '' || originalValue === 'false' || originalValue === null || originalValue === undefined) {
+        return false
+      }
+      return Boolean(value)
+    })
+    .default(false),
 })
 
 export type SkillFormValues = yup.InferType<typeof skillFormSchema>

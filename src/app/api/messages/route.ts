@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getMessages, addMessage } from '@/lib/services'
+import { getMessages, addMessage } from '@/lib/services/messages.service.admin'
 import { messageSchema } from '@/lib/validations'
 import type { ApiResponse, Message } from '@/types'
 
@@ -34,7 +34,17 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       ? searchParams.get('replied') === 'true'
       : undefined
 
-    const messages = await getMessages(read, replied)
+    let messages = await getMessages()
+
+    // Filter by read status if specified
+    if (read !== undefined) {
+      messages = messages.filter(msg => msg.read === read)
+    }
+
+    // Filter by replied status if specified
+    if (replied !== undefined) {
+      messages = messages.filter(msg => msg.replied === replied)
+    }
 
     return NextResponse.json({
       success: true,

@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getMessage, updateMessage, deleteMessage, markAsRead, markAsReplied } from '@/lib/services'
+import { getMessage, updateMessage, deleteMessage, markMessageAsRead, markMessageAsReplied } from '@/lib/services/messages.service.admin'
 import type { ApiResponse, Message } from '@/types'
 
 interface RouteParams {
@@ -101,9 +101,9 @@ export async function PUT(
 
     // Handle specific actions
     if (body.action === 'mark-read') {
-      await markAsRead(id)
+      await markMessageAsRead(id)
     } else if (body.action === 'mark-replied') {
-      await markAsReplied(id)
+      await markMessageAsReplied(id)
     } else {
       // General update
       await updateMessage(id, body)

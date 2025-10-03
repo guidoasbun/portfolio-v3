@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getSkill, updateSkill, deleteSkill } from '@/lib/services'
+import { getSkill, updateSkill, deleteSkill } from '@/lib/services/skills.service.admin'
 import { skillFormSchema } from '@/lib/validations'
 import type { ApiResponse, Skill } from '@/types'
 

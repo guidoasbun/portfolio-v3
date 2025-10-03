@@ -1,7 +1,7 @@
 /**
- * Admin Projects List Page
+ * Admin Skills List Page
  *
- * Displays all projects with CRUD operations.
+ * Displays all skills with CRUD operations.
  */
 
 'use client'
@@ -11,56 +11,64 @@ import Link from 'next/link'
 import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
-import { ProjectsTable } from '@/components/admin/ProjectsTable'
+import { SkillsTable } from '@/components/admin/SkillsTable'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
 import { useModal } from '@/hooks/useModal'
 import { FiPlus, FiAlertCircle, FiCheckCircle } from 'react-icons/fi'
-import type { Project } from '@/types'
+import type { Skill, SkillCategory } from '@/types'
 
-export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([])
+export default function AdminSkillsPage() {
+  const [skills, setSkills] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | 'featured'>('all')
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null)
+  const [filter, setFilter] = useState<'all' | 'featured' | SkillCategory>('all')
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal()
 
-  // Fetch projects
-  const fetchProjects = useCallback(async () => {
+  // Fetch skills
+  const fetchSkills = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
-      const url = filter === 'all'
-        ? '/api/projects'
-        : '/api/projects?featured=true'
+      let url = '/api/skills'
+
+      if (filter === 'featured') {
+        url += '?featured=true'
+      } else if (filter !== 'all') {
+        url += `?category=${filter}`
+      }
 
       const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error('Failed to fetch projects')
+        throw new Error('Failed to fetch skills')
       }
 
       const result = await response.json()
-      setProjects(result.data || [])
+
+      // Handle ApiResponse format
+      const data = result.data || result
+
+      setSkills(data)
     } catch (err) {
-      console.error('Error fetching projects:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load projects')
+      console.error('Error fetching skills:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load skills')
     } finally {
       setLoading(false)
     }
   }, [filter])
 
   useEffect(() => {
-    fetchProjects()
-  }, [fetchProjects])
+    fetchSkills()
+  }, [fetchSkills])
 
   // Handle delete confirmation
-  const handleDeleteClick = (id: string, title: string) => {
-    setDeleteTarget({ id, title })
+  const handleDeleteClick = (id: string, name: string) => {
+    setDeleteTarget({ id, name })
     openDeleteModal()
   }
 
@@ -70,28 +78,38 @@ export default function AdminProjectsPage() {
 
     try {
       setDeleting(true)
-      const response = await fetch(`/api/projects/${deleteTarget.id}`, {
+      const response = await fetch(`/api/skills/${deleteTarget.id}`, {
         method: 'DELETE'
       })
 
       if (!response.ok) {
-        throw new Error('Failed to delete project')
+        throw new Error('Failed to delete skill')
       }
 
-      setSuccessMessage(`Project "${deleteTarget.title}" deleted successfully`)
+      setSuccessMessage(`Skill "${deleteTarget.name}" deleted successfully`)
       setTimeout(() => setSuccessMessage(null), 5000)
 
-      // Refresh projects list
-      await fetchProjects()
+      // Refresh skills list
+      await fetchSkills()
 
       closeDeleteModal()
       setDeleteTarget(null)
     } catch (err) {
-      console.error('Error deleting project:', err)
-      setError(err instanceof Error ? err.message : 'Failed to delete project')
+      console.error('Error deleting skill:', err)
+      setError(err instanceof Error ? err.message : 'Failed to delete skill')
     } finally {
       setDeleting(false)
     }
+  }
+
+  // Count by category
+  const countByCategory = (category: SkillCategory) => {
+    return skills.filter(skill => skill.category === category).length
+  }
+
+  // Count featured
+  const countFeatured = () => {
+    return skills.filter(skill => skill.featured).length
   }
 
   return (
@@ -100,16 +118,16 @@ export default function AdminProjectsPage() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <Heading as="h1" className="mb-2">
-            Projects
+            Skills
           </Heading>
           <p className="text-muted-foreground">
-            Manage your portfolio projects
+            Manage your technical skills and expertise
           </p>
         </div>
-        <Link href="/admin/projects/new">
+        <Link href="/admin/skills/new">
           <Button>
             <FiPlus className="mr-2" />
-            Create Project
+            Add Skill
           </Button>
         </Link>
       </div>
@@ -139,30 +157,65 @@ export default function AdminProjectsPage() {
 
       {/* Filters */}
       <GlassCard>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <span className="text-sm font-medium">Filter:</span>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button
               variant={filter === 'all' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setFilter('all')}
             >
-              All Projects ({projects.length})
+              All ({skills.length})
             </Button>
             <Button
               variant={filter === 'featured' ? 'primary' : 'ghost'}
               size="sm"
               onClick={() => setFilter('featured')}
             >
-              Featured
+              Featured ({countFeatured()})
+            </Button>
+            <Button
+              variant={filter === 'frontend' ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('frontend')}
+            >
+              Frontend ({countByCategory('frontend')})
+            </Button>
+            <Button
+              variant={filter === 'backend' ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('backend')}
+            >
+              Backend ({countByCategory('backend')})
+            </Button>
+            <Button
+              variant={filter === 'database' ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('database')}
+            >
+              Database ({countByCategory('database')})
+            </Button>
+            <Button
+              variant={filter === 'tools' ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('tools')}
+            >
+              Tools ({countByCategory('tools')})
+            </Button>
+            <Button
+              variant={filter === 'design' ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setFilter('design')}
+            >
+              Design ({countByCategory('design')})
             </Button>
           </div>
         </div>
       </GlassCard>
 
-      {/* Projects Table */}
-      <ProjectsTable
-        projects={projects}
+      {/* Skills Table */}
+      <SkillsTable
+        skills={skills}
         onDelete={handleDeleteClick}
         loading={loading}
       />
@@ -172,10 +225,10 @@ export default function AdminProjectsPage() {
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
         onConfirm={handleDelete}
-        title="Delete Project"
+        title="Delete Skill"
         message={
           deleteTarget
-            ? `Are you sure you want to delete "${deleteTarget.title}"? This action cannot be undone.`
+            ? `Are you sure you want to delete "${deleteTarget.name}"? This action cannot be undone.`
             : ''
         }
         confirmText="Delete"
