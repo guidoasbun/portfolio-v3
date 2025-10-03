@@ -14,6 +14,8 @@ export { Select, type SelectOption, type SelectOptionGroup } from './Select'
 export { Label } from './Label'
 export { FormField } from './FormField'
 export { FormError } from './FormError'
+export { Badge } from './Badge'
+export { TagsInput } from './TagsInput'
 
 // Loading & Feedback Components
 export { LoadingSpinner } from './LoadingSpinner'
