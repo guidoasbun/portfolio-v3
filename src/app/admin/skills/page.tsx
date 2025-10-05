@@ -2,47 +2,62 @@
  * Admin Skills List Page
  *
  * Displays all skills with CRUD operations.
+ * Features: search, category/featured filtering, sorting, and pagination.
  */
 
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
+import { Input } from '@/components/ui/Input'
+import { Select } from '@/components/ui/Select'
 import { SkillsTable } from '@/components/admin/SkillsTable'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { Pagination } from '@/components/ui/Pagination'
 import { useModal } from '@/hooks/useModal'
-import { FiPlus, FiAlertCircle, FiCheckCircle } from 'react-icons/fi'
+import { useFilterPersistence } from '@/hooks/useFilterPersistence'
+import { FiPlus, FiAlertCircle, FiCheckCircle, FiSearch, FiX } from 'react-icons/fi'
 import type { Skill, SkillCategory } from '@/types'
+
+type SortOption = 'name-asc' | 'name-desc' | 'category' | 'featured'
+
+interface SkillFilters {
+  search: string
+  category: 'all' | 'featured' | SkillCategory
+  sortBy: SortOption
+  page: number
+}
+
+const ITEMS_PER_PAGE = 15
 
 export default function AdminSkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | 'featured' | SkillCategory>('all')
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal()
 
-  // Fetch skills
+  // Persisted filters
+  const [filters, setFilters] = useFilterPersistence<SkillFilters>('admin-skills-filters', {
+    search: '',
+    category: 'all',
+    sortBy: 'name-asc',
+    page: 1,
+  })
+
+  // Fetch skills (fetch all, filter client-side)
   const fetchSkills = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
-      let url = '/api/skills'
-
-      if (filter === 'featured') {
-        url += '?featured=true'
-      } else if (filter !== 'all') {
-        url += `?category=${filter}`
-      }
-
-      const response = await fetch(url)
+      const response = await fetch('/api/skills')
 
       if (!response.ok) {
         throw new Error('Failed to fetch skills')
@@ -60,11 +75,74 @@ export default function AdminSkillsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filter])
+  }, [])
 
   useEffect(() => {
     fetchSkills()
   }, [fetchSkills])
+
+  // Filter and sort skills
+  const filteredAndSortedSkills = useMemo(() => {
+    let filtered = skills
+
+    // Apply category filter
+    if (filters.category === 'featured') {
+      filtered = filtered.filter((skill) => skill.featured)
+    } else if (filters.category !== 'all') {
+      filtered = filtered.filter((skill) => skill.category === filters.category)
+    }
+
+    // Apply search filter
+    if (filters.search.trim()) {
+      const query = filters.search.toLowerCase()
+      filtered = filtered.filter((skill) => skill.name.toLowerCase().includes(query))
+    }
+
+    // Apply sorting
+    const sorted = [...filtered]
+    switch (filters.sortBy) {
+      case 'name-asc':
+        sorted.sort((a, b) => a.name.localeCompare(b.name))
+        break
+      case 'name-desc':
+        sorted.sort((a, b) => b.name.localeCompare(a.name))
+        break
+      case 'category':
+        sorted.sort((a, b) => {
+          if (a.category === b.category) {
+            return a.name.localeCompare(b.name)
+          }
+          return a.category.localeCompare(b.category)
+        })
+        break
+      case 'featured':
+        sorted.sort((a, b) => {
+          if (a.featured === b.featured) {
+            return a.name.localeCompare(b.name)
+          }
+          return a.featured ? -1 : 1
+        })
+        break
+    }
+
+    return sorted
+  }, [skills, filters])
+
+  // Paginate skills
+  const paginatedSkills = useMemo(() => {
+    const startIndex = (filters.page - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return filteredAndSortedSkills.slice(startIndex, endIndex)
+  }, [filteredAndSortedSkills, filters.page])
+
+  const totalPages = Math.ceil(filteredAndSortedSkills.length / ITEMS_PER_PAGE)
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (filters.page > totalPages && totalPages > 0) {
+      setFilters((prev) => ({ ...prev, page: 1 }))
+    }
+  }, [filters.page, totalPages, setFilters])
 
   // Handle delete confirmation
   const handleDeleteClick = (id: string, name: string) => {
@@ -155,70 +233,124 @@ export default function AdminSkillsPage() {
         </GlassCard>
       )}
 
-      {/* Filters */}
+      {/* Search */}
       <GlassCard>
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm font-medium">Filter:</span>
-          <div className="flex gap-2 flex-wrap">
-            <Button
-              variant={filter === 'all' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('all')}
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by skill name..."
+            value={filters.search}
+            onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))}
+            className="pl-10 pr-10"
+          />
+          {filters.search && (
+            <button
+              onClick={() => setFilters((prev) => ({ ...prev, search: '', page: 1 }))}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear search"
             >
-              All ({skills.length})
-            </Button>
-            <Button
-              variant={filter === 'featured' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('featured')}
+              <FiX size={18} />
+            </button>
+          )}
+        </div>
+      </GlassCard>
+
+      {/* Filters and Sort */}
+      <GlassCard>
+        <div className="flex flex-col gap-4">
+          {/* Category Filter */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-sm font-medium">Category:</span>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={filters.category === 'all' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'all', page: 1 }))}
+              >
+                All ({skills.length})
+              </Button>
+              <Button
+                variant={filters.category === 'featured' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'featured', page: 1 }))}
+              >
+                Featured ({countFeatured()})
+              </Button>
+              <Button
+                variant={filters.category === 'frontend' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'frontend', page: 1 }))}
+              >
+                Frontend ({countByCategory('frontend')})
+              </Button>
+              <Button
+                variant={filters.category === 'backend' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'backend', page: 1 }))}
+              >
+                Backend ({countByCategory('backend')})
+              </Button>
+              <Button
+                variant={filters.category === 'database' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'database', page: 1 }))}
+              >
+                Database ({countByCategory('database')})
+              </Button>
+              <Button
+                variant={filters.category === 'tools' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'tools', page: 1 }))}
+              >
+                Tools ({countByCategory('tools')})
+              </Button>
+              <Button
+                variant={filters.category === 'design' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, category: 'design', page: 1 }))}
+              >
+                Design ({countByCategory('design')})
+              </Button>
+            </div>
+          </div>
+
+          {/* Sort */}
+          <div className="flex items-center gap-3 flex-1 min-w-[200px]">
+            <span className="text-sm font-medium whitespace-nowrap">Sort by:</span>
+            <Select
+              value={filters.sortBy}
+              onChange={(e) => setFilters((prev) => ({ ...prev, sortBy: e.target.value as SortOption }))}
+              className="flex-1 max-w-xs"
             >
-              Featured ({countFeatured()})
-            </Button>
-            <Button
-              variant={filter === 'frontend' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('frontend')}
-            >
-              Frontend ({countByCategory('frontend')})
-            </Button>
-            <Button
-              variant={filter === 'backend' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('backend')}
-            >
-              Backend ({countByCategory('backend')})
-            </Button>
-            <Button
-              variant={filter === 'database' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('database')}
-            >
-              Database ({countByCategory('database')})
-            </Button>
-            <Button
-              variant={filter === 'tools' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('tools')}
-            >
-              Tools ({countByCategory('tools')})
-            </Button>
-            <Button
-              variant={filter === 'design' ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setFilter('design')}
-            >
-              Design ({countByCategory('design')})
-            </Button>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+              <option value="category">Category</option>
+              <option value="featured">Featured First</option>
+            </Select>
           </div>
         </div>
       </GlassCard>
 
       {/* Skills Table */}
       <SkillsTable
-        skills={skills}
+        skills={paginatedSkills}
         onDelete={handleDeleteClick}
         loading={loading}
       />
+
+      {/* Pagination */}
+      {!loading && filteredAndSortedSkills.length > ITEMS_PER_PAGE && (
+        <GlassCard>
+          <Pagination
+            currentPage={filters.page}
+            totalPages={totalPages}
+            totalItems={filteredAndSortedSkills.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+          />
+        </GlassCard>
+      )}
 
       {/* Delete Confirmation Modal */}
       <ConfirmModal
