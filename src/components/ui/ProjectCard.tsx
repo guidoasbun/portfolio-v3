@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { GlassCard } from '@/components/ui/GlassCard'
@@ -16,7 +16,7 @@ interface ProjectCardProps {
   className?: string
 }
 
-export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
+function ProjectCardComponent({ project, onClick, className }: ProjectCardProps) {
   const {
     title,
     description,
@@ -173,3 +173,6 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
     </GlassCard>
   )
 }
+
+// Memoize component to prevent unnecessary re-renders
+export const ProjectCard = memo(ProjectCardComponent)

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo } from 'react'
 import { motion } from 'framer-motion'
 import { GlassCard } from './GlassCard'
 import type { Skill } from '@/types'
@@ -11,7 +11,7 @@ interface SkillCardProps {
   index: number
 }
 
-export function SkillCard({ skill, index }: SkillCardProps) {
+function SkillCardComponent({ skill, index }: SkillCardProps) {
   const { name, color } = skill
 
   return (
@@ -69,3 +69,6 @@ export function SkillCard({ skill, index }: SkillCardProps) {
     </motion.div>
   )
 }
+
+// Memoize component to prevent unnecessary re-renders
+export const SkillCard = memo(SkillCardComponent)
