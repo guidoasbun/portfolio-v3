@@ -95,7 +95,7 @@ export const defaultMetadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  manifest: "/manifest.json",
 };
 
 // Page-specific metadata generators

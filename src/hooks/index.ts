@@ -15,3 +15,12 @@ export { useFirestore, useFirestoreDoc } from './useFirestore'
 
 // Three.js Hooks
 export { useLazyThree } from './useLazyThree'
+
+// Utility Hooks
+export { useOnlineStatus } from './useOnlineStatus'
+export { useInView } from './useInView'
+export { useFilterPersistence } from './useFilterPersistence'
+export { useAdminStats } from './useAdminStats'
+export { useAnalytics } from './useAnalytics'
+export { useFocusTrap } from './useFocusTrap'
+export { useReducedMotion } from './useReducedMotion'

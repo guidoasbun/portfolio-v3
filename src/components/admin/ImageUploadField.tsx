@@ -138,6 +138,7 @@ export function ImageUploadField({
                     src={preview.preview}
                     alt={preview.name}
                     fill
+                    loading="lazy"
                     className="object-cover"
                   />
                   {/* Progress Overlay */}
