@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { IoCloseOutline } from 'react-icons/io5'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface ModalProps {
   isOpen: boolean
@@ -31,6 +32,10 @@ export function Modal({
 }: ModalProps) {
   const [mounted, setMounted] = React.useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
+  const focusTrapRef = useFocusTrap({
+    isActive: isOpen,
+    onEscape: closeOnEsc ? onClose : undefined
+  })
 
   // Handle portal mounting
   useEffect(() => {
@@ -106,7 +111,15 @@ export function Modal({
 
           {/* Modal */}
           <motion.div
-            ref={modalRef}
+            ref={(node) => {
+              // Assign to both refs
+              if (modalRef) {
+                (modalRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+              }
+              if (focusTrapRef) {
+                (focusTrapRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+              }
+            }}
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
@@ -118,12 +131,15 @@ export function Modal({
               className
             )}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title ? 'modal-title' : undefined}
           >
             {/* Header */}
             {(title || showCloseButton) && (
               <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
                 {title && (
-                  <h2 className="text-xl font-semibold text-foreground">
+                  <h2 id="modal-title" className="text-xl font-semibold text-foreground">
                     {title}
                   </h2>
                 )}
@@ -134,6 +150,7 @@ export function Modal({
                       'p-1 rounded-lg transition-colors',
                       'text-foreground/60 hover:text-foreground',
                       'hover:bg-foreground/10',
+                      'focus:outline-none focus:ring-2 focus:ring-accent-blue',
                       !title && 'ml-auto'
                     )}
                     aria-label="Close modal"

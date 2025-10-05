@@ -77,6 +77,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
   return (
     <motion.nav
+      id="navigation"
       variants={slideDown}
       initial="hidden"
       animate="visible"
@@ -86,6 +87,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           ? 'glass shadow-lg'
           : 'bg-transparent'
       )}
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">

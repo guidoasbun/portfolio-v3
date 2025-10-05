@@ -6,6 +6,7 @@ import { MobileMenu } from './MobileMenu'
 import { Footer } from './Footer'
 import { ScrollToTop } from './ScrollToTop'
 import { GradientBackground } from './GradientBackground'
+import { SkipNav } from './SkipNav'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -24,12 +25,13 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <>
+      <SkipNav />
       <GradientBackground />
       <div className="relative min-h-screen flex flex-col">
         <Navbar onMenuClick={handleMenuOpen} />
         <MobileMenu isOpen={isMobileMenuOpen} onClose={handleMenuClose} />
 
-        <main className="flex-grow pt-16">
+        <main id="main-content" className="flex-grow pt-16" tabIndex={-1}>
           {children}
         </main>
 

@@ -179,6 +179,106 @@ html {
   box-sizing: border-box;
 }
 
+/* ============================================
+   ACCESSIBILITY STYLES
+   ============================================ */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Skip navigation links - visible on focus */
+.skip-nav-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.skip-nav-link:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --glass-light: rgba(255, 255, 255, 0.3);
+    --glass-medium: rgba(255, 255, 255, 0.5);
+    --glass-heavy: rgba(255, 255, 255, 0.7);
+    --border-glass: rgba(0, 0, 0, 0.5);
+    --border-glass-dark: rgba(0, 0, 0, 0.7);
+  }
+
+  .dark {
+    --glass-light: rgba(0, 0, 0, 0.3);
+    --glass-medium: rgba(0, 0, 0, 0.5);
+    --glass-heavy: rgba(0, 0, 0, 0.7);
+    --border-glass: rgba(255, 255, 255, 0.5);
+    --border-glass-dark: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Increase border visibility */
+  .glass,
+  .glass-light,
+  .glass-heavy {
+    border-width: 2px;
+  }
+
+  /* Ensure text has sufficient contrast */
+  body {
+    color: var(--foreground);
+  }
+
+  /* Increase focus indicator visibility */
+  *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus within styles for complex components */
+.glass:focus-within,
+.glass-light:focus-within,
+.glass-heavy:focus-within {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
 /* Ensure proper backdrop-filter support */
 @supports (backdrop-filter: blur(10px)) {
   .glass,
