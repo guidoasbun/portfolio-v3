@@ -2,39 +2,39 @@
 
 A modern, production-ready portfolio website built with Next.js 15.5.3, featuring glass morphism design, 3D animations with Three.js, and a comprehensive admin dashboard powered by Firebase.
 
-## ✨ Features
+## Features
 
 ### Public Portfolio
-- 🎨 **Glass Morphism Design** - Modern UI with transparent cards and backdrop blur
-- 🌓 **Dark/Light/System Theme** - Full theme support with smooth transitions
-- 🎭 **3D Animations** - Interactive Three.js background with performance optimization
-- 📱 **Fully Responsive** - Mobile-first design that works on all devices
-- ♿ **Accessible** - WCAG compliant with keyboard navigation support
-- 📧 **Contact Form** - Spam-protected form with email notifications and reCAPTCHA
-- 📄 **Resume Management** - PDF resume viewer with download tracking
-- 🔌 **Progressive Enhancement** - Lazy loading, offline detection, and blur placeholders
-- 📱 **PWA Ready** - Web app manifest and service worker infrastructure
+- **Glass Morphism Design** - Modern UI with transparent cards and backdrop blur
+- **Dark/Light/System Theme** - Full theme support with smooth transitions
+- **3D Animations** - Interactive Three.js background with performance optimization
+- **Fully Responsive** - Mobile-first design that works on all devices
+- **Accessible** - WCAG compliant with keyboard navigation support
+- **Contact Form** - Spam-protected form with email notifications and reCAPTCHA
+- **Resume Management** - PDF resume viewer with download tracking
+- **Progressive Enhancement** - Lazy loading, offline detection, and blur placeholders
+- **PWA Ready** - Web app manifest and service worker infrastructure
 
 ### Admin Dashboard
-- 🔐 **Firebase Authentication** - Secure admin access with email/password
-- 📊 **Real-time Dashboard** - Live stats from Firestore
-- 🎯 **Project Management** - Full CRUD with image upload to Firebase Storage
-- 💼 **Experience Management** - Timeline management with rich content
-- 🛠️ **Skills Management** - Category-based skill organization
-- 💬 **Message Management** - Contact form submissions with status tracking
-- 📄 **Resume Management** - PDF upload with version control
+- **Firebase Authentication** - Secure admin access with email/password
+- **Real-time Dashboard** - Live stats from Firestore
+- **Project Management** - Full CRUD with image upload to Firebase Storage
+- **Experience Management** - Timeline management with rich content
+- **Skills Management** - Category-based skill organization
+- **Message Management** - Contact form submissions with status tracking
+- **Resume Management** - PDF upload with version control
 
 ### Security & Performance
-- 🛡️ **Rate Limiting** - IP-based protection (3 submissions/15min on contact form)
-- 🤖 **reCAPTCHA v3** - Invisible bot protection with server-side verification
-- 🍯 **Honeypot Fields** - Additional spam protection
-- 📧 **Email Notifications** - Admin alerts and user confirmations
-- ⚡ **Optimized Performance** - Code splitting, lazy loading, and image optimization
-- 🖼️ **Progressive Images** - Blur placeholders and lazy loading for better UX
-- 🔌 **Offline Detection** - Real-time connection status notifications
-- 🎯 **TypeScript** - Full type safety with strict mode
+- **Rate Limiting** - IP-based protection (3 submissions/15min on contact form)
+- **reCAPTCHA v3** - Invisible bot protection with server-side verification
+- **Honeypot Fields** - Additional spam protection
+- **Email Notifications** - Admin alerts and user confirmations
+- **Optimized Performance** - Code splitting, lazy loading, and image optimization
+- **Progressive Images** - Blur placeholders and lazy loading for better UX
+- **Offline Detection** - Real-time connection status notifications
+- **TypeScript** - Full type safety with strict mode
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework**: Next.js 15.5.3 (App Router, Turbopack)
 - **Language**: TypeScript 5
@@ -46,14 +46,14 @@ A modern, production-ready portfolio website built with Next.js 15.5.3, featurin
 - **Email**: Nodemailer (SMTP)
 - **Security**: Google reCAPTCHA v3
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js 18+ and npm
 - Firebase project (free tier works)
 - Gmail account (or other SMTP provider) for email notifications
 - Google reCAPTCHA v3 keys
 
-## 🛠️ Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -87,7 +87,7 @@ A modern, production-ready portfolio website built with Next.js 15.5.3, featurin
    - Get keys from [Google reCAPTCHA](https://www.google.com/recaptcha/admin)
    - Add site key and secret to `.env.local`
 
-## 🏃 Running Locally
+## Running Locally
 
 ```bash
 # Development mode with Turbopack
@@ -108,7 +108,7 @@ npm run lint
 
 Open [http://localhost:3000](http://localhost:3000) to view the portfolio.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 portfolio/
@@ -136,7 +136,7 @@ portfolio/
 └── public/                    # Static assets
 ```
 
-## 🔐 Admin Access
+## Admin Access
 
 1. **Create Admin User**
    ```bash
@@ -156,27 +156,27 @@ portfolio/
    Navigate to: http://localhost:3000/admin/login
    ```
 
-## 📧 Contact Form Setup
+## Contact Form Setup
 
 The contact form includes:
-- ✅ Email notifications (admin + user confirmation)
-- ✅ Rate limiting (3 submissions per 15 minutes)
-- ✅ reCAPTCHA v3 verification
-- ✅ Honeypot spam protection
-- ✅ Form validation with Yup
+- Email notifications (admin + user confirmation)
+- Rate limiting (3 submissions per 15 minutes)
+- reCAPTCHA v3 verification
+- Honeypot spam protection
+- Form validation with Yup
 
 See [Contact Form Setup Guide](./documentation/contact-form-setup-guide.md) for detailed configuration.
 
-## 🎨 Theme Customization
+## Theme Customization
 
 The portfolio supports three theme modes:
-- 🌙 **Dark Mode** - Default dark theme
-- ☀️ **Light Mode** - Light theme variant
-- 🔄 **System Mode** - Follows OS preference
+- **Dark Mode** - Default dark theme
+- **Light Mode** - Light theme variant
+- **System Mode** - Follows OS preference
 
 Theme persists across sessions and applies to all components including Three.js scenes.
 
-## 📚 Documentation
+## Documentation
 
 - [Development Roadmap](./documentation/roadmap.md) - Project phases and progress
 - [Firebase Setup Guide](./documentation/firebase-setup-guide.md) - Firebase configuration
@@ -185,7 +185,7 @@ Theme persists across sessions and applies to all components including Three.js 
 - [Phase 7.7 Summary](./documentation/phase-7.7-progressive-enhancement.md) - Progressive enhancement features
 - [CLAUDE.md](./CLAUDE.md) - Project architecture and guidelines
 
-## 🚢 Deployment
+## Deployment
 
 ### Firebase Hosting (Recommended)
 
@@ -216,7 +216,7 @@ Theme persists across sessions and applies to all components including Three.js 
 
 See [deployment documentation](./documentation/roadmap.md#phase-8-polish--deployment-week-8) for detailed instructions.
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Type checking
@@ -229,15 +229,15 @@ npm run lint
 npm run build
 ```
 
-## 📈 Performance
+## Performance
 
-- ⚡ Lighthouse Score: 90+ (target)
-- 🎯 First Contentful Paint: < 1.5s
-- 🚀 Time to Interactive: < 3.5s
-- 📦 Initial Bundle: < 500KB
-- 🎮 3D Performance: 60fps desktop, 30fps mobile
+- Lighthouse Score: 90+ (target)
+- First Contentful Paint: < 1.5s
+- Time to Interactive: < 3.5s
+- Initial Bundle: < 500KB
+- 3D Performance: 60fps desktop, 30fps mobile
 
-## 🔒 Security Features
+## Security Features
 
 - Rate limiting on contact form (IP-based)
 - reCAPTCHA v3 bot protection
@@ -247,7 +247,7 @@ npm run build
 - Input validation (client + server)
 - TypeScript type safety
 
-## 🤝 Contributing
+## Contributing
 
 This is a personal portfolio project, but suggestions and feedback are welcome!
 
@@ -257,11 +257,11 @@ This is a personal portfolio project, but suggestions and feedback are welcome!
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Next.js team for the amazing framework
 - Firebase for backend infrastructure
@@ -269,7 +269,7 @@ This project is open source and available under the [MIT License](LICENSE).
 - Framer Motion for smooth animations
 - Tailwind CSS for utility-first styling
 
-## 📞 Support
+## Support
 
 For issues and questions:
 - Check [documentation](./documentation/)
@@ -278,4 +278,4 @@ For issues and questions:
 
 ---
 
-Built with ❤️ using Next.js, TypeScript, and Firebase
+Built with Next.js, TypeScript, and Firebase
