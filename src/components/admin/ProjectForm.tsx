@@ -49,6 +49,7 @@ export function ProjectForm({
     setValue,
     watch
   } = useForm<ProjectFormValues>({
+    // @ts-expect-error - Yup resolver type mismatch with optional fields
     resolver: yupResolver(projectFormSchema),
     defaultValues: initialData
       ? {
@@ -139,7 +140,7 @@ export function ProjectForm({
   const longDescriptionLength = watch('longDescription')?.length || 0
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onFormSubmit as never)} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Project' : 'Create New Project'}

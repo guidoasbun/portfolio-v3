@@ -1,15 +1,35 @@
 {
-  "name": "Portfolio - Full Stack Developer",
-  "short_name": "Portfolio",
+  "name": "Guido Asbun - Full Stack Developer",
+  "short_name": "Guido Asbun",
   "description": "Full Stack Developer specializing in React, Next.js, and TypeScript. View my portfolio, projects, and experience in modern web development.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "orientation": "portrait-primary",
+  "lang": "en-US",
+  "dir": "ltr",
   "icons": [],
   "categories": [
     "business",
-    "portfolio"
+    "portfolio",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "View Projects",
+      "short_name": "Projects",
+      "description": "Browse my portfolio projects",
+      "url": "/#projects",
+      "icons": []
+    },
+    {
+      "name": "Contact Me",
+      "short_name": "Contact",
+      "description": "Get in touch",
+      "url": "/#contact",
+      "icons": []
+    }
   ]
 }

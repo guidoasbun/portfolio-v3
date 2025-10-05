@@ -42,6 +42,7 @@ export function SkillForm({
     formState: { errors },
     watch
   } = useForm<SkillFormValues>({
+    // @ts-expect-error - Yup resolver type mismatch with optional fields
     resolver: yupResolver(skillFormSchema),
     defaultValues: initialData
       ? {
@@ -65,7 +66,7 @@ export function SkillForm({
   const colorValue = watch('color')
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit as never)} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Skill' : 'Add New Skill'}

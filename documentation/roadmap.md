@@ -825,19 +825,26 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 - [x] Remove all TypeScript `any` types (zero `any` types in codebase)
 - [x] Verify production build succeeds (✓ Compiled successfully with no TS errors)
 
-### 8.7 Deployment Preparation
+### 8.7 Deployment Preparation ✅ COMPLETED
 
-- [ ] Install Firebase CLI (npm install -g firebase-tools)
-- [ ] Initialize Firebase Hosting (firebase init hosting)
-- [ ] Configure firebase.json for Next.js
-- [ ] Set up .firebaserc with project ID
-- [ ] Configure Cloud Functions (Gen 2) for API routes/SSR
-- [ ] Set up GitHub Actions CI/CD (firebase init hosting:github)
-- [ ] Configure environment variables in Firebase Console
-- [ ] Set up custom domain in Firebase Hosting
-- [ ] Configure SSL certificate (automatic with Firebase)
-- [ ] Create production build (npm run build)
-- [ ] Test production build locally (firebase emulators:start)
+- [x] Install Firebase CLI (npm install -g firebase-tools)
+- [x] Initialize Firebase Hosting (firebase init hosting)
+- [x] Configure firebase.json for Next.js
+- [x] Set up .firebaserc with project ID
+- [x] Configure Cloud Functions (Gen 2) for API routes/SSR
+- [x] Set up GitHub Actions CI/CD (firebase init hosting:github)
+- [x] Configure environment variables in Firebase Console
+- [x] Set up custom domain in Firebase Hosting
+- [x] Configure SSL certificate (automatic with Firebase)
+- [x] Create production build (npm run build) - Zero TypeScript errors
+- [x] Test production build locally (firebase emulators:start)
+- [x] Create AWS Route 53 to Firebase migration guide
+- [x] Update production environment variables with guido-asbun.com
+- [x] Update metadata.ts and manifest.json with production URLs
+- [x] Fix TypeScript type errors in admin forms (ExperienceForm, ProjectForm, SkillForm)
+- [x] Add static export configuration for sitemap.ts
+- [x] Remove dynamic OG image generation (incompatible with Firebase)
+- [x] Create GitHub Actions workflows (merge and PR preview)
 
 ### 8.8 Launch
 

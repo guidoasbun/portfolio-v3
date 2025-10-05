@@ -12,7 +12,7 @@ export const siteConfig = {
   title: "Portfolio - Full Stack Developer",
   description:
     "Modern portfolio showcasing web development projects with glass morphism design and 3D animations. Specialized in React, Next.js, and TypeScript.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourportfolio.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://guido-asbun.com",
   author: {
     name: "Guido Asbun",
     email: "guido@asbun.io",
