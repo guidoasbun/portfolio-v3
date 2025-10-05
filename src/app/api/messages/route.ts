@@ -9,6 +9,9 @@ import { NextResponse } from 'next/server'
 import { getMessages, addMessage } from '@/lib/services/messages.service.admin'
 import { messageSchema } from '@/lib/validations'
 import type { ApiResponse, Message } from '@/types'
+import { rateLimitMiddleware, RATE_LIMITS } from '@/lib/rate-limiter'
+import { verifyRecaptchaWithScore } from '@/lib/recaptcha'
+import { sendContactFormEmails } from '@/lib/email'
 
 /**
  * GET /api/messages
@@ -70,27 +73,92 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
  */
 export async function POST(request: NextRequest): Promise<NextResponse<ApiResponse<{ id: string }>>> {
   try {
+    // 1. Check rate limiting (3 submissions per 15 minutes)
+    const rateLimitResult = await rateLimitMiddleware(request, RATE_LIMITS.CONTACT_FORM)
+
+    if (!rateLimitResult.success) {
+      const retryAfter = Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Too many requests. Please try again later.',
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': retryAfter.toString(),
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': new Date(rateLimitResult.resetTime).toISOString(),
+          },
+        }
+      )
+    }
+
     const body = await request.json()
 
-    // Validate the request body
-    const validatedData = await messageSchema.validate(body, {
+    // 2. Verify reCAPTCHA token (if provided)
+    const { recaptchaToken, ...formData } = body
+
+    if (recaptchaToken) {
+      const recaptchaResult = await verifyRecaptchaWithScore(recaptchaToken, 0.5)
+
+      if (!recaptchaResult.valid) {
+        console.warn('reCAPTCHA verification failed:', recaptchaResult.error)
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Security verification failed. Please try again.',
+          },
+          { status: 400 }
+        )
+      }
+
+      // Log successful verification (optional)
+      console.log('reCAPTCHA verification successful. Score:', recaptchaResult.score)
+    }
+
+    // 3. Validate the request body
+    const validatedData = await messageSchema.validate(formData, {
       abortEarly: false,
     })
 
-    // TODO: Add rate limiting here to prevent spam
-    // Check if the same email has sent a message in the last X minutes
-
-    // Add the message to the database
+    // 4. Add the message to the database
     const id = await addMessage(validatedData)
 
-    // TODO: Send email notification to admin
-    // await sendEmailNotification(validatedData)
+    // 5. Send email notifications (async, don't block response)
+    sendContactFormEmails(validatedData)
+      .then((results) => {
+        if (results.admin.success) {
+          console.log('Admin notification sent successfully')
+        } else {
+          console.error('Failed to send admin notification:', results.admin.error)
+        }
 
-    return NextResponse.json({
-      success: true,
-      data: { id },
-      message: 'Message sent successfully. We will get back to you soon!',
-    }, { status: 201 })
+        if (results.user.success) {
+          console.log('User confirmation sent successfully')
+        } else {
+          console.error('Failed to send user confirmation:', results.user.error)
+        }
+      })
+      .catch((error) => {
+        console.error('Error sending emails:', error)
+      })
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: { id },
+        message: 'Message sent successfully. We will get back to you soon!',
+      },
+      {
+        status: 201,
+        headers: {
+          'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+          'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+        },
+      }
+    )
   } catch (error) {
     console.error('Error creating message:', error)
 
