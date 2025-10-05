@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { GlassCard } from './GlassCard'
 import type { Experience } from '@/types'
@@ -21,7 +21,7 @@ interface TimelineItemProps {
   isLast?: boolean
 }
 
-export function TimelineItem({ experience, index, isLast = false }: TimelineItemProps) {
+function TimelineItemComponent({ experience, index, isLast = false }: TimelineItemProps) {
   const {
     type,
     title,
@@ -76,9 +76,10 @@ export function TimelineItem({ experience, index, isLast = false }: TimelineItem
     }
   }
 
-  const Icon = getIcon()
-  const dateRange = formatDateRange(startDate, endDate, current)
-  const duration = calculateDuration(startDate, endDate, current)
+  // Memoize computed values to prevent recalculation on every render
+  const Icon = useMemo(() => getIcon(), [type])
+  const dateRange = useMemo(() => formatDateRange(startDate, endDate, current), [startDate, endDate, current])
+  const duration = useMemo(() => calculateDuration(startDate, endDate, current), [startDate, endDate, current])
 
   return (
     <div className="relative flex gap-6">
@@ -223,3 +224,6 @@ export function TimelineItem({ experience, index, isLast = false }: TimelineItem
     </div>
   )
 }
+
+// Memoize component to prevent unnecessary re-renders
+export const TimelineItem = memo(TimelineItemComponent)
