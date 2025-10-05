@@ -1,7 +1,7 @@
 /**
  * Admin Messages List Page
  *
- * Displays all contact form messages with filtering, search, and CRUD operations.
+ * Displays all contact form messages with filtering, search, sorting, and pagination.
  */
 
 'use client'
@@ -11,25 +11,44 @@ import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Input } from '@/components/ui/Input'
+import { Select } from '@/components/ui/Select'
 import { MessagesTable } from '@/components/admin/MessagesTable'
 import { MessageDetailModal } from '@/components/admin/MessageDetailModal'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { Pagination } from '@/components/ui/Pagination'
 import { useModal } from '@/hooks/useModal'
+import { useFilterPersistence } from '@/hooks/useFilterPersistence'
 import { FiAlertCircle, FiCheckCircle, FiSearch, FiX, FiDownload } from 'react-icons/fi'
 import type { Message } from '@/types'
 
 type FilterType = 'all' | 'unread' | 'unreplied' | 'read' | 'replied'
+type SortOption = 'date-desc' | 'date-asc' | 'name-asc' | 'name-desc'
+
+interface MessageFilters {
+  search: string
+  filter: FilterType
+  sortBy: SortOption
+  page: number
+}
+
+const ITEMS_PER_PAGE = 15
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<FilterType>('all')
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; subject: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  // Persisted filters
+  const [filters, setFilters] = useFilterPersistence<MessageFilters>('admin-messages-filters', {
+    search: '',
+    filter: 'all',
+    sortBy: 'date-desc',
+    page: 1,
+  })
 
   const {
     isOpen: isDetailModalOpen,
@@ -72,12 +91,12 @@ export default function AdminMessagesPage() {
     fetchMessages()
   }, [fetchMessages])
 
-  // Filter messages
-  const filteredMessages = useMemo(() => {
+  // Filter, sort, and paginate messages
+  const filteredAndSortedMessages = useMemo(() => {
     let filtered = messages
 
     // Apply filter
-    switch (filter) {
+    switch (filters.filter) {
       case 'unread':
         filtered = filtered.filter((msg) => !msg.read)
         break
@@ -96,8 +115,8 @@ export default function AdminMessagesPage() {
     }
 
     // Apply search
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
+    if (filters.search.trim()) {
+      const query = filters.search.toLowerCase()
       filtered = filtered.filter(
         (msg) =>
           msg.name.toLowerCase().includes(query) ||
@@ -107,8 +126,41 @@ export default function AdminMessagesPage() {
       )
     }
 
-    return filtered
-  }, [messages, filter, searchQuery])
+    // Apply sorting
+    const sorted = [...filtered]
+    switch (filters.sortBy) {
+      case 'date-desc':
+        sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        break
+      case 'date-asc':
+        sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        break
+      case 'name-asc':
+        sorted.sort((a, b) => a.name.localeCompare(b.name))
+        break
+      case 'name-desc':
+        sorted.sort((a, b) => b.name.localeCompare(a.name))
+        break
+    }
+
+    return sorted
+  }, [messages, filters])
+
+  // Paginate messages
+  const paginatedMessages = useMemo(() => {
+    const startIndex = (filters.page - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return filteredAndSortedMessages.slice(startIndex, endIndex)
+  }, [filteredAndSortedMessages, filters.page])
+
+  const totalPages = Math.ceil(filteredAndSortedMessages.length / ITEMS_PER_PAGE)
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (filters.page > totalPages && totalPages > 0) {
+      setFilters((prev) => ({ ...prev, page: 1 }))
+    }
+  }, [filters.page, totalPages, setFilters])
 
   // Count by filter type
   const countByFilter = (filterType: FilterType): number => {
@@ -246,13 +298,13 @@ export default function AdminMessagesPage() {
 
   // Export to CSV
   const exportToCSV = () => {
-    if (filteredMessages.length === 0) return
+    if (filteredAndSortedMessages.length === 0) return
 
     // CSV headers
     const headers = ['Date', 'Name', 'Email', 'Subject', 'Message', 'Status']
 
     // CSV rows
-    const rows = filteredMessages.map((msg) => {
+    const rows = filteredAndSortedMessages.map((msg) => {
       const date = new Date(msg.createdAt).toLocaleString()
       const status = `${msg.read ? 'Read' : 'Unread'}/${msg.replied ? 'Replied' : 'Not Replied'}`
       // Escape quotes and newlines in message
@@ -281,11 +333,6 @@ export default function AdminMessagesPage() {
     setTimeout(() => setSuccessMessage(null), 3000)
   }
 
-  // Clear search
-  const clearSearch = () => {
-    setSearchQuery('')
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -298,7 +345,7 @@ export default function AdminMessagesPage() {
             Manage contact form submissions and inquiries
           </p>
         </div>
-        <Button onClick={exportToCSV} disabled={filteredMessages.length === 0}>
+        <Button onClick={exportToCSV} disabled={filteredAndSortedMessages.length === 0}>
           <FiDownload className="mr-2" />
           Export to CSV
         </Button>
@@ -327,83 +374,111 @@ export default function AdminMessagesPage() {
         </GlassCard>
       )}
 
-      {/* Search and Filters */}
-      <div className="space-y-4">
-        {/* Search */}
-        <GlassCard>
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search by name, email, subject, or message..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10"
-            />
-            {searchQuery && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Clear search"
-              >
-                <FiX size={18} />
-              </button>
-            )}
-          </div>
-        </GlassCard>
+      {/* Search */}
+      <GlassCard>
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by name, email, subject, or message..."
+            value={filters.search}
+            onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))}
+            className="pl-10 pr-10"
+          />
+          {filters.search && (
+            <button
+              onClick={() => setFilters((prev) => ({ ...prev, search: '', page: 1 }))}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear search"
+            >
+              <FiX size={18} />
+            </button>
+          )}
+        </div>
+      </GlassCard>
 
-        {/* Filters */}
-        <GlassCard>
+      {/* Filters and Sort */}
+      <GlassCard>
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Status Filter */}
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-sm font-medium">Filter:</span>
+            <span className="text-sm font-medium">Status:</span>
             <div className="flex gap-2 flex-wrap">
               <Button
-                variant={filter === 'all' ? 'primary' : 'ghost'}
+                variant={filters.filter === 'all' ? 'primary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter('all')}
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'all', page: 1 }))}
               >
                 All ({countByFilter('all')})
               </Button>
               <Button
-                variant={filter === 'unread' ? 'primary' : 'ghost'}
+                variant={filters.filter === 'unread' ? 'primary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter('unread')}
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'unread', page: 1 }))}
               >
                 Unread ({countByFilter('unread')})
               </Button>
               <Button
-                variant={filter === 'unreplied' ? 'primary' : 'ghost'}
+                variant={filters.filter === 'unreplied' ? 'primary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter('unreplied')}
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'unreplied', page: 1 }))}
               >
                 Unreplied ({countByFilter('unreplied')})
               </Button>
               <Button
-                variant={filter === 'read' ? 'primary' : 'ghost'}
+                variant={filters.filter === 'read' ? 'primary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter('read')}
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'read', page: 1 }))}
               >
                 Read ({countByFilter('read')})
               </Button>
               <Button
-                variant={filter === 'replied' ? 'primary' : 'ghost'}
+                variant={filters.filter === 'replied' ? 'primary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter('replied')}
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'replied', page: 1 }))}
               >
                 Replied ({countByFilter('replied')})
               </Button>
             </div>
           </div>
-        </GlassCard>
-      </div>
+
+          {/* Sort */}
+          <div className="flex items-center gap-3 flex-1 min-w-[200px]">
+            <span className="text-sm font-medium whitespace-nowrap">Sort by:</span>
+            <Select
+              value={filters.sortBy}
+              onChange={(e) => setFilters((prev) => ({ ...prev, sortBy: e.target.value as SortOption }))}
+              className="flex-1"
+            >
+              <option value="date-desc">Newest First</option>
+              <option value="date-asc">Oldest First</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+            </Select>
+          </div>
+        </div>
+      </GlassCard>
 
       {/* Messages Table */}
       <MessagesTable
-        messages={filteredMessages}
+        messages={paginatedMessages}
         onView={handleViewMessage}
         onDelete={handleDeleteClick}
         loading={loading}
       />
+
+      {/* Pagination */}
+      {!loading && filteredAndSortedMessages.length > ITEMS_PER_PAGE && (
+        <GlassCard>
+          <Pagination
+            currentPage={filters.page}
+            totalPages={totalPages}
+            totalItems={filteredAndSortedMessages.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+          />
+        </GlassCard>
+      )}
 
       {/* Message Detail Modal */}
       <MessageDetailModal

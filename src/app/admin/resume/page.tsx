@@ -3,26 +3,35 @@
  *
  * Displays all resumes with CRUD operations.
  * Allows uploading new PDFs, setting active resume, and tracking downloads.
+ * Features: filtering and pagination.
  */
 
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { ResumeTable } from '@/components/admin/ResumeTable'
 import { ResumeUploadForm } from '@/components/admin/ResumeUploadForm'
 import { ConfirmModal } from '@/components/ui/ConfirmModal'
+import { Pagination } from '@/components/ui/Pagination'
 import { useModal } from '@/hooks/useModal'
+import { useFilterPersistence } from '@/hooks/useFilterPersistence'
 import { FiPlus, FiAlertCircle, FiCheckCircle } from 'react-icons/fi'
 import type { Resume } from '@/types'
+
+interface ResumeFilters {
+  filter: 'all' | 'active'
+  page: number
+}
+
+const ITEMS_PER_PAGE = 10
 
 export default function AdminResumePage() {
   const [resumes, setResumes] = useState<Resume[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | 'active'>('all')
   const [showUploadForm, setShowUploadForm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; version: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -31,7 +40,13 @@ export default function AdminResumePage() {
 
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal()
 
-  // Fetch resumes
+  // Persisted filters
+  const [filters, setFilters] = useFilterPersistence<ResumeFilters>('admin-resume-filters', {
+    filter: 'all',
+    page: 1,
+  })
+
+  // Fetch resumes (fetch all, filter client-side)
   const fetchResumes = useCallback(async () => {
     try {
       setLoading(true)
@@ -46,23 +61,42 @@ export default function AdminResumePage() {
       const result = await response.json()
       const fetchedResumes = result.data || []
 
-      // Apply filter
-      const filteredResumes = filter === 'active'
-        ? fetchedResumes.filter((r: Resume) => r.active)
-        : fetchedResumes
-
-      setResumes(filteredResumes)
+      setResumes(fetchedResumes)
     } catch (err) {
       console.error('Error fetching resumes:', err)
       setError(err instanceof Error ? err.message : 'Failed to load resumes')
     } finally {
       setLoading(false)
     }
-  }, [filter])
+  }, [])
 
   useEffect(() => {
     fetchResumes()
   }, [fetchResumes])
+
+  // Filter and paginate resumes
+  const filteredResumes = useMemo(() => {
+    if (filters.filter === 'active') {
+      return resumes.filter((r) => r.active)
+    }
+    return resumes
+  }, [resumes, filters.filter])
+
+  // Paginate resumes
+  const paginatedResumes = useMemo(() => {
+    const startIndex = (filters.page - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return filteredResumes.slice(startIndex, endIndex)
+  }, [filteredResumes, filters.page])
+
+  const totalPages = Math.ceil(filteredResumes.length / ITEMS_PER_PAGE)
+
+  // Reset to page 1 when filter changes
+  useEffect(() => {
+    if (filters.page > totalPages && totalPages > 0) {
+      setFilters((prev) => ({ ...prev, page: 1 }))
+    }
+  }, [filters.page, totalPages, setFilters])
 
   // Handle upload submit
   const handleUploadSubmit = async (data: {
@@ -168,8 +202,6 @@ export default function AdminResumePage() {
     }
   }
 
-  const filteredResumes = resumes
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -221,32 +253,50 @@ export default function AdminResumePage() {
 
       {/* Filter Tabs */}
       {!showUploadForm && (
-        <div className="flex gap-2">
-          <Button
-            variant={filter === 'all' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setFilter('all')}
-          >
-            All ({resumes.length})
-          </Button>
-          <Button
-            variant={filter === 'active' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setFilter('active')}
-          >
-            Active ({resumes.filter(r => r.active).length})
-          </Button>
-        </div>
+        <GlassCard>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">Filter:</span>
+            <div className="flex gap-2">
+              <Button
+                variant={filters.filter === 'all' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'all', page: 1 }))}
+              >
+                All ({resumes.length})
+              </Button>
+              <Button
+                variant={filters.filter === 'active' ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => setFilters((prev) => ({ ...prev, filter: 'active', page: 1 }))}
+              >
+                Active ({resumes.filter(r => r.active).length})
+              </Button>
+            </div>
+          </div>
+        </GlassCard>
       )}
 
       {/* Resume Table */}
       {!showUploadForm && (
         <ResumeTable
-          resumes={filteredResumes}
+          resumes={paginatedResumes}
           onSetActive={handleSetActive}
           onDelete={handleDeleteClick}
           loading={loading}
         />
+      )}
+
+      {/* Pagination */}
+      {!showUploadForm && !loading && filteredResumes.length > ITEMS_PER_PAGE && (
+        <GlassCard>
+          <Pagination
+            currentPage={filters.page}
+            totalPages={totalPages}
+            totalItems={filteredResumes.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+          />
+        </GlassCard>
       )}
 
       {/* Delete Confirmation Modal */}
