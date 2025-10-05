@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import type { Project } from '@/types'
 import { FiExternalLink, FiGithub, FiStar } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
+import { getCategoryBlurDataURL } from '@/lib/image-blur'
 
 interface ProjectCardProps {
   project: Project
@@ -76,6 +77,9 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
             src={primaryImage}
             alt={title}
             fill
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL={getCategoryBlurDataURL(category)}
             className="object-cover transition-transform duration-500 group-hover:scale-110"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />

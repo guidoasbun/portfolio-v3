@@ -33,6 +33,16 @@ export const viewport: Viewport = {
   ],
 };
 
+// NOTE: Service Worker registration is available but currently disabled
+// To enable offline support in production, add the following to a client component:
+// import { registerServiceWorker } from '@/lib/sw-register'
+// useEffect(() => {
+//   registerServiceWorker({
+//     onSuccess: () => console.log('Service Worker: Content cached'),
+//     onUpdate: () => console.log('Service Worker: New content available'),
+//   })
+// }, [])
+
 export default function RootLayout({
   children,
 }: Readonly<{

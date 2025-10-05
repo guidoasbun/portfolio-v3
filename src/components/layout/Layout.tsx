@@ -7,6 +7,7 @@ import { Footer } from './Footer'
 import { ScrollToTop } from './ScrollToTop'
 import { GradientBackground } from './GradientBackground'
 import { SkipNav } from './SkipNav'
+import { OfflineIndicator } from '@/components/ui/OfflineIndicator'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -27,6 +28,7 @@ export function Layout({ children }: LayoutProps) {
     <>
       <SkipNav />
       <GradientBackground />
+      <OfflineIndicator />
       <div className="relative min-h-screen flex flex-col">
         <Navbar onMenuClick={handleMenuOpen} />
         <MobileMenu isOpen={isMobileMenuOpen} onClose={handleMenuClose} />
