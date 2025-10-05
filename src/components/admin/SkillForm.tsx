@@ -42,8 +42,7 @@ export function SkillForm({
     formState: { errors },
     watch
   } = useForm<SkillFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: yupResolver(skillFormSchema) as any,
+    resolver: yupResolver(skillFormSchema),
     defaultValues: initialData
       ? {
           name: initialData.name,
