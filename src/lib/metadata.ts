@@ -4,39 +4,40 @@
  * Centralized metadata for consistent SEO across the portfolio site.
  */
 
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 
 // Site configuration
 export const siteConfig = {
-  name: 'Portfolio - Full Stack Developer',
-  title: 'Portfolio - Full Stack Developer',
-  description: 'Modern portfolio showcasing web development projects with glass morphism design and 3D animations. Specialized in React, Next.js, and TypeScript.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://yourportfolio.com',
+  name: "Portfolio - Full Stack Developer",
+  title: "Portfolio - Full Stack Developer",
+  description:
+    "Modern portfolio showcasing web development projects with glass morphism design and 3D animations. Specialized in React, Next.js, and TypeScript.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourportfolio.com",
   author: {
-    name: 'Your Name',
-    email: 'your.email@example.com',
-    url: 'https://yourportfolio.com',
+    name: "Guido Asbun",
+    email: "guido@asbun.io",
+    url: "https://guido-asbun.com",
   },
   keywords: [
-    'Full Stack Developer',
-    'Web Developer',
-    'React Developer',
-    'Next.js Developer',
-    'TypeScript',
-    'Frontend Developer',
-    'Backend Developer',
-    'Portfolio',
-    'Software Engineer',
-    '3D Web Design',
-    'Glass Morphism',
-    'Modern Web Development',
+    "Full Stack Developer",
+    "Web Developer",
+    "React Developer",
+    "Next.js Developer",
+    "TypeScript",
+    "Frontend Developer",
+    "Backend Developer",
+    "Portfolio",
+    "Software Engineer",
+    "3D Web Design",
+    "Glass Morphism",
+    "Modern Web Development",
   ],
   social: {
-    github: 'https://github.com/yourusername',
-    linkedin: 'https://linkedin.com/in/yourname',
-    twitter: 'https://twitter.com/yourhandle',
+    github: "https://github.com/guidoasbun",
+    linkedin: "https://www.linkedin.com/in/guidoasbun/",
+    twitter: "https://twitter.com/yourhandle",
   },
-}
+};
 
 // Default metadata
 export const defaultMetadata: Metadata = {
@@ -61,14 +62,14 @@ export const defaultMetadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
+    type: "website",
+    locale: "en_US",
     url: siteConfig.url,
     title: siteConfig.title,
     description: siteConfig.description,
@@ -83,33 +84,33 @@ export const defaultMetadata: Metadata = {
     ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
-    creator: '@yourhandle',
+    creator: "@yourhandle",
     images: [`${siteConfig.url}/og-image.png`],
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
-}
+};
 
 // Page-specific metadata generators
 export function createMetadata({
   title,
   description,
   image,
-  type = 'website',
+  type = "website",
   noIndex = false,
 }: {
-  title?: string
-  description?: string
-  image?: string
-  type?: 'website' | 'article' | 'profile'
-  noIndex?: boolean
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article" | "profile";
+  noIndex?: boolean;
 }): Metadata {
   return {
     title,
@@ -135,53 +136,53 @@ export function createMetadata({
         : defaultMetadata.openGraph?.images,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: title || siteConfig.title,
       description: description || siteConfig.description,
       images: image ? [image] : (defaultMetadata.twitter?.images as string[]),
     },
-  }
+  };
 }
 
 // Structured data generators
 export function createPersonSchema() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
+    "@context": "https://schema.org",
+    "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.url,
     email: siteConfig.author.email,
-    jobTitle: 'Full Stack Developer',
+    jobTitle: "Full Stack Developer",
     description: siteConfig.description,
     sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
-  }
+  };
 }
 
 export function createWebSiteSchema() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
+    "@context": "https://schema.org",
+    "@type": "WebSite",
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
     author: {
-      '@type': 'Person',
+      "@type": "Person",
       name: siteConfig.author.name,
     },
-  }
+  };
 }
 
 export function createBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: item.name,
       item: `${siteConfig.url}${item.url}`,
     })),
-  }
+  };
 }
 
 export function createArticleSchema({
@@ -191,24 +192,24 @@ export function createArticleSchema({
   dateModified,
   image,
 }: {
-  title: string
-  description: string
-  datePublished: string
-  dateModified?: string
-  image?: string
+  title: string;
+  description: string;
+  datePublished: string;
+  dateModified?: string;
+  image?: string;
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: title,
     description,
     image: image || `${siteConfig.url}/og-image.png`,
     datePublished,
     dateModified: dateModified || datePublished,
     author: {
-      '@type': 'Person',
+      "@type": "Person",
       name: siteConfig.author.name,
       url: siteConfig.url,
     },
-  }
+  };
 }
