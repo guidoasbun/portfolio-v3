@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { useRouter } from 'next/navigation'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -17,7 +19,7 @@ import {
   FiGithub,
   FiLinkedin,
   FiSend,
-  FiCheckCircle,
+  FiAlertCircle,
 } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
 
@@ -69,13 +71,15 @@ const socialLinks = [
 
 export function ContactSection({ className }: ContactSectionProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const router = useRouter()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    setValue,
   } = useForm<ContactFormValues>({
     resolver: yupResolver(contactFormSchema),
     mode: 'onBlur',
@@ -83,8 +87,15 @@ export function ContactSection({ className }: ContactSectionProps) {
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true)
+    setSubmitError(null)
 
     try {
+      // Get reCAPTCHA token if available
+      let recaptchaToken: string | undefined
+      if (executeRecaptcha) {
+        recaptchaToken = await executeRecaptcha('contact_form')
+      }
+
       const response = await fetch('/api/messages', {
         method: 'POST',
         headers: {
@@ -95,24 +106,27 @@ export function ContactSection({ className }: ContactSectionProps) {
           email: data.email,
           subject: data.subject,
           message: data.message,
+          recaptchaToken,
         }),
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error('Failed to send message')
+        // Handle specific error messages
+        if (response.status === 429) {
+          setSubmitError('Too many requests. Please try again later.')
+        } else {
+          setSubmitError(result.error || 'Failed to send message. Please try again.')
+        }
+        return
       }
 
-      setSubmitSuccess(true)
-      reset()
-
-      // Hide success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false)
-      }, 5000)
+      // Success - redirect to thank you page
+      router.push('/contact/thank-you')
     } catch (error) {
       console.error('Error sending message:', error)
-      // Show error to user (you could add an error state here)
-      alert('Failed to send message. Please try again.')
+      setSubmitError('Failed to send message. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -158,20 +172,28 @@ export function ContactSection({ className }: ContactSectionProps) {
                 Send a Message
               </h3>
 
-              {submitSuccess && (
+              {submitError && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center gap-3"
+                  className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-3"
                 >
-                  <FiCheckCircle className="text-green-500 text-xl flex-shrink-0" />
-                  <p className="text-green-500 text-sm">
-                    Thank you! Your message has been sent successfully.
-                  </p>
+                  <FiAlertCircle className="text-red-500 text-xl flex-shrink-0" />
+                  <p className="text-red-500 text-sm">{submitError}</p>
                 </motion.div>
               )}
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                {/* Honeypot field - hidden from users, catches bots */}
+                <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    onChange={(e) => setValue('name', e.target.value === '' ? 'bot' : '')}
+                  />
+                </div>
                 <FormField
                   label="Name"
                   error={errors.name?.message}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { RecaptchaProvider } from "@/components/providers/recaptcha-provider";
 import { AuthProvider } from "@/context/auth-context";
 import { Layout } from "@/components/layout";
 import "./globals.css";
@@ -35,9 +36,11 @@ export default function RootLayout({
           defaultTheme="system"
           storageKey="portfolio-theme"
         >
-          <AuthProvider>
-            <Layout>{children}</Layout>
-          </AuthProvider>
+          <RecaptchaProvider>
+            <AuthProvider>
+              <Layout>{children}</Layout>
+            </AuthProvider>
+          </RecaptchaProvider>
         </ThemeProvider>
       </body>
     </html>
