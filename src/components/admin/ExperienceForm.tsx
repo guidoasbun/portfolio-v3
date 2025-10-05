@@ -115,7 +115,7 @@ export function ExperienceForm({
   }
 
   return (
-    <form onSubmit={handleSubmit((data) => onSubmit(data as ExperienceFormValues))} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit as never)} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Experience' : 'Add New Experience'}
