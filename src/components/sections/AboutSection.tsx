@@ -149,7 +149,7 @@ export function AboutSection({
   }
 
   return (
-    <section id="about" className="relative py-20 sm:py-32">
+    <section id="about" className="relative py-12 sm:py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -159,31 +159,31 @@ export function AboutSection({
           className="max-w-6xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               About Me
             </h2>
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
               Get to know more about my background, skills, and interests
             </p>
           </motion.div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Bio Section - Takes 2 columns on large screens */}
             <motion.div variants={itemVariants} className="lg:col-span-2">
-              <GlassCard className="p-6 sm:p-8 h-full">
-                <h3 className="text-2xl font-semibold mb-4 text-foreground">
+              <GlassCard className="p-5 sm:p-6 md:p-8 h-full">
+                <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
                   Introduction
                 </h3>
-                <div className="text-foreground/80 leading-relaxed space-y-4">
+                <div className="text-sm sm:text-base text-foreground/80 leading-relaxed space-y-3 sm:space-y-4">
                   {bio.split('\n\n').map((paragraph, index) => (
                     <p key={index}>{paragraph.trim()}</p>
                   ))}
                 </div>
 
                 {/* Download Resume Button */}
-                <div className="mt-6">
+                <div className="mt-5 sm:mt-6">
                   <Button
                     variant="primary"
                     size="lg"

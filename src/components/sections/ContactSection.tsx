@@ -170,7 +170,7 @@ export function ContactSection({ className }: ContactSectionProps) {
     <section
       id="contact"
       className={cn(
-        'relative py-20 md:py-32 overflow-hidden',
+        'relative py-12 sm:py-20 lg:py-32 overflow-hidden',
         className
       )}
     >
@@ -181,12 +181,12 @@ export function ContactSection({ className }: ContactSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Get In Touch
           </h2>
-          <p className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
             Have a question or want to work together? I&apos;d love to hear from you.
           </p>
         </motion.div>
@@ -197,12 +197,12 @@ export function ContactSection({ className }: ContactSectionProps) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 max-w-6xl mx-auto"
         >
           {/* Contact Form */}
           <motion.div variants={staggerItem}>
-            <GlassCard className="p-6 md:p-8 h-full">
-              <h3 className="text-2xl font-semibold mb-6 text-foreground">
+            <GlassCard className="p-5 sm:p-6 md:p-8 h-full">
+              <h3 className="text-xl sm:text-2xl font-semibold mb-5 sm:mb-6 text-foreground">
                 Send a Message
               </h3>
 

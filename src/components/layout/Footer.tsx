@@ -44,9 +44,9 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative glass-light border-t border-foreground/10 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <footer className="relative glass-light border-t border-foreground/10 mt-12 sm:mt-16 lg:mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {/* Brand Section */}
           <motion.div
             variants={fadeIn}
@@ -54,20 +54,20 @@ export function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h3 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent mb-3 sm:mb-4">
               {APP_CONFIG.name}
             </h3>
-            <p className="text-sm text-foreground/60 mb-4">
+            <p className="text-xs sm:text-sm text-foreground/60 mb-3 sm:mb-4">
               {APP_CONFIG.description}
             </p>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 sm:space-x-4">
               {SOCIAL_LINKS.map((social) => (
                 <a
                   key={social.name}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-foreground/10 transition-colors text-foreground/70 hover:text-foreground"
+                  className="p-2 rounded-lg hover:bg-foreground/10 transition-colors text-foreground/70 hover:text-foreground min-w-[44px] min-h-[44px] flex items-center justify-center"
                   aria-label={social.name}
                 >
                   {iconMap[social.icon]}
@@ -83,14 +83,14 @@ export function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h4>
+            <ul className="space-y-1.5 sm:space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-sm text-foreground/60 hover:text-foreground transition-colors"
+                    className="text-xs sm:text-sm text-foreground/60 hover:text-foreground transition-colors inline-block py-1 min-h-[32px] flex items-center"
                   >
                     {link.label}
                   </Link>
@@ -105,13 +105,14 @@ export function Footer() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className="sm:col-span-2 md:col-span-1"
           >
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2 text-sm text-foreground/60">
+            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Contact</h4>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-foreground/60">
               <li>
                 <a
                   href={`mailto:${CONTACT_INFO.email}`}
-                  className="hover:text-foreground transition-colors"
+                  className="hover:text-foreground transition-colors inline-block py-1 min-h-[32px] flex items-center"
                 >
                   {CONTACT_INFO.email}
                 </a>
@@ -119,25 +120,25 @@ export function Footer() {
               <li>
                 <a
                   href={`tel:${CONTACT_INFO.phone}`}
-                  className="hover:text-foreground transition-colors"
+                  className="hover:text-foreground transition-colors inline-block py-1 min-h-[32px] flex items-center"
                 >
                   {CONTACT_INFO.phone}
                 </a>
               </li>
-              <li>{CONTACT_INFO.location}</li>
-              <li className="text-xs">{CONTACT_INFO.timezone}</li>
+              <li className="py-1">{CONTACT_INFO.location}</li>
+              <li className="text-xs py-1">{CONTACT_INFO.timezone}</li>
             </ul>
           </motion.div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-foreground/10 pt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <p className="text-sm text-foreground/60">
+        <div className="border-t border-foreground/10 pt-6 sm:pt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 gap-2">
+            <p className="text-xs sm:text-sm text-foreground/60 text-center sm:text-left">
               &copy; {currentYear} {APP_CONFIG.name}. All rights reserved.
             </p>
-            <p className="text-sm text-foreground/60 flex items-center">
-              Made with <FaHeart className="mx-1 text-red-500 w-4 h-4" /> using Next.js & Three.js
+            <p className="text-xs sm:text-sm text-foreground/60 flex items-center">
+              Made with <FaHeart className="mx-1 text-red-500 w-3 h-3 sm:w-4 sm:h-4" /> using Next.js & Three.js
             </p>
           </div>
         </div>

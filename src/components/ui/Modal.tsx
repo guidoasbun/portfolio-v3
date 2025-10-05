@@ -81,13 +81,13 @@ export function Modal({
     }
   }
 
-  // Size variants
+  // Size variants - responsive
   const sizeClasses = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    full: 'max-w-full mx-4'
+    sm: 'max-w-sm w-full mx-4',
+    md: 'max-w-md w-full mx-4',
+    lg: 'max-w-lg w-full mx-4',
+    xl: 'max-w-xl w-full mx-4 sm:mx-6',
+    full: 'max-w-full w-full mx-4'
   }
 
   const modalContent = (
@@ -137,9 +137,9 @@ export function Modal({
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10">
                 {title && (
-                  <h2 id="modal-title" className="text-xl font-semibold text-foreground">
+                  <h2 id="modal-title" className="text-lg sm:text-xl font-semibold text-foreground">
                     {title}
                   </h2>
                 )}
@@ -147,7 +147,7 @@ export function Modal({
                   <button
                     onClick={onClose}
                     className={cn(
-                      'p-1 rounded-lg transition-colors',
+                      'p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center',
                       'text-foreground/60 hover:text-foreground',
                       'hover:bg-foreground/10',
                       'focus:outline-none focus:ring-2 focus:ring-accent-blue',
@@ -162,7 +162,7 @@ export function Modal({
             )}
 
             {/* Content */}
-            <div className="px-6 py-4 max-h-[calc(100vh-12rem)] overflow-y-auto">
+            <div className="px-4 sm:px-6 py-4 max-h-[calc(100vh-10rem)] sm:max-h-[calc(100vh-12rem)] overflow-y-auto">
               {children}
             </div>
           </motion.div>
