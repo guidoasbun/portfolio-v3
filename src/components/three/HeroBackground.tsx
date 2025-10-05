@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { useTheme } from '@/context/theme-context'
 import { useLazyThree } from '@/hooks/useLazyThree'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { getOptimalParticleCount } from '@/lib/three/performance'
 import { SkeletonLoader3D } from '@/components/loading/SkeletonLoader3D'
 import type { HeroBackgroundProps } from '@/types/three'
@@ -25,18 +26,25 @@ const PerspectiveCamera = dynamic(() => import('@react-three/drei').then((mod) =
 export function HeroBackground({ className = '' }: HeroBackgroundProps) {
   const { actualTheme } = useTheme()
   const { shouldLoad, isReady, performanceTier } = useLazyThree(100)
+  const shouldReduceMotion = useReducedMotion()
   const [particleCount, setParticleCount] = useState<number>(1000)
 
   useEffect(() => {
     if (isReady) {
       const count = getOptimalParticleCount(performanceTier)
-      setParticleCount(count)
+      // Reduce particle count if user prefers reduced motion
+      setParticleCount(shouldReduceMotion ? Math.floor(count / 2) : count)
     }
-  }, [isReady, performanceTier])
+  }, [isReady, performanceTier, shouldReduceMotion])
 
   // Theme-based fog color
   const fogColor = actualTheme === 'dark' ? '#0a0a0a' : '#f8fafc'
   const fogDensity = actualTheme === 'dark' ? 0.02 : 0.015
+
+  // Don't render 3D scene if user prefers reduced motion
+  if (shouldReduceMotion) {
+    return <div className={className} aria-hidden="true" />
+  }
 
   // Show skeleton while loading
   if (!shouldLoad || !isReady) {

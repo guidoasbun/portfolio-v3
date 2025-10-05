@@ -12,6 +12,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = React.useRef<HTMLDivElement>(null)
 
   const themes = [
     {
@@ -50,10 +51,34 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     setIsOpen(false)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape' && isOpen) {
+      setIsOpen(false)
+    } else if (e.key === 'ArrowDown' && isOpen) {
+      e.preventDefault()
+      const firstButton = dropdownRef.current?.querySelector('button')
+      firstButton?.focus()
+    }
+  }
+
+  React.useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
   return (
-    <div className={cn('relative', className)}>
+    <div ref={dropdownRef} className={cn('relative', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
         className={cn(
           'glass flex items-center gap-2 px-3 py-2 rounded-lg',
           'transition-all duration-200 hover:glass-medium',
@@ -61,6 +86,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         )}
         aria-label="Toggle theme"
         aria-expanded={isOpen}
+        aria-haspopup="true"
       >
         {currentTheme?.icon}
         <span className="text-sm font-medium">{currentTheme?.label}</span>
@@ -95,12 +121,20 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                 <button
                   key={themeOption.value}
                   onClick={() => handleThemeChange(themeOption.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setIsOpen(false)
+                    }
+                  }}
                   className={cn(
                     'w-full flex items-center gap-3 px-3 py-2 rounded-md text-left',
                     'transition-all duration-200',
                     'hover:glass-light',
+                    'focus:outline-none focus:ring-2 focus:ring-accent-blue focus:ring-inset',
                     theme === themeOption.value && 'glass-medium text-accent-blue'
                   )}
+                  role="menuitemradio"
+                  aria-checked={theme === themeOption.value}
                 >
                   {themeOption.icon}
                   <span className="text-sm">{themeOption.label}</span>

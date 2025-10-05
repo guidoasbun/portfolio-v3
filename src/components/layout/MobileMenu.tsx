@@ -8,6 +8,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { drawerVariants, backdropVariants, staggerContainer, staggerItem } from '@/lib/animations'
 import { SOCIAL_LINKS } from '@/lib/constants'
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface NavLink {
   label: string
@@ -36,6 +37,11 @@ const iconMap: Record<string, React.ReactElement> = {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const focusTrapRef = useFocusTrap({
+    isActive: isOpen,
+    onEscape: onClose
+  }) as React.RefObject<HTMLDivElement>
+
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     onClose()
@@ -73,15 +79,20 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             exit="exit"
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             onClick={onClose}
+            aria-hidden="true"
           />
 
           {/* Drawer */}
           <motion.div
+            ref={focusTrapRef}
             variants={drawerVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] glass-heavy shadow-2xl z-50 overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
           >
             <div className="p-6">
               {/* Header with close button */}
