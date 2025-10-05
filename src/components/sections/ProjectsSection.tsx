@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { ProjectCard } from '@/components/ui/ProjectCard'
 import { ProjectDetailsModal } from '@/components/sections/ProjectDetailsModal'
@@ -28,7 +28,12 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const { trackEvent } = useAnalytics()
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -108,7 +113,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
   }
 
   return (
-    <section id="projects" className="relative py-20 sm:py-32">
+    <section id="projects" className="relative py-12 sm:py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -118,22 +123,20 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
           className="max-w-7xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Projects
             </h2>
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
               Explore my latest work and side projects. Each project showcases
               different technologies and problem-solving approaches.
             </p>
           </motion.div>
 
           {/* Filter Tabs */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-wrap justify-center gap-3 mb-12"
-          >
-            {categories.map((category) => {
+          {isMounted && (
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 lg:mb-12 px-2 sm:px-0">
+              {categories.map((category) => {
               const count = getCategoryCount(category.value)
               const isActive = activeCategory === category.value
 
@@ -147,8 +150,9 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   key={category.value}
                   onClick={() => handleCategoryChange(category.value)}
                   className={cn(
-                    'relative px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300',
+                    'relative px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300',
                     'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+                    'min-h-[44px] text-sm sm:text-base',
                     isActive
                       ? 'glass-heavy text-foreground shadow-lg scale-105'
                       : 'glass-light text-foreground/70 hover:text-foreground hover:glass-medium'
@@ -156,11 +160,11 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   aria-label={`Filter by ${category.label}`}
                   aria-pressed={isActive}
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
                     {category.label}
                     <span
                       className={cn(
-                        'text-xs px-2 py-0.5 rounded-full',
+                        'text-xs px-1.5 sm:px-2 py-0.5 rounded-full',
                         isActive
                           ? 'bg-blue-500 text-white'
                           : 'bg-foreground/10 text-foreground/60'
@@ -178,13 +182,14 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   )}
                 </button>
               )
-            })}
-          </motion.div>
+              })}
+            </div>
+          )}
 
           {/* Projects Grid */}
           <motion.div
             layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
           >
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (

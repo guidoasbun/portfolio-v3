@@ -39,7 +39,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       'placeholder:text-muted-foreground',
       'focus:outline-none focus:ring-2 focus:ring-offset-0',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      'px-4 py-3 text-sm min-h-[80px]'
+      'px-3 sm:px-4 py-3 text-sm sm:text-base min-h-[100px] sm:min-h-[120px]' // Increased min-height for better mobile UX
     ]
 
     const variants = {

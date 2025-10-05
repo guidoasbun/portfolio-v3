@@ -69,7 +69,7 @@ export function ExperienceSection({ experiences = mockExperiences }: ExperienceS
   }
 
   return (
-    <section id="experience" className="relative py-20 sm:py-32">
+    <section id="experience" className="relative py-12 sm:py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -79,11 +79,11 @@ export function ExperienceSection({ experiences = mockExperiences }: ExperienceS
           className="max-w-5xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               Experience
             </h2>
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
               My professional journey, education, and career milestones
             </p>
           </motion.div>
@@ -91,7 +91,7 @@ export function ExperienceSection({ experiences = mockExperiences }: ExperienceS
           {/* Filter Tabs */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap justify-center gap-3 mb-12"
+            className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 lg:mb-12 px-2 sm:px-0"
           >
             {categories.map((category) => {
               const count = getCategoryCount(category.value)
