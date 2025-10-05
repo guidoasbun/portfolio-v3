@@ -49,8 +49,7 @@ export function ProjectForm({
     setValue,
     watch
   } = useForm<ProjectFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: yupResolver(projectFormSchema) as any,
+    resolver: yupResolver(projectFormSchema),
     defaultValues: initialData
       ? {
           title: initialData.title,

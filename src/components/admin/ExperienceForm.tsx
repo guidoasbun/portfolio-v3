@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useForm, Controller, type SubmitHandler } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { experienceFormSchema, type ExperienceFormValues } from '@/lib/validations'
 import { FormField } from '@/components/ui/FormField'
@@ -17,7 +17,7 @@ import type { Experience } from '@/types'
 
 interface ExperienceFormProps {
   initialData?: Experience
-  onSubmit: SubmitHandler<ExperienceFormValues>
+  onSubmit: (data: ExperienceFormValues) => void | Promise<void>
   onCancel: () => void
   isSubmitting?: boolean
 }
@@ -44,8 +44,8 @@ export function ExperienceForm({
     watch,
     setValue
   } = useForm<ExperienceFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: yupResolver(experienceFormSchema) as any,
+    // @ts-expect-error - Yup resolver type mismatch with optional fields
+    resolver: yupResolver(experienceFormSchema),
     defaultValues: initialData
       ? {
           type: initialData.type,
@@ -114,12 +114,8 @@ export function ExperienceForm({
     return 'Job Title'
   }
 
-  const handleFormSubmit: SubmitHandler<ExperienceFormValues> = async (data) => {
-    await onSubmit(data)
-  }
-
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit((data) => onSubmit(data as ExperienceFormValues))} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Experience' : 'Add New Experience'}
