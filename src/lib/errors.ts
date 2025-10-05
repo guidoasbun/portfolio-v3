@@ -99,10 +99,30 @@ export function logError(error: Error | AppError, context?: Record<string, unkno
     ...(context && { context }),
   }
 
-  console.error("Application Error:", errorInfo)
+  // Always log to console in development
+  if (process.env.NODE_ENV === 'development') {
+    console.error("Application Error:", errorInfo)
+  } else {
+    // In production, log less verbose info
+    console.error("Error:", error.message)
+  }
 
-  // In production, you might want to send this to an error tracking service
-  // like Sentry, LogRocket, etc.
+  // Send to error tracking service in production
+  // Uncomment and configure when ready to use Sentry or similar service
+  /*
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
+    // Example: Sentry integration
+    // import * as Sentry from '@sentry/nextjs'
+    // Sentry.captureException(error, {
+    //   contexts: {
+    //     custom: context,
+    //   },
+    //   tags: {
+    //     isOperational: error instanceof AppError ? error.isOperational : false,
+    //   },
+    // })
+  }
+  */
 }
 
 export async function withErrorHandling<T>(
@@ -149,5 +169,54 @@ export function sanitizeErrorForClient(error: Error | AppError): {
   return {
     message: "Internal server error",
     statusCode: 500,
+  }
+}
+
+/**
+ * Report error from client-side
+ * Use this for tracking client-side errors
+ */
+export function reportClientError(
+  error: Error,
+  additionalInfo?: Record<string, unknown>
+): void {
+  // Log to console in development
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Client Error:', error, additionalInfo)
+    return
+  }
+
+  // In production, send to error tracking service
+  // Uncomment and configure when ready to use Sentry or similar service
+  /*
+  if (typeof window !== 'undefined') {
+    // Example: Sentry integration
+    // import * as Sentry from '@sentry/nextjs'
+    // Sentry.captureException(error, {
+    //   extra: additionalInfo,
+    //   tags: {
+    //     environment: 'client',
+    //   },
+    // })
+  }
+  */
+}
+
+/**
+ * Create error boundary error handler
+ * Compatible with React's ErrorInfo type
+ */
+export function createErrorBoundaryHandler(
+  componentName: string
+): (error: Error, errorInfo: { componentStack?: string | null }) => void {
+  return (error: Error, errorInfo: { componentStack?: string | null }) => {
+    logError(error, {
+      component: componentName,
+      componentStack: errorInfo.componentStack || 'unknown',
+    })
+    reportClientError(error, {
+      component: componentName,
+      componentStack: errorInfo.componentStack || 'unknown',
+    })
   }
 }

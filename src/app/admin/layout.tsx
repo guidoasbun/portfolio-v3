@@ -11,8 +11,10 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AdminHeader } from '@/components/admin/AdminHeader'
 import { Breadcrumb } from '@/components/admin/Breadcrumb'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { createErrorBoundaryHandler } from '@/lib/errors'
 import {
   FiHome,
   FiBriefcase,
@@ -88,7 +90,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <Breadcrumb />
             </div>
 
-            {children}
+            <ErrorBoundary onError={createErrorBoundaryHandler('AdminLayout')}>
+              {children}
+            </ErrorBoundary>
           </div>
         </main>
       </div>
