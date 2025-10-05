@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { skillFormSchema, type SkillFormValues } from '@/lib/validations'
 import { FormField } from '@/components/ui/FormField'
@@ -14,7 +14,7 @@ import type { Skill } from '@/types'
 
 interface SkillFormProps {
   initialData?: Skill
-  onSubmit: (data: SkillFormValues) => Promise<void>
+  onSubmit: SubmitHandler<SkillFormValues>
   onCancel: () => void
   isSubmitting?: boolean
 }
@@ -42,8 +42,8 @@ export function SkillForm({
     formState: { errors },
     watch
   } = useForm<SkillFormValues>({
-    // @ts-expect-error - Yup's Maybe<T> type conflicts with our interface optional fields
-    resolver: yupResolver(skillFormSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(skillFormSchema) as any,
     defaultValues: initialData
       ? {
           name: initialData.name,
@@ -66,8 +66,7 @@ export function SkillForm({
   const colorValue = watch('color')
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Skill' : 'Add New Skill'}

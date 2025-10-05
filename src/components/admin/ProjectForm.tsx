@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, type SubmitHandler } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { projectFormSchema, type ProjectFormValues } from '@/lib/validations'
 import { FormField } from '@/components/ui/FormField'
@@ -49,8 +49,8 @@ export function ProjectForm({
     setValue,
     watch
   } = useForm<ProjectFormValues>({
-    // @ts-expect-error - Yup's Maybe<T> type conflicts with our interface optional fields
-    resolver: yupResolver(projectFormSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver(projectFormSchema) as any,
     defaultValues: initialData
       ? {
           title: initialData.title,
@@ -101,7 +101,7 @@ export function ProjectForm({
   }, [previews.length, isEditMode, setValue])
 
   // Handle form submission
-  const onFormSubmit = async (data: ProjectFormValues) => {
+  const onFormSubmit: SubmitHandler<ProjectFormValues> = async (data) => {
     try {
       let imageUrls: string[] = []
 
@@ -140,8 +140,7 @@ export function ProjectForm({
   const longDescriptionLength = watch('longDescription')?.length || 0
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <form onSubmit={handleSubmit(onFormSubmit as any)} className="space-y-6">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
       <GlassCard>
         <Heading as="h2" className="mb-6">
           {isEditMode ? 'Edit Project' : 'Create New Project'}
