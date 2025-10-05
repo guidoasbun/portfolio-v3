@@ -1,0 +1,12 @@
+# robots.txt
+# Allow all crawlers to index the site
+
+User-agent: *
+Allow: /
+
+# Disallow admin routes
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://yourportfolio.com/sitemap.xml
