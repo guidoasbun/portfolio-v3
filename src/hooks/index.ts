@@ -5,6 +5,7 @@ export { useModal, useModalWithData } from './useModal'
 export { useStorage } from './useStorage'
 export type { UseStorageReturn } from './useStorage'
 export { useImageUpload, useSingleImageUpload } from './useImageUpload'
+export { usePdfUpload } from './usePdfUpload'
 
 // Auth Hooks
 export { useAuth } from './useAuth'

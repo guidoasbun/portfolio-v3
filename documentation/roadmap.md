@@ -584,15 +584,26 @@ This roadmap breaks down the portfolio development into 8 phases with small, act
 
 ## Phase 7: Advanced Features (Week 7)
 
-### 7.1 Resume Management
+### 7.1 Resume Management ✅ COMPLETED
 
-- [ ] Create app/admin/resume/page.tsx
-- [ ] Implement PDF upload
-- [ ] Create version management
-- [ ] Add active version toggle
-- [ ] Create ResumeViewer component
-- [ ] Implement react-pdf integration
-- [ ] Add download tracking
+- [x] Create app/admin/resume/page.tsx
+- [x] Create usePdfUpload hook (src/hooks/usePdfUpload.ts)
+- [x] Create PdfUploadField component with drag-and-drop (src/components/admin/PdfUploadField.tsx)
+- [x] Create ResumeUploadForm component with validation (src/components/admin/ResumeUploadForm.tsx)
+- [x] Create ResumeTable component (desktop/mobile views) (src/components/admin/ResumeTable.tsx)
+- [x] Implement PDF upload with Firebase Storage integration
+- [x] Create version management with labels
+- [x] Add active version toggle (only one active at a time)
+- [x] Add download tracking display
+- [x] Implement full CRUD operations (Create, Read, Update, Delete)
+- [x] Add delete confirmation modal (ConfirmModal integration)
+- [x] Add filter tabs (All/Active)
+- [x] Add responsive design (mobile/tablet/desktop)
+- [x] Integrate with theme system (light/dark/system)
+- [x] Add success/error messages
+- [x] Connect to API routes (/api/resume)
+- [x] Verify build succeeds with no TypeScript errors
+- [x] Verify strict TypeScript types (no any types)
 
 ### 7.2 Contact Form Integration
 
