@@ -37,6 +37,7 @@ export type AnalyticsEventName =
   | 'contact_form_submit'
   | 'contact_form_success'
   | 'contact_form_error'
+  | 'contact_form_retry'
   // Resume events
   | 'resume_download'
   | 'resume_view'
@@ -95,6 +96,11 @@ export interface AnalyticsEventParams {
     form_location: string
     error_message: string
     error_type: string
+  }
+  contact_form_retry: {
+    form_location: string
+    attempt: number
+    error: string
   }
 
   // Resume events

@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server'
 import { getProjects, addProject, getFeaturedProjects, getProjectsByCategory } from '@/lib/services/projects.service.admin'
 import { projectFormSchema } from '@/lib/validations'
 import type { ApiResponse, Project } from '@/types'
+import { handleError, ValidationError, logError } from '@/lib/errors'
 
 /**
  * GET /api/projects
@@ -38,13 +39,14 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       message: 'Projects retrieved successfully',
     })
   } catch (error) {
-    console.error('Error fetching projects:', error)
+    const appError = handleError(error)
+    logError(appError, { endpoint: 'GET /api/projects' })
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch projects',
+        error: appError.message,
       },
-      { status: 500 }
+      { status: appError.statusCode }
     )
   }
 }
@@ -59,54 +61,47 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
     // TODO: Add authentication check here when admin auth is fully implemented
     // const session = await getServerSession()
     // if (!session) {
-    //   return NextResponse.json(
-    //     { success: false, error: 'Unauthorized' },
-    //     { status: 401 }
-    //   )
+    //   throw new AuthenticationError('Unauthorized')
     // }
 
     const body = await request.json()
 
     // Validate the request body
-    const validatedData = await projectFormSchema.validate(body, {
-      abortEarly: false,
-    })
+    try {
+      const validatedData = await projectFormSchema.validate(body, {
+        abortEarly: false,
+      })
 
-    // Transform null values to undefined for optional fields
-    const projectData = {
-      ...validatedData,
-      liveUrl: validatedData.liveUrl || undefined,
-      githubUrl: validatedData.githubUrl || undefined,
+      // Transform null values to undefined for optional fields
+      const projectData = {
+        ...validatedData,
+        liveUrl: validatedData.liveUrl || undefined,
+        githubUrl: validatedData.githubUrl || undefined,
+      }
+
+      // Add the project to the database
+      const id = await addProject(projectData)
+
+      return NextResponse.json({
+        success: true,
+        data: { id },
+        message: 'Project created successfully',
+      }, { status: 201 })
+    } catch (validationError) {
+      if (validationError instanceof Error && validationError.name === 'ValidationError') {
+        throw new ValidationError(validationError.message)
+      }
+      throw validationError
     }
-
-    // Add the project to the database
-    const id = await addProject(projectData)
-
-    return NextResponse.json({
-      success: true,
-      data: { id },
-      message: 'Project created successfully',
-    }, { status: 201 })
   } catch (error) {
-    console.error('Error creating project:', error)
-
-    // Handle validation errors
-    if (error instanceof Error && error.name === 'ValidationError') {
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        { status: 400 }
-      )
-    }
-
+    const appError = handleError(error)
+    logError(appError, { endpoint: 'POST /api/projects' })
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create project',
+        error: appError.message,
       },
-      { status: 500 }
+      { status: appError.statusCode }
     )
   }
 }

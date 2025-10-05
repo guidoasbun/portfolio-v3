@@ -12,6 +12,7 @@ import type { ApiResponse, Message } from '@/types'
 import { rateLimitMiddleware, RATE_LIMITS } from '@/lib/rate-limiter'
 import { verifyRecaptchaWithScore } from '@/lib/recaptcha'
 import { sendContactFormEmails } from '@/lib/email'
+import { handleError, ValidationError, RateLimitError, logError } from '@/lib/errors'
 
 /**
  * GET /api/messages
@@ -55,13 +56,14 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
       message: 'Messages retrieved successfully',
     })
   } catch (error) {
-    console.error('Error fetching messages:', error)
+    const appError = handleError(error)
+    logError(appError, { endpoint: 'GET /api/messages' })
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch messages',
+        error: appError.message,
       },
-      { status: 500 }
+      { status: appError.statusCode }
     )
   }
 }
@@ -78,10 +80,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
 
     if (!rateLimitResult.success) {
       const retryAfter = Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
+      const rateLimitError = new RateLimitError('Too many requests. Please try again later.')
+      logError(rateLimitError, { endpoint: 'POST /api/messages', rateLimitInfo: rateLimitResult })
+
       return NextResponse.json(
         {
           success: false,
-          error: 'Too many requests. Please try again later.',
+          error: rateLimitError.message,
         },
         {
           status: 429,
@@ -104,24 +109,38 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
       const recaptchaResult = await verifyRecaptchaWithScore(recaptchaToken, 0.5)
 
       if (!recaptchaResult.valid) {
-        console.warn('reCAPTCHA verification failed:', recaptchaResult.error)
+        const validationError = new ValidationError('Security verification failed. Please try again.')
+        logError(validationError, {
+          endpoint: 'POST /api/messages',
+          recaptchaError: recaptchaResult.error,
+        })
         return NextResponse.json(
           {
             success: false,
-            error: 'Security verification failed. Please try again.',
+            error: validationError.message,
           },
           { status: 400 }
         )
       }
 
       // Log successful verification (optional)
-      console.log('reCAPTCHA verification successful. Score:', recaptchaResult.score)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('reCAPTCHA verification successful. Score:', recaptchaResult.score)
+      }
     }
 
     // 3. Validate the request body
-    const validatedData = await messageSchema.validate(formData, {
-      abortEarly: false,
-    })
+    let validatedData
+    try {
+      validatedData = await messageSchema.validate(formData, {
+        abortEarly: false,
+      })
+    } catch (validationError) {
+      if (validationError instanceof Error && validationError.name === 'ValidationError') {
+        throw new ValidationError(validationError.message)
+      }
+      throw validationError
+    }
 
     // 4. Add the message to the database
     const id = await addMessage(validatedData)
@@ -160,25 +179,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
       }
     )
   } catch (error) {
-    console.error('Error creating message:', error)
-
-    // Handle validation errors
-    if (error instanceof Error && error.name === 'ValidationError') {
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        { status: 400 }
-      )
-    }
-
+    const appError = handleError(error)
+    logError(appError, { endpoint: 'POST /api/messages' })
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to send message',
+        error: appError.message,
       },
-      { status: 500 }
+      { status: appError.statusCode }
     )
   }
 }

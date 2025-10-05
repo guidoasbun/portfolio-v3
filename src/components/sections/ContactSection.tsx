@@ -14,6 +14,8 @@ import { Textarea } from '@/components/ui/Textarea'
 import { FormField } from '@/components/ui/FormField'
 import { contactFormSchema, type ContactFormValues } from '@/lib/validations'
 import { staggerContainer, staggerItem } from '@/lib/animations'
+import { retryFetch } from '@/lib/retry'
+import { formatErrorForDisplay, isRetryableError } from '@/lib/error-messages'
 import {
   FiMail,
   FiMapPin,
@@ -103,7 +105,8 @@ export function ContactSection({ className }: ContactSectionProps) {
         recaptchaToken = await executeRecaptcha('contact_form')
       }
 
-      const response = await fetch('/api/messages', {
+      // Use retry logic for network resilience
+      const response = await retryFetch('/api/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,31 +118,21 @@ export function ContactSection({ className }: ContactSectionProps) {
           message: data.message,
           recaptchaToken,
         }),
+      }, {
+        maxRetries: 2,
+        initialDelay: 1000,
+        onRetry: (error, attempt, delay) => {
+          console.log(`Retrying contact form submission (attempt ${attempt}) after ${delay}ms`)
+          trackEvent('contact_form_retry', {
+            form_location: 'contact_section',
+            attempt: attempt,
+            error: error.message,
+          })
+        },
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
-        // Track error
-        const errorType = response.status === 429 ? 'rate_limit' : 'submission_failed'
-        const errorMessage = response.status === 429
-          ? 'Too many requests. Please try again later.'
-          : result.error || 'Failed to send message. Please try again.'
-
-        trackEvent('contact_form_error', {
-          form_location: 'contact_section',
-          error_message: errorMessage,
-          error_type: errorType,
-        })
-
-        // Handle specific error messages
-        if (response.status === 429) {
-          setSubmitError('Too many requests. Please try again later.')
-        } else {
-          setSubmitError(result.error || 'Failed to send message. Please try again.')
-        }
-        return
-      }
+      // Response is successful, parse result for potential use
+      await response.json()
 
       // Track success
       trackEvent('contact_form_success', {
@@ -151,16 +144,20 @@ export function ContactSection({ className }: ContactSectionProps) {
       router.push('/contact/thank-you')
     } catch (error) {
       console.error('Error sending message:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send message. Please try again.'
+
+      // Format error for user display
+      const errorInfo = formatErrorForDisplay(error instanceof Error ? error : new Error(String(error)))
+      const isRetryable = error instanceof Error && isRetryableError(error)
 
       // Track error
       trackEvent('contact_form_error', {
         form_location: 'contact_section',
-        error_message: errorMessage,
-        error_type: 'network_error',
+        error_message: errorInfo.message,
+        error_type: isRetryable ? 'retryable_error' : 'permanent_error',
       })
 
-      setSubmitError('Failed to send message. Please try again.')
+      // Show user-friendly error message
+      setSubmitError(errorInfo.message)
     } finally {
       setIsSubmitting(false)
     }

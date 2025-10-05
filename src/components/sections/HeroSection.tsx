@@ -2,9 +2,11 @@
 
 import { Button } from '@/components/ui/Button'
 import { HeroBackground } from '@/components/three/HeroBackground'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { motion } from 'framer-motion'
 import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 import { useAnalytics } from '@/hooks/useAnalytics'
+import { createErrorBoundaryHandler } from '@/lib/errors'
 
 export function HeroSection() {
   const { trackEvent } = useAnalytics()
@@ -48,8 +50,15 @@ export function HeroSection() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
-      <HeroBackground className="absolute inset-0 w-full h-full" />
+      {/* 3D Background with Error Boundary */}
+      <ErrorBoundary
+        onError={createErrorBoundaryHandler('HeroBackground')}
+        fallback={
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+        }
+      >
+        <HeroBackground className="absolute inset-0 w-full h-full" />
+      </ErrorBoundary>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
