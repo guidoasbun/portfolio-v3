@@ -19,7 +19,8 @@ import {
   FiFolder,
   FiMail,
   FiFileText,
-  FiCode
+  FiCode,
+  FiBarChart2
 } from 'react-icons/fi'
 import { useState } from 'react'
 import type { NavItem } from '@/types/admin'
@@ -34,7 +35,8 @@ const navItems: NavItem[] = [
   { href: '/admin/experience', label: 'Experience', icon: FiBriefcase },
   { href: '/admin/skills', label: 'Skills', icon: FiCode },
   { href: '/admin/messages', label: 'Messages', icon: FiMail },
-  { href: '/admin/resume', label: 'Resume', icon: FiFileText }
+  { href: '/admin/resume', label: 'Resume', icon: FiFileText },
+  { href: '/admin/analytics', label: 'Analytics', icon: FiBarChart2 }
 ]
 
 export default function AdminLayout({ children }: AdminLayoutProps) {

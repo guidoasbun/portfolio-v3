@@ -1,6 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react'
+import { trackEvent } from '@/lib/firebase/analytics'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -32,6 +33,7 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme)
   const [actualTheme, setActualTheme] = useState<'dark' | 'light'>('light')
+  const previousThemeRef = useRef<Theme>(defaultTheme)
 
   useEffect(() => {
     // Get theme from localStorage or use default
@@ -75,9 +77,21 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
+    setTheme: (newTheme: Theme) => {
+      const previousTheme = previousThemeRef.current
+
+      // Track theme change
+      trackEvent('theme_change', {
+        theme_mode: newTheme,
+        previous_theme: previousTheme,
+      })
+
+      // Update refs
+      previousThemeRef.current = newTheme
+
+      // Save and apply theme
+      localStorage.setItem(storageKey, newTheme)
+      setTheme(newTheme)
     },
     actualTheme
   }

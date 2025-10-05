@@ -18,7 +18,8 @@ import {
   FiGithub,
   FiGlobe,
 } from 'react-icons/fi'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 interface ResumeSection {
   title: string
@@ -113,6 +114,15 @@ const mockResumeData = {
 
 export default function ResumePage() {
   const [isSharing, setIsSharing] = useState(false)
+  const { trackEvent } = useAnalytics()
+
+  // Track resume view on page load
+  useEffect(() => {
+    trackEvent('resume_view', {
+      resume_id: 'default',
+      resume_version: '1.0',
+    })
+  }, [trackEvent])
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -137,11 +147,25 @@ export default function ResumePage() {
   }
 
   const handleDownload = () => {
+    // Track resume download
+    trackEvent('resume_download', {
+      resume_id: 'default',
+      resume_version: '1.0',
+      download_count: 1,
+    })
+
     // Placeholder - will integrate with backend
     alert('Download functionality will be implemented when resume file is available')
   }
 
   const handlePrint = () => {
+    // Track print action
+    trackEvent('resume_download', {
+      resume_id: 'default',
+      resume_version: '1.0-print',
+      download_count: 1,
+    })
+
     window.print()
   }
 

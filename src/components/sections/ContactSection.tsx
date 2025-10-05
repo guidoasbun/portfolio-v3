@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useRouter } from 'next/navigation'
+import { useAnalytics } from '@/hooks/useAnalytics'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -74,6 +75,7 @@ export function ContactSection({ className }: ContactSectionProps) {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const { executeRecaptcha } = useGoogleReCaptcha()
   const router = useRouter()
+  const { trackEvent } = useAnalytics()
 
   const {
     register,
@@ -88,6 +90,11 @@ export function ContactSection({ className }: ContactSectionProps) {
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true)
     setSubmitError(null)
+
+    // Track form submission start
+    trackEvent('contact_form_submit', {
+      form_location: 'contact_section',
+    })
 
     try {
       // Get reCAPTCHA token if available
@@ -113,6 +120,18 @@ export function ContactSection({ className }: ContactSectionProps) {
       const result = await response.json()
 
       if (!response.ok) {
+        // Track error
+        const errorType = response.status === 429 ? 'rate_limit' : 'submission_failed'
+        const errorMessage = response.status === 429
+          ? 'Too many requests. Please try again later.'
+          : result.error || 'Failed to send message. Please try again.'
+
+        trackEvent('contact_form_error', {
+          form_location: 'contact_section',
+          error_message: errorMessage,
+          error_type: errorType,
+        })
+
         // Handle specific error messages
         if (response.status === 429) {
           setSubmitError('Too many requests. Please try again later.')
@@ -122,10 +141,25 @@ export function ContactSection({ className }: ContactSectionProps) {
         return
       }
 
+      // Track success
+      trackEvent('contact_form_success', {
+        form_location: 'contact_section',
+        subject: data.subject,
+      })
+
       // Success - redirect to thank you page
       router.push('/contact/thank-you')
     } catch (error) {
       console.error('Error sending message:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send message. Please try again.'
+
+      // Track error
+      trackEvent('contact_form_error', {
+        form_location: 'contact_section',
+        error_message: errorMessage,
+        error_type: 'network_error',
+      })
+
       setSubmitError('Failed to send message. Please try again.')
     } finally {
       setIsSubmitting(false)

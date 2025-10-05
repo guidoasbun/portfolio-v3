@@ -4,6 +4,7 @@ import { useRef, useMemo, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { MeshRef, ThreeTheme } from '@/types/three'
+import { trackEvent } from '@/lib/firebase/analytics'
 
 interface InteractiveElementsProps {
   theme: ThreeTheme
@@ -35,6 +36,7 @@ export function InteractiveElements({
   const scrollRef = useRef(0)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const { viewport } = useThree()
+  const hasTrackedInteraction = useRef(false)
 
   // Detect mobile
   const isMobile = useMemo(() => {
@@ -156,12 +158,30 @@ export function InteractiveElements({
   // Mouse move handler
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      // Track first interaction (once per session)
+      if (!hasTrackedInteraction.current) {
+        trackEvent('3d_interaction', {
+          interaction_type: 'hover',
+          element_type: 'interactive_elements',
+        })
+        hasTrackedInteraction.current = true
+      }
+
       targetMouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1
       targetMouseRef.current.y = -(event.clientY / window.innerHeight) * 2 + 1
     }
 
     // Touch move handler
     const handleTouchStart = (event: TouchEvent) => {
+      // Track touch interaction
+      if (!hasTrackedInteraction.current) {
+        trackEvent('3d_interaction', {
+          interaction_type: 'drag',
+          element_type: 'interactive_elements',
+        })
+        hasTrackedInteraction.current = true
+      }
+
       if (event.touches.length > 0) {
         touchStartRef.current = {
           x: event.touches[0].clientX,

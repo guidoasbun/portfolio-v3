@@ -7,6 +7,7 @@ import { ProjectDetailsModal } from '@/components/sections/ProjectDetailsModal'
 import { mockProjects } from '@/data/projects'
 import type { Project, ProjectCategory } from '@/types'
 import { cn } from '@/lib/utils'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 interface ProjectsSectionProps {
   projects?: Project[]
@@ -27,6 +28,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { trackEvent } = useAnalytics()
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -43,8 +45,25 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
   }
 
   const handleProjectClick = (project: Project) => {
+    // Track project view
+    trackEvent('project_view', {
+      project_id: project.id,
+      project_title: project.title,
+      project_category: project.category,
+    })
+
     setSelectedProject(project)
     setIsModalOpen(true)
+  }
+
+  const handleCategoryChange = (category: FilterCategory) => {
+    // Track filter change
+    trackEvent('project_filter_change', {
+      filter_type: 'category',
+      filter_value: category,
+    })
+
+    setActiveCategory(category)
   }
 
   const handleCloseModal = () => {
@@ -126,7 +145,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
               return (
                 <button
                   key={category.value}
-                  onClick={() => setActiveCategory(category.value)}
+                  onClick={() => handleCategoryChange(category.value)}
                   className={cn(
                     'relative px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300',
                     'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',

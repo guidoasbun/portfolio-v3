@@ -4,13 +4,46 @@ import { Button } from '@/components/ui/Button'
 import { HeroBackground } from '@/components/three/HeroBackground'
 import { motion } from 'framer-motion'
 import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 export function HeroSection() {
+  const { trackEvent } = useAnalytics()
+
   const scrollToProjects = () => {
+    // Track CTA click
+    trackEvent('cta_click', {
+      cta_text: 'View Projects',
+      cta_location: 'hero_section',
+      cta_destination: '#projects',
+    })
+
     const projectsSection = document.getElementById('projects')
     if (projectsSection) {
       projectsSection.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+
+  const scrollToContact = () => {
+    // Track CTA click
+    trackEvent('cta_click', {
+      cta_text: 'Get in Touch',
+      cta_location: 'hero_section',
+      cta_destination: '#contact',
+    })
+
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleSocialClick = (platform: string, url: string) => {
+    // Track social link click
+    trackEvent('social_link_click', {
+      platform: platform,
+      link_url: url,
+      link_location: 'hero_section',
+    })
   }
 
   return (
@@ -80,7 +113,7 @@ export function HeroSection() {
               <Button size="lg" onClick={scrollToProjects}>
                 View Projects
               </Button>
-              <Button variant="secondary" size="lg" onClick={() => {}}>
+              <Button variant="secondary" size="lg" onClick={scrollToContact}>
                 <FiMail className="mr-2" />
                 Get in Touch
               </Button>
@@ -97,6 +130,7 @@ export function HeroSection() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => handleSocialClick('GitHub', 'https://github.com')}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="GitHub"
               >
@@ -106,6 +140,7 @@ export function HeroSection() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => handleSocialClick('LinkedIn', 'https://linkedin.com')}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="LinkedIn"
               >
@@ -113,6 +148,7 @@ export function HeroSection() {
               </a>
               <a
                 href="mailto:your.email@example.com"
+                onClick={() => handleSocialClick('Email', 'mailto:your.email@example.com')}
                 className="text-foreground/70 hover:text-foreground transition-colors duration-300"
                 aria-label="Email"
               >
