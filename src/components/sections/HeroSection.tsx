@@ -1,58 +1,61 @@
-'use client'
+"use client";
 
-import { Button } from '@/components/ui/Button'
-import { HeroBackground } from '@/components/three/HeroBackground'
-import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
-import { motion } from 'framer-motion'
-import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
-import { useAnalytics } from '@/hooks/useAnalytics'
-import { createErrorBoundaryHandler } from '@/lib/errors'
+import { Button } from "@/components/ui/Button";
+import { HeroBackground } from "@/components/three/HeroBackground";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { motion } from "framer-motion";
+import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { createErrorBoundaryHandler } from "@/lib/errors";
 
 export function HeroSection() {
-  const { trackEvent } = useAnalytics()
+  const { trackEvent } = useAnalytics();
 
   const scrollToProjects = () => {
     // Track CTA click
-    trackEvent('cta_click', {
-      cta_text: 'View Projects',
-      cta_location: 'hero_section',
-      cta_destination: '#projects',
-    })
+    trackEvent("cta_click", {
+      cta_text: "View Projects",
+      cta_location: "hero_section",
+      cta_destination: "#projects",
+    });
 
-    const projectsSection = document.getElementById('projects')
+    const projectsSection = document.getElementById("projects");
     if (projectsSection) {
-      projectsSection.scrollIntoView({ behavior: 'smooth' })
+      projectsSection.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   const scrollToContact = () => {
     // Track CTA click
-    trackEvent('cta_click', {
-      cta_text: 'Get in Touch',
-      cta_location: 'hero_section',
-      cta_destination: '#contact',
-    })
+    trackEvent("cta_click", {
+      cta_text: "Get in Touch",
+      cta_location: "hero_section",
+      cta_destination: "#contact",
+    });
 
-    const contactSection = document.getElementById('contact')
+    const contactSection = document.getElementById("contact");
     if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' })
+      contactSection.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   const handleSocialClick = (platform: string, url: string) => {
     // Track social link click
-    trackEvent('social_link_click', {
+    trackEvent("social_link_click", {
       platform: platform,
       link_url: url,
-      link_location: 'hero_section',
-    })
-  }
+      link_location: "hero_section",
+    });
+  };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* 3D Background with Error Boundary */}
       <ErrorBoundary
-        onError={createErrorBoundaryHandler('HeroBackground')}
+        onError={createErrorBoundaryHandler("HeroBackground")}
         fallback={
           <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
         }
@@ -67,7 +70,7 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="glass rounded-2xl p-6 sm:p-10 lg:p-12 shadow-2xl border border-white/20 backdrop-blur-md"
           >
             {/* Greeting */}
@@ -87,7 +90,7 @@ export function HeroSection() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent leading-tight"
             >
-              Your Name
+              Guido Asbun
             </motion.h1>
 
             {/* Title */}
@@ -119,10 +122,19 @@ export function HeroSection() {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mb-6 sm:mb-8"
             >
-              <Button size="lg" onClick={scrollToProjects} className="w-full sm:w-auto min-h-[44px]">
+              <Button
+                size="lg"
+                onClick={scrollToProjects}
+                className="w-full sm:w-auto min-h-[44px]"
+              >
                 View Projects
               </Button>
-              <Button variant="secondary" size="lg" onClick={scrollToContact} className="w-full sm:w-auto min-h-[44px]">
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={scrollToContact}
+                className="w-full sm:w-auto min-h-[44px]"
+              >
                 <FiMail className="mr-2" />
                 Get in Touch
               </Button>
@@ -139,7 +151,9 @@ export function HeroSection() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => handleSocialClick('GitHub', 'https://github.com')}
+                onClick={() =>
+                  handleSocialClick("GitHub", "https://github.com")
+                }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="GitHub"
               >
@@ -149,7 +163,9 @@ export function HeroSection() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => handleSocialClick('LinkedIn', 'https://linkedin.com')}
+                onClick={() =>
+                  handleSocialClick("LinkedIn", "https://linkedin.com")
+                }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="LinkedIn"
               >
@@ -157,7 +173,9 @@ export function HeroSection() {
               </a>
               <a
                 href="mailto:your.email@example.com"
-                onClick={() => handleSocialClick('Email', 'mailto:your.email@example.com')}
+                onClick={() =>
+                  handleSocialClick("Email", "mailto:your.email@example.com")
+                }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Email"
               >
@@ -178,7 +196,9 @@ export function HeroSection() {
               className="text-foreground/70 hover:text-foreground transition-colors duration-300 flex flex-col items-center gap-2 mx-auto min-h-[44px] p-2"
               aria-label="Scroll to projects"
             >
-              <span className="text-xs sm:text-sm uppercase tracking-wider">Scroll Down</span>
+              <span className="text-xs sm:text-sm uppercase tracking-wider">
+                Scroll Down
+              </span>
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 2 }}
@@ -193,5 +213,5 @@ export function HeroSection() {
       {/* Gradient Overlay for better text readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/30 to-background/50 pointer-events-none" />
     </section>
-  )
+  );
 }
