@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { GlassCard } from '@/components/ui/GlassCard'
-import { Button } from '@/components/ui/Button'
-import { motion, type Variants } from 'framer-motion'
+import { GlassCard } from "@/components/ui/GlassCard";
+import { Button } from "@/components/ui/Button";
+import { motion, type Variants } from "framer-motion";
 import {
   FiDownload,
   FiPrinter,
@@ -17,112 +17,118 @@ import {
   FiLinkedin,
   FiGithub,
   FiGlobe,
-} from 'react-icons/fi'
-import { useState, useEffect } from 'react'
-import { useAnalytics } from '@/hooks/useAnalytics'
+} from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface ResumeSection {
-  title: string
-  company: string
-  location: string
-  date: string
-  description: string[]
-  technologies?: string[]
+  title: string;
+  company: string;
+  location: string;
+  date: string;
+  description: string[];
+  technologies?: string[];
 }
 
 interface Education {
-  degree: string
-  institution: string
-  location: string
-  date: string
-  gpa?: string
+  degree: string;
+  institution: string;
+  location: string;
+  date: string;
+  gpa?: string;
 }
 
 interface Skill {
-  category: string
-  items: string[]
+  category: string;
+  items: string[];
 }
 
 // Mock data - will be replaced with real data from backend
 const mockResumeData = {
   header: {
-    name: 'Your Name',
-    title: 'Full Stack Developer',
-    email: 'your.email@example.com',
-    phone: '+1 (123) 456-7890',
-    location: 'City, State',
-    linkedin: 'linkedin.com/in/yourname',
-    github: 'github.com/yourusername',
-    website: 'yourwebsite.com',
+    name: "Guido Asbun",
+    title: "Full Stack Developer",
+    email: "your.email@example.com",
+    phone: "+1 (123) 456-7890",
+    location: "City, State",
+    linkedin: "linkedin.com/in/yourname",
+    github: "github.com/yourusername",
+    website: "yourwebsite.com",
   },
   summary:
-    'Passionate Full Stack Developer with 3+ years of experience building modern web applications. Specialized in React, Next.js, and Node.js with a strong focus on user experience and performance optimization.',
+    "Passionate Full Stack Developer with 3+ years of experience building modern web applications. Specialized in React, Next.js, and Node.js with a strong focus on user experience and performance optimization.",
   experience: [
     {
-      title: 'Senior Full Stack Developer',
-      company: 'Tech Company',
-      location: 'City, State',
-      date: 'Jan 2023 - Present',
+      title: "Senior Full Stack Developer",
+      company: "Tech Company",
+      location: "City, State",
+      date: "Jan 2023 - Present",
       description: [
-        'Led development of scalable web applications using Next.js and React',
-        'Implemented CI/CD pipelines reducing deployment time by 40%',
-        'Mentored junior developers and conducted code reviews',
+        "Led development of scalable web applications using Next.js and React",
+        "Implemented CI/CD pipelines reducing deployment time by 40%",
+        "Mentored junior developers and conducted code reviews",
       ],
-      technologies: ['React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL'],
+      technologies: ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL"],
     },
     {
-      title: 'Full Stack Developer',
-      company: 'Startup Inc',
-      location: 'City, State',
-      date: 'Jun 2021 - Dec 2022',
+      title: "Full Stack Developer",
+      company: "Startup Inc",
+      location: "City, State",
+      date: "Jun 2021 - Dec 2022",
       description: [
-        'Built and maintained RESTful APIs serving 10K+ daily users',
-        'Developed responsive UI components with React and Tailwind CSS',
-        'Optimized database queries improving performance by 60%',
+        "Built and maintained RESTful APIs serving 10K+ daily users",
+        "Developed responsive UI components with React and Tailwind CSS",
+        "Optimized database queries improving performance by 60%",
       ],
-      technologies: ['React', 'Node.js', 'MongoDB', 'AWS'],
+      technologies: ["React", "Node.js", "MongoDB", "AWS"],
     },
   ] as ResumeSection[],
   education: [
     {
-      degree: 'Bachelor of Science in Computer Science',
-      institution: 'University Name',
-      location: 'City, State',
-      date: '2017 - 2021',
-      gpa: '3.8/4.0',
+      degree: "Bachelor of Science in Computer Science",
+      institution: "University Name",
+      location: "City, State",
+      date: "2017 - 2021",
+      gpa: "3.8/4.0",
     },
   ] as Education[],
   skills: [
     {
-      category: 'Frontend',
-      items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+      category: "Frontend",
+      items: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+      ],
     },
     {
-      category: 'Backend',
-      items: ['Node.js', 'Express', 'Python', 'Django', 'REST APIs'],
+      category: "Backend",
+      items: ["Node.js", "Express", "Python", "Django", "REST APIs"],
     },
     {
-      category: 'Database',
-      items: ['PostgreSQL', 'MongoDB', 'Redis', 'Firebase'],
+      category: "Database",
+      items: ["PostgreSQL", "MongoDB", "Redis", "Firebase"],
     },
     {
-      category: 'Tools & Others',
-      items: ['Git', 'Docker', 'AWS', 'CI/CD', 'Agile/Scrum'],
+      category: "Tools & Others",
+      items: ["Git", "Docker", "AWS", "CI/CD", "Agile/Scrum"],
     },
   ] as Skill[],
-}
+};
 
 export default function ResumePageClient() {
-  const [isSharing, setIsSharing] = useState(false)
-  const { trackEvent } = useAnalytics()
+  const [isSharing, setIsSharing] = useState(false);
+  const { trackEvent } = useAnalytics();
 
   // Track resume view on page load
   useEffect(() => {
-    trackEvent('resume_view', {
-      resume_id: 'default',
-      resume_version: '1.0',
-    })
-  }, [trackEvent])
+    trackEvent("resume_view", {
+      resume_id: "default",
+      resume_version: "1.0",
+    });
+  }, [trackEvent]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -133,7 +139,7 @@ export default function ResumePageClient() {
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -144,51 +150,53 @@ export default function ResumePageClient() {
         duration: 0.6,
       },
     },
-  }
+  };
 
   const handleDownload = () => {
     // Track resume download
-    trackEvent('resume_download', {
-      resume_id: 'default',
-      resume_version: '1.0',
+    trackEvent("resume_download", {
+      resume_id: "default",
+      resume_version: "1.0",
       download_count: 1,
-    })
+    });
 
     // Placeholder - will integrate with backend
-    alert('Download functionality will be implemented when resume file is available')
-  }
+    alert(
+      "Download functionality will be implemented when resume file is available"
+    );
+  };
 
   const handlePrint = () => {
     // Track print action
-    trackEvent('resume_download', {
-      resume_id: 'default',
-      resume_version: '1.0-print',
+    trackEvent("resume_download", {
+      resume_id: "default",
+      resume_version: "1.0-print",
       download_count: 1,
-    })
+    });
 
-    window.print()
-  }
+    window.print();
+  };
 
   const handleShare = async () => {
-    setIsSharing(true)
+    setIsSharing(true);
     try {
       if (navigator.share) {
         await navigator.share({
           title: `${mockResumeData.header.name} - Resume`,
           text: `Check out ${mockResumeData.header.name}'s resume`,
           url: window.location.href,
-        })
+        });
       } else {
         // Fallback: Copy to clipboard
-        await navigator.clipboard.writeText(window.location.href)
-        alert('Resume link copied to clipboard!')
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Resume link copied to clipboard!");
       }
     } catch (error) {
-      console.error('Error sharing:', error)
+      console.error("Error sharing:", error);
     } finally {
-      setIsSharing(false)
+      setIsSharing(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen py-20">
@@ -329,7 +337,10 @@ export default function ResumePageClient() {
                 </h2>
                 <div className="space-y-6">
                   {mockResumeData.experience.map((exp, index) => (
-                    <div key={index} className="pb-6 border-b border-foreground/10 last:border-0">
+                    <div
+                      key={index}
+                      className="pb-6 border-b border-foreground/10 last:border-0"
+                    >
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
                         <div>
                           <h3 className="text-lg font-semibold text-foreground">
@@ -375,7 +386,10 @@ export default function ResumePageClient() {
                 </h2>
                 <div className="space-y-4">
                   {mockResumeData.education.map((edu, index) => (
-                    <div key={index} className="pb-4 border-b border-foreground/10 last:border-0">
+                    <div
+                      key={index}
+                      className="pb-4 border-b border-foreground/10 last:border-0"
+                    >
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                         <div>
                           <h3 className="text-lg font-semibold text-foreground">
@@ -466,5 +480,5 @@ export default function ResumePageClient() {
         }
       `}</style>
     </div>
-  )
+  );
 }

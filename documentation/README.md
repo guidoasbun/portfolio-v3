@@ -116,6 +116,24 @@ Welcome to the portfolio project documentation. This directory contains comprehe
     - E2E test results
     - Testing strategy
 
+18. **[Phase 8.7: Deployment Preparation](./deployment-guide.md)**
+    - Firebase Hosting setup
+    - Environment configuration
+    - CI/CD pipeline
+
+19. **[Phase 8.8: Launch](./phase-8.8-launch.md)** ⭐ NEW
+    - Production deployment to Vercel
+    - Custom domain configuration (guido-asbun.com)
+    - Environment variables setup
+    - SSL/TLS certificate provisioning
+    - Post-launch verification
+    - Performance metrics
+    - Monitoring and maintenance
+
+20. **[AWS Route 53 to Firebase Migration](./aws-route53-to-firebase-migration.md)**
+    - DNS configuration guide
+    - Domain migration steps
+
 
 ## 🚀 Quick Links
 
@@ -157,15 +175,22 @@ Welcome to the portfolio project documentation. This directory contains comprehe
   - 8.4 Error Handling ✅
   - 8.5 Testing ✅
   - 8.6 Documentation ✅
+  - 8.7 Deployment Preparation ✅
+  - 8.8 Launch ✅
 
-### 🚀 Ready for Deployment
+### 🎉 LIVE IN PRODUCTION
 
-The project is production-ready with:
+**Live URL:** https://www.guido-asbun.com
+
+The project is deployed and running with:
+- ✅ Production deployment on Vercel
+- ✅ Custom domain with SSL/TLS
+- ✅ All features functional
 - ✅ Zero TypeScript errors
 - ✅ Comprehensive documentation
 - ✅ 92.7% E2E test pass rate (38/41 tests)
-- ✅ Bundle size < 500KB
-- ✅ All critical features functional
+- ✅ Bundle size: 370KB (target: <500KB)
+- ✅ Firebase backend services active
 
 ## 🔧 Technology Stack
 
@@ -177,11 +202,12 @@ The project is production-ready with:
 - Framer Motion
 - Three.js & React Three Fiber
 
-### Backend
+### Backend & Deployment
 - Firebase Authentication
 - Firestore Database
 - Firebase Storage
-- Firebase Hosting
+- Vercel (Hosting & Serverless Functions)
+- AWS Route 53 (DNS)
 
 ### Email & Security
 - Nodemailer (SMTP)
@@ -287,16 +313,23 @@ The project is production-ready with:
 
 ## 📅 Documentation Updates
 
-This documentation is actively maintained. Last updated: **Phase 8.6 - Documentation Complete**
+This documentation is actively maintained. Last updated: **Phase 8.8 - Launch Complete**
 
-### Recent Updates (Phase 8.6)
+### Recent Updates (Phase 8.8)
+- ✅ Production deployment to Vercel
+- ✅ Custom domain configuration (guido-asbun.com)
+- ✅ Launch documentation (phase-8.8-launch.md)
+- ✅ Roadmap updated with deployment status
+- ✅ Documentation index updated
+- ✅ Live production URL added
+
+### Previous Updates (Phase 8.6)
 - ✅ API Reference documentation (12 endpoints)
 - ✅ Deployment Guide (Firebase Hosting)
 - ✅ Environment Variables Reference (20+ vars)
 - ✅ Component Library (35+ components)
 - ✅ JSDoc comments added to all services
 - ✅ CLAUDE.md updated with final architecture
-- ✅ README.md fully updated
 - ✅ All phase documentation completed
 
 ## 🤝 Contributing to Documentation
