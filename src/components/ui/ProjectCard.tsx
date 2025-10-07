@@ -37,14 +37,6 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
     }
   }
 
-  const handleLinkClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    url: string
-  ) => {
-    e.stopPropagation()
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
-
   return (
     <GlassCard
       variant="light"
@@ -131,7 +123,9 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
           {liveUrl && (
             <a
               href={liveUrl}
-              onClick={(e) => handleLinkClick(e, liveUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="flex-1"
               aria-label={`View live demo of ${title}`}
             >
@@ -149,7 +143,9 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
           {githubUrl && (
             <a
               href={githubUrl}
-              onClick={(e) => handleLinkClick(e, githubUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               aria-label={`View GitHub repository for ${title}`}
             >
               <Button
