@@ -41,8 +41,14 @@ export default function EditProjectPage() {
           throw new Error('Failed to fetch project')
         }
 
-        const data = await response.json()
-        setProject(data)
+        const result = await response.json()
+
+        // API returns data wrapped in ApiResponse format: { success, data, message }
+        if (result.success && result.data) {
+          setProject(result.data)
+        } else {
+          throw new Error(result.error || 'Failed to fetch project')
+        }
       } catch (err) {
         console.error('Error fetching project:', err)
         setError(err instanceof Error ? err.message : 'Failed to load project')

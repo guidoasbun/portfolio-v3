@@ -86,7 +86,7 @@ export function ProjectForm({
     uploadError
   } = useImageUpload()
 
-  const currentImages = watch('images')
+  const currentImages = watch('images') || []
 
   // Update form images field when previews change (for validation)
   React.useEffect(() => {
