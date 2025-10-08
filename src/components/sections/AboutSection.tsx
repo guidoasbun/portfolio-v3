@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { GlassCard } from '@/components/ui/GlassCard'
-import { Button } from '@/components/ui/Button'
-import { motion, type Variants } from 'framer-motion'
+import { GlassCard } from "@/components/ui/GlassCard";
+import { Button } from "@/components/ui/Button";
+import { motion, type Variants } from "framer-motion";
 import {
   FiDownload,
   FiCode,
@@ -13,89 +13,102 @@ import {
   FiMapPin,
   FiCalendar,
   FiCheckCircle,
-} from 'react-icons/fi'
+} from "react-icons/fi";
+import { LuCookingPot } from "react-icons/lu";
+import { IoIosFitness } from "react-icons/io";
+import { useState } from "react";
+import { resumeDownload } from "@/lib/analytics/events";
+import type { ApiResponse, Resume } from "@/types";
 
 interface Education {
-  degree: string
-  institution: string
-  location: string
-  startYear: number
-  endYear?: number
-  current?: boolean
+  degree: string;
+  institution: string;
+  location: string;
+  startYear: number;
+  endYear?: number;
+  current?: boolean;
 }
 
 interface Interest {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  description: string
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  description: string;
 }
 
 interface AboutSectionProps {
-  bio?: string
-  education?: Education[]
+  bio?: string;
+  education?: Education[];
   availability?: {
-    status: 'available' | 'unavailable' | 'open-to-opportunities'
-    message: string
-  }
-  interests?: Interest[]
-  resumeUrl?: string
+    status: "available" | "unavailable" | "open-to-opportunities";
+    message: string;
+  };
+  interests?: Interest[];
+  resumeUrl?: string;
 }
 
-const defaultBio = `I'm a passionate Full Stack Developer with a love for creating beautiful,
-performant web experiences. With expertise in modern web technologies like React, Next.js,
-and TypeScript, I transform ideas into reality through clean, maintainable code.
+const defaultBio = `I'm a Full Stack Developer transitioning into DevOps and 
+cloud infrastructure, with experience across the full software development lifecycle. 
+From developing React applications to deploying them on AWS with automated CI/CD pipelines, 
+I enjoy every aspect of modern software delivery.
 
-I believe in continuous learning and staying up-to-date with the latest industry trends.
-My approach combines technical excellence with user-centric design, ensuring that every
-project not only works flawlessly but also provides an exceptional user experience.`
+My technical journey has taken me from building compilers with Java to orchestrating 
+microservices with Docker and Kubernetes. I'm particularly passionate about infrastructure 
+automation, having implemented production pipelines that improved deployment efficiency and 
+reduced errors.
+
+Looking ahead, I'm eager to join a team where I can contribute to building robust DevOps 
+practices, optimize cloud infrastructure, and help create systems that scale effortlessly.`;
 
 const defaultEducation: Education[] = [
   {
-    degree: 'Bachelor of Science in Computer Science',
-    institution: 'University Name',
-    location: 'City, State',
-    startYear: 2018,
-    endYear: 2022,
+    degree: "Bachelor of Science in Computer Science and Cybersecurity",
+    institution: "California State University Fullerton",
+    location: "Fullerton, CA",
+    startYear: 2021,
+    endYear: 2025,
   },
-]
+];
 
 const defaultInterests: Interest[] = [
   {
     icon: FiCode,
-    label: 'Open Source',
-    description: 'Contributing to open source projects and building developer tools',
+    label: "Open Source",
+    description:
+      "Contributing to open source projects and building developer tools",
   },
   {
     icon: FiBookOpen,
-    label: 'Reading',
-    description: 'Technical books, sci-fi novels, and philosophy',
+    label: "Reading",
+    description: "Technical books, sci-fi novels, and philosophy",
   },
   {
-    icon: FiMusic,
-    label: 'Music',
-    description: 'Playing guitar and exploring different genres',
+    icon: LuCookingPot,
+    label: "Cooking",
+    description:
+      "Experimenting with recipes and techniques, approaching cooking like debugging code: iterate, test, improve",
   },
   {
-    icon: FiCamera,
-    label: 'Photography',
-    description: 'Capturing moments and experimenting with composition',
+    icon: IoIosFitness,
+    label: "Fitness",
+    description:
+      "Maintaining physical and mental wellness through regular exercise and outdoor activities",
   },
   {
     icon: FiCoffee,
-    label: 'Coffee',
-    description: 'Exploring different brewing methods and coffee origins',
+    label: "Coffee",
+    description: "Exploring different brewing methods and coffee origins",
   },
   {
     icon: FiMapPin,
-    label: 'Travel',
-    description: 'Discovering new cultures and perspectives',
+    label: "Travel",
+    description: "Discovering new cultures and perspectives",
   },
-]
+];
 
 const defaultAvailability = {
-  status: 'open-to-opportunities' as const,
-  message: 'Open to new opportunities and exciting projects',
-}
+  status: "open-to-opportunities" as const,
+  message: "Open to new opportunities and exciting projects",
+};
 
 export function AboutSection({
   bio = defaultBio,
@@ -104,6 +117,8 @@ export function AboutSection({
   interests = defaultInterests,
   resumeUrl,
 }: AboutSectionProps) {
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -113,7 +128,7 @@ export function AboutSection({
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -124,29 +139,63 @@ export function AboutSection({
         duration: 0.6,
       },
     },
-  }
+  };
 
   const getAvailabilityColor = (status: typeof availability.status) => {
     switch (status) {
-      case 'available':
-        return 'bg-green-500'
-      case 'unavailable':
-        return 'bg-red-500'
-      case 'open-to-opportunities':
-        return 'bg-blue-500'
+      case "available":
+        return "bg-green-500";
+      case "unavailable":
+        return "bg-red-500";
+      case "open-to-opportunities":
+        return "bg-blue-500";
       default:
-        return 'bg-gray-500'
+        return "bg-gray-500";
     }
-  }
+  };
 
-  const handleDownloadResume = () => {
+  const handleDownloadResume = async () => {
+    // If resumeUrl prop is provided, use it directly
     if (resumeUrl) {
-      window.open(resumeUrl, '_blank')
-    } else {
-      // Placeholder action - you can replace with actual resume URL
-      alert('Resume download functionality will be implemented soon!')
+      window.open(resumeUrl, "_blank");
+      return;
     }
-  }
+
+    // Otherwise, fetch the active resume from the API
+    setIsDownloading(true);
+    try {
+      // Fetch active resume
+      const response = await fetch("/api/resume/active");
+      const result: ApiResponse<Resume | null> = await response.json();
+
+      if (!result.success || !result.data) {
+        alert("No active resume found. Please contact the administrator.");
+        return;
+      }
+
+      const activeResume = result.data;
+
+      // Track the download
+      await fetch(`/api/resume/${activeResume.id}/download`, {
+        method: "POST",
+      });
+
+      // Track analytics
+      resumeDownload(
+        activeResume.id,
+        activeResume.version,
+        activeResume.downloadCount + 1
+      );
+
+      // Open the resume in a new tab
+      window.open(activeResume.fileUrl, "_blank");
+    } catch (error) {
+      console.error("Error downloading resume:", error);
+      alert("Failed to download resume. Please try again later.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <section id="about" className="relative py-12 sm:py-20 lg:py-32">
@@ -154,12 +203,15 @@ export function AboutSection({
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
           className="max-w-6xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
+          <motion.div
+            variants={itemVariants}
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               About Me
             </h2>
@@ -177,7 +229,7 @@ export function AboutSection({
                   Introduction
                 </h3>
                 <div className="text-sm sm:text-base text-foreground/80 leading-relaxed space-y-3 sm:space-y-4">
-                  {bio.split('\n\n').map((paragraph, index) => (
+                  {bio.split("\n\n").map((paragraph, index) => (
                     <p key={index}>{paragraph.trim()}</p>
                   ))}
                 </div>
@@ -188,10 +240,11 @@ export function AboutSection({
                     variant="primary"
                     size="lg"
                     onClick={handleDownloadResume}
+                    disabled={isDownloading}
                     className="w-full sm:w-auto"
                   >
                     <FiDownload className="mr-2" />
-                    Download Resume
+                    {isDownloading ? "Downloading..." : "Download Resume"}
                   </Button>
                 </div>
               </GlassCard>
@@ -250,8 +303,8 @@ export function AboutSection({
                           </span>
                           <span className="flex items-center gap-1">
                             <FiCalendar className="w-3 h-3" />
-                            {edu.startYear} -{' '}
-                            {edu.current ? 'Present' : edu.endYear}
+                            {edu.startYear} -{" "}
+                            {edu.current ? "Present" : edu.endYear}
                           </span>
                         </div>
                         {edu.current && (
@@ -278,7 +331,7 @@ export function AboutSection({
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {interests.map((interest, index) => {
-                  const Icon = interest.icon
+                  const Icon = interest.icon;
                   return (
                     <motion.div
                       key={index}
@@ -295,7 +348,7 @@ export function AboutSection({
                         </p>
                       </div>
                     </motion.div>
-                  )
+                  );
                 })}
               </div>
             </GlassCard>
@@ -303,5 +356,5 @@ export function AboutSection({
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

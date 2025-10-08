@@ -1,47 +1,56 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaHeart } from 'react-icons/fa'
-import { SOCIAL_LINKS, CONTACT_INFO, APP_CONFIG } from '@/lib/constants'
-import { fadeIn, slideUp } from '@/lib/animations'
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaEnvelope,
+  FaHeart,
+} from "react-icons/fa";
+import { SOCIAL_LINKS, CONTACT_INFO, APP_CONFIG } from "@/lib/constants";
+import { fadeIn, slideUp } from "@/lib/animations";
 
 interface FooterLink {
-  label: string
-  href: string
+  label: string;
+  href: string;
 }
 
 const quickLinks: FooterLink[] = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' }
-]
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "Contact", href: "#contact" },
+];
 
 const iconMap: Record<string, React.ReactElement> = {
   github: <FaGithub className="w-5 h-5" />,
   linkedin: <FaLinkedin className="w-5 h-5" />,
   twitter: <FaTwitter className="w-5 h-5" />,
-  mail: <FaEnvelope className="w-5 h-5" />
-}
+  mail: <FaEnvelope className="w-5 h-5" />,
+};
 
 export function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const targetId = href.substring(1)
-    const element = document.getElementById(targetId)
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const targetId = href.substring(1);
+    const element = document.getElementById(targetId);
 
     if (element) {
-      const offsetTop = element.offsetTop - 80
+      const offsetTop = element.offsetTop - 80;
       window.scrollTo({
         top: offsetTop,
-        behavior: 'smooth'
-      })
+        behavior: "smooth",
+      });
     }
-  }
+  };
 
   return (
     <footer className="relative glass-light border-t border-foreground/10 mt-12 sm:mt-16 lg:mt-20">
@@ -61,7 +70,7 @@ export function Footer() {
               {APP_CONFIG.description}
             </p>
             <div className="flex items-center space-x-3 sm:space-x-4">
-              {SOCIAL_LINKS.map((social) => (
+              {SOCIAL_LINKS.map(social => (
                 <a
                   key={social.name}
                   href={social.url}
@@ -83,13 +92,15 @@ export function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h4>
+            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+              Quick Links
+            </h4>
             <ul className="space-y-1.5 sm:space-y-2">
-              {quickLinks.map((link) => (
+              {quickLinks.map(link => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    onClick={(e) => handleLinkClick(e, link.href)}
+                    onClick={e => handleLinkClick(e, link.href)}
                     className="text-xs sm:text-sm text-foreground/60 hover:text-foreground transition-colors inline-block py-1 min-h-[32px] flex items-center"
                   >
                     {link.label}
@@ -107,7 +118,9 @@ export function Footer() {
             viewport={{ once: true }}
             className="sm:col-span-2 md:col-span-1"
           >
-            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Contact</h4>
+            <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+              Contact
+            </h4>
             <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-foreground/60">
               <li>
                 <a
@@ -138,11 +151,13 @@ export function Footer() {
               &copy; {currentYear} {APP_CONFIG.name}. All rights reserved.
             </p>
             <p className="text-xs sm:text-sm text-foreground/60 flex items-center">
-              Made with <FaHeart className="mx-1 text-red-500 w-3 h-3 sm:w-4 sm:h-4" /> using Next.js & Three.js
+              Made with{" "}
+              <FaHeart className="mx-1 text-red-500 w-3 h-3 sm:w-4 sm:h-4" />{" "}
+              using Next.js & Three.js
             </p>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
