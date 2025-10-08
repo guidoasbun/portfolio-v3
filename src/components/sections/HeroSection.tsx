@@ -100,7 +100,7 @@ export function HeroSection() {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-4 sm:mb-6"
             >
-              Full Stack Developer
+              Cloud Infrastructure & Software Engineering
             </motion.h2>
 
             {/* Description */}
@@ -110,9 +110,9 @@ export function HeroSection() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="text-base sm:text-lg lg:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0"
             >
-              Crafting beautiful, performant web experiences with modern
-              technologies. Specializing in React, Next.js, and cutting-edge web
-              development.
+              Building scalable cloud infrastructure and CI/CD pipelines while
+              crafting performant web applications. Specializing in AWS, Docker,
+              Kubernetes, and modern DevOps practices.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -148,11 +148,11 @@ export function HeroSection() {
               className="flex gap-4 sm:gap-6 justify-center"
             >
               <a
-                href="https://github.com"
+                href="https://github.com/guidoasbun"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  handleSocialClick("GitHub", "https://github.com")
+                  handleSocialClick("GitHub", "https://github.com/guidoasbun")
                 }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="GitHub"
@@ -160,11 +160,14 @@ export function HeroSection() {
                 <FiGithub className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/guidoasbun"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  handleSocialClick("LinkedIn", "https://linkedin.com")
+                  handleSocialClick(
+                    "LinkedIn",
+                    "https://www.linkedin.com/in/guidoasbun"
+                  )
                 }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="LinkedIn"
@@ -172,9 +175,9 @@ export function HeroSection() {
                 <FiLinkedin className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
               <a
-                href="mailto:your.email@example.com"
+                href="mailto:guido@asbun.io"
                 onClick={() =>
-                  handleSocialClick("Email", "mailto:your.email@example.com")
+                  handleSocialClick("Email", "mailto:guido@asbun.io")
                 }
                 className="p-2 text-foreground/70 hover:text-foreground transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Email"

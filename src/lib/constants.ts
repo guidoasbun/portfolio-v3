@@ -53,31 +53,31 @@ export const API_ENDPOINTS = {
 } as const;
 
 export const CONTACT_INFO = {
-  email: "your.email@example.com",
-  phone: "+1 (555) 123-4567",
-  location: "Your City, Country",
-  timezone: "UTC-5",
+  email: "guido@asbun.io",
+  phone: "+1 (949) 570-4195",
+  location: "Southern California",
+  timezone: "GMT-7",
 } as const;
 
 export const SOCIAL_LINKS = [
   {
     name: "GitHub",
-    url: "https://github.com/yourusername",
+    url: "https://github.com/guidoasbun",
     icon: "github",
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/yourusername",
+    url: "https://www.linkedin.com/in/guidoasbun",
     icon: "linkedin",
   },
-  {
-    name: "Twitter",
-    url: "https://twitter.com/yourusername",
-    icon: "twitter",
-  },
+  // {
+  //   name: "Twitter",
+  //   url: "https://twitter.com/yourusername",
+  //   icon: "twitter",
+  // },
   {
     name: "Email",
-    url: "mailto:your.email@example.com",
+    url: "mailto:guido@asbun.io",
     icon: "mail",
   },
 ] as const;

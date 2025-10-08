@@ -1,21 +1,21 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { useRouter } from 'next/navigation'
-import { useAnalytics } from '@/hooks/useAnalytics'
-import { GlassCard } from '@/components/ui/GlassCard'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { Textarea } from '@/components/ui/Textarea'
-import { FormField } from '@/components/ui/FormField'
-import { contactFormSchema, type ContactFormValues } from '@/lib/validations'
-import { staggerContainer, staggerItem } from '@/lib/animations'
-import { retryFetch } from '@/lib/retry'
-import { formatErrorForDisplay, isRetryableError } from '@/lib/error-messages'
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useRouter } from "next/navigation";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
+import { FormField } from "@/components/ui/FormField";
+import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
+import { staggerContainer, staggerItem } from "@/lib/animations";
+import { retryFetch } from "@/lib/retry";
+import { formatErrorForDisplay, isRetryableError } from "@/lib/error-messages";
 import {
   FiMail,
   FiMapPin,
@@ -23,61 +23,61 @@ import {
   FiLinkedin,
   FiSend,
   FiAlertCircle,
-} from 'react-icons/fi'
-import { cn } from '@/lib/utils'
+} from "react-icons/fi";
+import { cn } from "@/lib/utils";
 
 interface ContactSectionProps {
-  className?: string
+  className?: string;
 }
 
 interface ContactInfo {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  value: string
-  href?: string
-  type: 'email' | 'location' | 'social'
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  href?: string;
+  type: "email" | "location" | "social";
 }
 
 const contactInfo: ContactInfo[] = [
   {
     icon: FiMail,
-    label: 'Email',
-    value: 'your.email@example.com',
-    href: 'mailto:your.email@example.com',
-    type: 'email',
+    label: "Email",
+    value: "guido@asbun.io",
+    href: "mailto:guido@asbun.io",
+    type: "email",
   },
   {
     icon: FiMapPin,
-    label: 'Location',
-    value: 'Your City, Country',
-    type: 'location',
+    label: "Location",
+    value: "Southern California",
+    type: "location",
   },
-]
+];
 
 const socialLinks = [
   {
     icon: FiGithub,
-    label: 'GitHub',
-    href: 'https://github.com/yourusername',
+    label: "GitHub",
+    href: "https://github.com/guidoasbun",
   },
   {
     icon: FiLinkedin,
-    label: 'LinkedIn',
-    href: 'https://linkedin.com/in/yourusername',
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/guidoasbun",
   },
   {
     icon: FiMail,
-    label: 'Email',
-    href: 'mailto:your.email@example.com',
+    label: "Email",
+    href: "mailto:guido@asbun.io",
   },
-]
+];
 
 export function ContactSection({ className }: ContactSectionProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const { executeRecaptcha } = useGoogleReCaptcha()
-  const router = useRouter()
-  const { trackEvent } = useAnalytics()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const router = useRouter();
+  const { trackEvent } = useAnalytics();
 
   const {
     register,
@@ -86,88 +86,96 @@ export function ContactSection({ className }: ContactSectionProps) {
     setValue,
   } = useForm<ContactFormValues>({
     resolver: yupResolver(contactFormSchema),
-    mode: 'onBlur',
-  })
+    mode: "onBlur",
+  });
 
   const onSubmit = async (data: ContactFormValues) => {
-    setIsSubmitting(true)
-    setSubmitError(null)
+    setIsSubmitting(true);
+    setSubmitError(null);
 
     // Track form submission start
-    trackEvent('contact_form_submit', {
-      form_location: 'contact_section',
-    })
+    trackEvent("contact_form_submit", {
+      form_location: "contact_section",
+    });
 
     try {
       // Get reCAPTCHA token if available
-      let recaptchaToken: string | undefined
+      let recaptchaToken: string | undefined;
       if (executeRecaptcha) {
-        recaptchaToken = await executeRecaptcha('contact_form')
+        recaptchaToken = await executeRecaptcha("contact_form");
       }
 
       // Use retry logic for network resilience
-      const response = await retryFetch('/api/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await retryFetch(
+        "/api/messages",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+            recaptchaToken,
+          }),
         },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          subject: data.subject,
-          message: data.message,
-          recaptchaToken,
-        }),
-      }, {
-        maxRetries: 2,
-        initialDelay: 1000,
-        onRetry: (error, attempt, delay) => {
-          console.log(`Retrying contact form submission (attempt ${attempt}) after ${delay}ms`)
-          trackEvent('contact_form_retry', {
-            form_location: 'contact_section',
-            attempt: attempt,
-            error: error.message,
-          })
-        },
-      })
+        {
+          maxRetries: 2,
+          initialDelay: 1000,
+          onRetry: (error, attempt, delay) => {
+            console.log(
+              `Retrying contact form submission (attempt ${attempt}) after ${delay}ms`
+            );
+            trackEvent("contact_form_retry", {
+              form_location: "contact_section",
+              attempt: attempt,
+              error: error.message,
+            });
+          },
+        }
+      );
 
       // Response is successful, parse result for potential use
-      await response.json()
+      await response.json();
 
       // Track success
-      trackEvent('contact_form_success', {
-        form_location: 'contact_section',
+      trackEvent("contact_form_success", {
+        form_location: "contact_section",
         subject: data.subject,
-      })
+      });
 
       // Success - redirect to thank you page
-      router.push('/contact/thank-you')
+      router.push("/contact/thank-you");
     } catch (error) {
-      console.error('Error sending message:', error)
+      console.error("Error sending message:", error);
 
       // Format error for user display
-      const errorInfo = formatErrorForDisplay(error instanceof Error ? error : new Error(String(error)))
-      const isRetryable = error instanceof Error && isRetryableError(error)
+      const errorInfo = formatErrorForDisplay(
+        error instanceof Error ? error : new Error(String(error))
+      );
+      const isRetryable = error instanceof Error && isRetryableError(error);
 
       // Track error
-      trackEvent('contact_form_error', {
-        form_location: 'contact_section',
+      trackEvent("contact_form_error", {
+        form_location: "contact_section",
         error_message: errorInfo.message,
-        error_type: isRetryable ? 'retryable_error' : 'permanent_error',
-      })
+        error_type: isRetryable ? "retryable_error" : "permanent_error",
+      });
 
       // Show user-friendly error message
-      setSubmitError(errorInfo.message)
+      setSubmitError(errorInfo.message);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <section
       id="contact"
       className={cn(
-        'relative py-12 sm:py-20 lg:py-32 overflow-hidden',
+        "relative py-12 sm:py-20 lg:py-32 overflow-hidden",
         className
       )}
     >
@@ -176,7 +184,7 @@ export function ContactSection({ className }: ContactSectionProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
@@ -184,7 +192,8 @@ export function ContactSection({ className }: ContactSectionProps) {
             Get In Touch
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
-            Have a question or want to work together? I&apos;d love to hear from you.
+            Have a question or want to work together? I&apos;d love to hear from
+            you.
           </p>
         </motion.div>
 
@@ -193,7 +202,7 @@ export function ContactSection({ className }: ContactSectionProps) {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 max-w-6xl mx-auto"
         >
           {/* Contact Form */}
@@ -216,35 +225,32 @@ export function ContactSection({ className }: ContactSectionProps) {
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 {/* Honeypot field - hidden from users, catches bots */}
-                <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                <div
+                  className="absolute opacity-0 pointer-events-none"
+                  aria-hidden="true"
+                >
                   <input
                     type="text"
                     name="website"
                     tabIndex={-1}
                     autoComplete="off"
-                    onChange={(e) => setValue('name', e.target.value === '' ? 'bot' : '')}
+                    onChange={e =>
+                      setValue("name", e.target.value === "" ? "bot" : "")
+                    }
                   />
                 </div>
-                <FormField
-                  label="Name"
-                  error={errors.name?.message}
-                  required
-                >
+                <FormField label="Name" error={errors.name?.message} required>
                   <Input
-                    {...register('name')}
+                    {...register("name")}
                     placeholder="Your name"
                     error={!!errors.name}
                     disabled={isSubmitting}
                   />
                 </FormField>
 
-                <FormField
-                  label="Email"
-                  error={errors.email?.message}
-                  required
-                >
+                <FormField label="Email" error={errors.email?.message} required>
                   <Input
-                    {...register('email')}
+                    {...register("email")}
                     type="email"
                     placeholder="your.email@example.com"
                     error={!!errors.email}
@@ -259,7 +265,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                   required
                 >
                   <Input
-                    {...register('subject')}
+                    {...register("subject")}
                     placeholder="What's this about?"
                     error={!!errors.subject}
                     disabled={isSubmitting}
@@ -272,7 +278,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                   required
                 >
                   <Textarea
-                    {...register('message')}
+                    {...register("message")}
                     placeholder="Tell me about your project or inquiry..."
                     error={!!errors.message}
                     disabled={isSubmitting}
@@ -296,7 +302,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                         transition={{
                           duration: 1,
                           repeat: Infinity,
-                          ease: 'linear',
+                          ease: "linear",
                         }}
                         className="mr-2"
                       >
@@ -320,7 +326,7 @@ export function ContactSection({ className }: ContactSectionProps) {
             {/* Contact Info Cards */}
             <div className="space-y-4">
               {contactInfo.map((info, index) => {
-                const Icon = info.icon
+                const Icon = info.icon;
                 const content = (
                   <>
                     <div className="flex items-center gap-4">
@@ -337,7 +343,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                       </div>
                     </div>
                   </>
-                )
+                );
 
                 return (
                   <GlassCard
@@ -348,8 +354,12 @@ export function ContactSection({ className }: ContactSectionProps) {
                       <a
                         href={info.href}
                         className="block"
-                        target={info.type === 'email' ? undefined : '_blank'}
-                        rel={info.type === 'email' ? undefined : 'noopener noreferrer'}
+                        target={info.type === "email" ? undefined : "_blank"}
+                        rel={
+                          info.type === "email"
+                            ? undefined
+                            : "noopener noreferrer"
+                        }
                       >
                         {content}
                       </a>
@@ -357,7 +367,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                       content
                     )}
                   </GlassCard>
-                )
+                );
               })}
             </div>
 
@@ -368,7 +378,7 @@ export function ContactSection({ className }: ContactSectionProps) {
               </h4>
               <div className="flex gap-4">
                 {socialLinks.map((link, index) => {
-                  const Icon = link.icon
+                  const Icon = link.icon;
                   return (
                     <a
                       key={index}
@@ -380,7 +390,7 @@ export function ContactSection({ className }: ContactSectionProps) {
                     >
                       <Icon className="text-xl" />
                     </a>
-                  )
+                  );
                 })}
               </div>
             </GlassCard>
@@ -399,5 +409,5 @@ export function ContactSection({ className }: ContactSectionProps) {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
