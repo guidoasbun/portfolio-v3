@@ -7,7 +7,8 @@ import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { createMetadata, createPersonSchema, createWebSiteSchema } from '@/lib/metadata'
 import { getProjects } from '@/lib/services/projects.service'
-import type { Project } from '@/types'
+import { getExperiences } from '@/lib/services/experience.service'
+import type { Project, Experience } from '@/types'
 
 // SEO Metadata
 export const metadata: Metadata = createMetadata({
@@ -29,6 +30,15 @@ export default async function Home() {
     // Projects will fall back to empty array or mockProjects in component
   }
 
+  // Fetch experiences from Firebase
+  let experiences: Experience[] = []
+  try {
+    experiences = await getExperiences()
+  } catch (error) {
+    console.error('Failed to fetch experiences:', error)
+    // Experiences will fall back to empty array in component
+  }
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -44,7 +54,7 @@ export default async function Home() {
       <HeroSection />
       <AboutSection />
       <ProjectsSection projects={projects} />
-      <ExperienceSection />
+      <ExperienceSection experiences={experiences} />
       <SkillsSection />
       <ContactSection />
     </>
