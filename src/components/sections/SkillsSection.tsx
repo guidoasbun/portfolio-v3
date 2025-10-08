@@ -3,7 +3,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { SkillCard } from '@/components/ui/SkillCard'
-import { mockSkills } from '@/data/skills'
 import type { Skill, SkillCategory } from '@/types'
 import { cn } from '@/lib/utils'
 import {
@@ -67,7 +66,7 @@ const categories: CategoryFilter[] = [
   },
 ]
 
-export function SkillsSection({ skills = mockSkills }: SkillsSectionProps) {
+export function SkillsSection({ skills = [] }: SkillsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
   const [isMounted, setIsMounted] = useState(false)
 

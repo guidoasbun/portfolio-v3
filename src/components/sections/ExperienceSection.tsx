@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { TimelineItem } from '@/components/ui/TimelineItem'
-import { mockExperiences, getSortedExperiences } from '@/data/experiences'
 import type { Experience, ExperienceType } from '@/types'
 import { cn } from '@/lib/utils'
 import { FiBriefcase, FiAward, FiBookOpen, FiGrid } from 'react-icons/fi'
@@ -27,7 +26,7 @@ const categories: CategoryFilter[] = [
   { label: 'Education', value: 'education', icon: FiBookOpen },
 ]
 
-export function ExperienceSection({ experiences = mockExperiences }: ExperienceSectionProps) {
+export function ExperienceSection({ experiences = [] }: ExperienceSectionProps) {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
 
   // Filter and sort experiences
@@ -35,15 +34,20 @@ export function ExperienceSection({ experiences = mockExperiences }: ExperienceS
     const filtered =
       activeFilter === 'all'
         ? experiences
-        : experiences.filter((exp) => exp.type === activeFilter)
+        : experiences.filter((exp: Experience) => exp.type === activeFilter)
 
-    return getSortedExperiences(filtered)
+    // Sort: current experiences first, then by start date descending
+    return [...filtered].sort((a, b) => {
+      if (a.current && !b.current) return -1
+      if (!a.current && b.current) return 1
+      return b.startDate.getTime() - a.startDate.getTime()
+    })
   }, [activeFilter, experiences])
 
   // Get count for each category
   const getCategoryCount = (filter: FilterType): number => {
     if (filter === 'all') return experiences.length
-    return experiences.filter((exp) => exp.type === filter).length
+    return experiences.filter((exp: Experience) => exp.type === filter).length
   }
 
   const containerVariants: Variants = {
