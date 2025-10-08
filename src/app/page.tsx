@@ -6,9 +6,9 @@ import { ExperienceSection } from '@/components/sections/ExperienceSection'
 import { SkillsSection } from '@/components/sections/SkillsSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { createMetadata, createPersonSchema, createWebSiteSchema } from '@/lib/metadata'
-import { getProjects } from '@/lib/services/projects.service'
-import { getExperiences } from '@/lib/services/experience.service'
-import { getSkills } from '@/lib/services/skills.service'
+import { getProjects } from '@/lib/services/projects.service.admin'
+import { getExperiences } from '@/lib/services/experience.service.admin'
+import { getSkills } from '@/lib/services/skills.service.admin'
 import type { Project, Experience, Skill } from '@/types'
 
 // SEO Metadata
