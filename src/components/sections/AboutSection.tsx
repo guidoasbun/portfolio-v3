@@ -46,18 +46,11 @@ interface AboutSectionProps {
   resumeUrl?: string;
 }
 
-const defaultBio = `I'm a Full Stack Developer transitioning into DevOps and 
-cloud infrastructure, with experience across the full software development lifecycle. 
-From developing React applications to deploying them on AWS with automated CI/CD pipelines, 
-I enjoy every aspect of modern software delivery.
+const defaultBio = `I'm a Full Stack Developer transitioning into DevOps and cloud infrastructure, with experience across the full software development lifecycle. From developing React applications to deploying them on AWS with automated CI/CD pipelines, I enjoy every aspect of modern software delivery.
 
-My technical journey has taken me from building compilers with Java to orchestrating 
-microservices with Docker and Kubernetes. I'm particularly passionate about infrastructure 
-automation, having implemented production pipelines that improved deployment efficiency and 
-reduced errors.
+My technical journey has taken me from building compilers with Java to orchestrating microservices with Docker and Kubernetes. I'm particularly passionate about infrastructure automation, having implemented production pipelines that improved deployment efficiency and reduced errors.
 
-Looking ahead, I'm eager to join a team where I can contribute to building robust DevOps 
-practices, optimize cloud infrastructure, and help create systems that scale effortlessly.`;
+Looking ahead, I'm eager to join a team where I can contribute to building robust DevOps practices, optimize cloud infrastructure, and help create systems that scale effortlessly.`;
 
 const defaultEducation: Education[] = [
   {
@@ -229,7 +222,7 @@ export function AboutSection({
                   Introduction
                 </h3>
                 <div className="text-sm sm:text-base text-foreground/80 leading-relaxed space-y-3 sm:space-y-4">
-                  {bio.split("\n\n").map((paragraph, index) => (
+                  {bio.split("\n\n").filter(p => p.trim()).map((paragraph, index) => (
                     <p key={index}>{paragraph.trim()}</p>
                   ))}
                 </div>

@@ -32,7 +32,9 @@ export const initializeAnalytics = async (): Promise<Analytics | null> => {
     const isEnabled = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID !== undefined
 
     if (!isEnabled) {
-      console.warn('Firebase Analytics is not enabled. Add NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID to .env.local')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Firebase Analytics is not enabled. Add NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID to .env.local')
+      }
       return null
     }
 
@@ -43,7 +45,9 @@ export const initializeAnalytics = async (): Promise<Analytics | null> => {
     // Check if analytics is supported in this browser
     const supported = await isSupported()
     if (!supported) {
-      console.warn('Firebase Analytics is not supported in this browser')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Firebase Analytics is not supported in this browser')
+      }
       return null
     }
 
@@ -51,10 +55,15 @@ export const initializeAnalytics = async (): Promise<Analytics | null> => {
     analyticsInstance = getAnalytics(app)
     isInitialized = true
 
-    console.log('Firebase Analytics initialized successfully')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Firebase Analytics initialized successfully')
+    }
     return analyticsInstance
   } catch (error) {
-    console.error('Error initializing Firebase Analytics:', error)
+    // Silently fail in production (likely ad blocker or network restriction)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Firebase Analytics could not be initialized (ad blocker or network restriction):', error)
+    }
     return null
   }
 }
@@ -107,7 +116,10 @@ export const trackEvent = async <T extends AnalyticsEventName>(
       console.log('Analytics Event:', eventName, params)
     }
   } catch (error) {
-    console.error('Error tracking event:', error)
+    // Silently fail in production
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Error tracking event (analytics may be blocked):', eventName, error)
+    }
   }
 }
 
@@ -169,7 +181,9 @@ export const setUserProperty = async (
       console.log('User Property Set:', propertyName, value)
     }
   } catch (error) {
-    console.error('Error setting user property:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Error setting user property:', error)
+    }
   }
 }
 
@@ -198,7 +212,9 @@ export const setUserId = async (userId: string | null): Promise<void> => {
       console.log('User ID Set:', userId)
     }
   } catch (error) {
-    console.error('Error setting user ID:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Error setting user ID:', error)
+    }
   }
 }
 
@@ -229,6 +245,8 @@ export const setAnalyticsCollectionEnabled = async (
       console.log('Analytics Collection:', enabled ? 'enabled' : 'disabled')
     }
   } catch (error) {
-    console.error('Error setting analytics collection:', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Error setting analytics collection:', error)
+    }
   }
 }
