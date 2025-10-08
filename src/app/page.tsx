@@ -8,7 +8,8 @@ import { ContactSection } from '@/components/sections/ContactSection'
 import { createMetadata, createPersonSchema, createWebSiteSchema } from '@/lib/metadata'
 import { getProjects } from '@/lib/services/projects.service'
 import { getExperiences } from '@/lib/services/experience.service'
-import type { Project, Experience } from '@/types'
+import { getSkills } from '@/lib/services/skills.service'
+import type { Project, Experience, Skill } from '@/types'
 
 // SEO Metadata
 export const metadata: Metadata = createMetadata({
@@ -39,6 +40,15 @@ export default async function Home() {
     // Experiences will fall back to empty array in component
   }
 
+  // Fetch skills from Firebase
+  let skills: Skill[] = []
+  try {
+    skills = await getSkills()
+  } catch (error) {
+    console.error('Failed to fetch skills:', error)
+    // Skills will fall back to empty array in component
+  }
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -55,7 +65,7 @@ export default async function Home() {
       <AboutSection />
       <ProjectsSection projects={projects} />
       <ExperienceSection experiences={experiences} />
-      <SkillsSection />
+      <SkillsSection skills={skills} />
       <ContactSection />
     </>
   )
