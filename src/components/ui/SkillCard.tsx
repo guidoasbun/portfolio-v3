@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { GlassCard } from './GlassCard'
 import type { Skill } from '@/types'
 import { cn } from '@/lib/utils'
+import { getSkillIcon } from '@/lib/icon-map'
 
 interface SkillCardProps {
   skill: Skill
@@ -12,7 +13,8 @@ interface SkillCardProps {
 }
 
 function SkillCardComponent({ skill, index }: SkillCardProps) {
-  const { name, color } = skill
+  const { name, color, icon } = skill
+  const IconComponent = getSkillIcon(icon)
 
   return (
     <motion.div
@@ -31,8 +33,21 @@ function SkillCardComponent({ skill, index }: SkillCardProps) {
           'hover:shadow-lg hover:border-foreground/20'
         )}
       >
-        {/* Skill Name */}
-        <div className="text-center">
+        {/* Skill Icon and Name */}
+        <div className="text-center flex flex-col items-center gap-2">
+          {/* Icon */}
+          {IconComponent && (
+            <IconComponent
+              className={cn(
+                'w-8 h-8 sm:w-10 sm:h-10 transition-all duration-300',
+                'group-hover:scale-110'
+              )}
+              style={{ color: color || '#3B82F6' }}
+              aria-hidden="true"
+            />
+          )}
+
+          {/* Skill Name */}
           <h3
             className={cn(
               'text-sm sm:text-base font-semibold text-foreground',
@@ -48,7 +63,7 @@ function SkillCardComponent({ skill, index }: SkillCardProps) {
             initial={{ width: 0 }}
             whileHover={{ width: '100%' }}
             transition={{ duration: 0.3 }}
-            className="h-0.5 mt-2 mx-auto rounded-full"
+            className="h-0.5 mt-1 mx-auto rounded-full"
             style={{
               backgroundColor: color || '#3B82F6',
             }}
