@@ -17,6 +17,9 @@ export const metadata: Metadata = createMetadata({
   description: 'Full Stack Developer specializing in React, Next.js, and TypeScript. View my portfolio, projects, and experience in modern web development with 3D animations and glass morphism design.',
 })
 
+// Revalidate the page every 60 seconds (ISR - Incremental Static Regeneration)
+export const revalidate = 60
+
 export default async function Home() {
   // Structured data for SEO
   const personSchema = createPersonSchema()
