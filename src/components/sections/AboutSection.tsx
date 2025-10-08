@@ -244,7 +244,9 @@ export function AboutSection({
                     className="w-full sm:w-auto"
                   >
                     <FiDownload className="mr-2" />
-                    {isDownloading ? "Downloading..." : "Download Resume"}
+                    <span suppressHydrationWarning>
+                      {isDownloading ? "Downloading..." : "Download Resume"}
+                    </span>
                   </Button>
                 </div>
               </GlassCard>
