@@ -145,7 +145,7 @@ export function PdfUploadField({
                   </div>
                   <div className="w-full bg-foreground/10 rounded-full h-2 overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300"
+                      className="h-full bg-gradient-to-r from-[#00274C] to-[#E17000] transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>

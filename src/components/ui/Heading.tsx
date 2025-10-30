@@ -35,7 +35,7 @@ export function Heading({
   }
 
   const gradientStyles = gradient ? [
-    'bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan',
+    'bg-gradient-to-r from-[#00274C] to-[#E17000]',
     'bg-clip-text text-transparent'
   ] : []
 

@@ -95,7 +95,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           {/* Logo/Brand */}
           <Link
             href="/"
-            className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-xl font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
             Portfolio
           </Link>

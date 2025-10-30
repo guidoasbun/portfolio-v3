@@ -35,7 +35,7 @@ function QuickLinkCard({ title, description, icon: Icon, href }: QuickLinkCardPr
     <Link href={href}>
       <GlassCard className="h-full hover:glass-heavy transition-all cursor-pointer group">
         <div className="flex items-start space-x-4">
-          <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white group-hover:scale-110 transition-transform">
+          <div className="p-3 rounded-lg bg-gradient-to-r from-[#00274C] to-[#E17000] text-white group-hover:scale-110 transition-transform">
             <Icon size={24} />
           </div>
           <div className="flex-1">
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
                 <p className="text-2xl font-bold">{stats.experienceCount}</p>
               )}
             </div>
-            <FiBriefcase className="text-purple-500" size={32} />
+            <FiBriefcase className="text-[#E17000]" size={32} />
           </div>
         </GlassCard>
 
@@ -194,7 +194,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="flex justify-between items-center py-2">
             <span className="text-muted-foreground">Role</span>
-            <span className="px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-medium">
+            <span className="px-3 py-1 rounded-full bg-gradient-to-r from-[#00274C] to-[#E17000] text-white text-sm font-medium">
               Administrator
             </span>
           </div>

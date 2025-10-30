@@ -5,7 +5,7 @@ import { Button, GlassCard, Container, Section, Heading, Text, ThemeToggle } fro
 
 export default function BaseComponentsDemo() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent-blue/5 to-accent-purple/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent-blue/5 to-accent-orange/5">
       {/* Theme Toggle Header */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
@@ -145,7 +145,7 @@ export default function BaseComponentsDemo() {
                         <Text className="text-center">Small Container (max-w-2xl)</Text>
                       </Container>
                     </div>
-                    <div className="bg-accent-purple/20 p-2 rounded">
+                    <div className="bg-accent-orange/20 p-2 rounded">
                       <Container size="md">
                         <Text className="text-center">Medium Container (max-w-4xl)</Text>
                       </Container>

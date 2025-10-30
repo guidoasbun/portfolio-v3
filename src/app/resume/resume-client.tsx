@@ -211,7 +211,7 @@ export default function ResumePageClient() {
           <motion.div variants={itemVariants} className="mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
-                <h1 className="text-4xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                <h1 className="text-4xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
                   Resume
                 </h1>
                 <p className="text-foreground/70">

@@ -86,11 +86,11 @@ export async function sendAdminNotification(data: ContactEmailData): Promise<Ema
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+            .header { background: linear-gradient(135deg, #00274C 0%, #E17000 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
             .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
             .field { margin-bottom: 20px; }
             .label { font-weight: bold; color: #4b5563; margin-bottom: 5px; }
-            .value { background: white; padding: 12px; border-radius: 6px; border-left: 3px solid #667eea; }
+            .value { background: white; padding: 12px; border-radius: 6px; border-left: 3px solid #00274C; }
             .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px; }
           </style>
         </head>
@@ -178,11 +178,11 @@ export async function sendUserConfirmation(data: ContactEmailData): Promise<Emai
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center; }
+            .header { background: linear-gradient(135deg, #00274C 0%, #E17000 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center; }
             .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-            .message-box { background: white; padding: 20px; border-radius: 6px; border-left: 3px solid #667eea; margin: 20px 0; }
+            .message-box { background: white; padding: 20px; border-radius: 6px; border-left: 3px solid #00274C; margin: 20px 0; }
             .footer { text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px; }
-            .button { display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
+            .button { display: inline-block; background: #E17000; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
           </style>
         </head>
         <body>

@@ -52,13 +52,13 @@ function TimelineItemComponent({ experience, index, isLast = false }: TimelineIt
   const getColor = () => {
     switch (type) {
       case 'work':
-        return 'text-blue-500 bg-blue-500/10 border-blue-500/20'
+        return 'text-[#00274C] bg-[#00274C]/10 border-[#00274C]/20'
       case 'internship':
-        return 'text-purple-500 bg-purple-500/10 border-purple-500/20'
+        return 'text-[#E17000] bg-[#E17000]/10 border-[#E17000]/20'
       case 'education':
         return 'text-green-500 bg-green-500/10 border-green-500/20'
       default:
-        return 'text-blue-500 bg-blue-500/10 border-blue-500/20'
+        return 'text-[#00274C] bg-[#00274C]/10 border-[#00274C]/20'
     }
   }
 
@@ -66,13 +66,13 @@ function TimelineItemComponent({ experience, index, isLast = false }: TimelineIt
   const getDotColor = () => {
     switch (type) {
       case 'work':
-        return 'bg-blue-500'
+        return 'bg-[#00274C]'
       case 'internship':
-        return 'bg-purple-500'
+        return 'bg-[#E17000]'
       case 'education':
         return 'bg-green-500'
       default:
-        return 'bg-blue-500'
+        return 'bg-[#00274C]'
     }
   }
 

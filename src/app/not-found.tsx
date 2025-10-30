@@ -18,7 +18,7 @@ export default function NotFound() {
         >
           {/* 404 Number */}
           <motion.h1
-            className="text-9xl md:text-[12rem] font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4"
+            className="text-9xl md:text-[12rem] font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent mb-4"
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 150 }}

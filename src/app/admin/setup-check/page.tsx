@@ -144,7 +144,7 @@ export default function SetupCheckPage() {
 
           {/* Current Admin UID */}
           {process.env.NEXT_PUBLIC_ADMIN_UID && (
-            <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <div className="p-4 rounded-lg bg-[#00274C]/10 border border-[#00274C]/20">
               <h3 className="font-semibold mb-2">Current Admin UID</h3>
               <code className="text-sm bg-foreground/10 px-3 py-2 rounded block font-mono">
                 {process.env.NEXT_PUBLIC_ADMIN_UID}

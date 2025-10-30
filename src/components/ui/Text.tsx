@@ -30,7 +30,7 @@ export function Text({
   const variants = {
     default: 'text-foreground',
     muted: 'text-foreground/70',
-    accent: 'text-transparent bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text'
+    accent: 'text-transparent bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text'
   }
 
   return (

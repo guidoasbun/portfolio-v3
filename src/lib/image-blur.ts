@@ -21,14 +21,14 @@ export function getBlurDataURL(color: string = '#e5e7eb'): string {
  */
 export function getCategoryBlurDataURL(category?: string): string {
   const colorMap: Record<string, string> = {
-    web: '#3b82f6',      // blue-500
-    mobile: '#8b5cf6',   // purple-500
-    desktop: '#06b6d4',  // cyan-500
-    ai: '#ec4899',       // pink-500
+    web: '#00274C',      // Michigan Blue
+    mobile: '#E17000',   // Michigan Orange
+    desktop: '#00274C',  // Michigan Blue
+    ai: '#E17000',       // Michigan Orange
     other: '#64748b',    // slate-500
   }
 
-  const color = (category && colorMap[category]) || '#6366f1' // default to indigo-500
+  const color = (category && colorMap[category]) || '#00274C' // default to Michigan Blue
   return getBlurDataURL(color)
 }
 

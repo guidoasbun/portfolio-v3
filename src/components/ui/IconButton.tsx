@@ -74,23 +74,23 @@ export function IconButton({
 
   const variants = {
     primary: [
-      'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md',
-      'hover:from-blue-600 hover:to-purple-700 hover:shadow-lg',
-      'focus:ring-blue-500',
+      'bg-[#E17000] text-white shadow-md',
+      'hover:bg-[#00274C] hover:shadow-lg',
+      'focus:ring-[#E17000]',
     ],
     secondary: [
       'glass text-foreground border border-foreground/20',
       'hover:glass-heavy hover:bg-foreground/5 hover:shadow-md',
-      'focus:ring-blue-500',
+      'focus:ring-[#E17000]',
     ],
     ghost: [
       'text-foreground hover:bg-foreground/10',
-      'focus:ring-blue-500',
+      'focus:ring-[#E17000]',
     ],
     glass: [
       'glass text-foreground backdrop-blur-md',
       'hover:bg-foreground/10',
-      'focus:ring-blue-500',
+      'focus:ring-[#E17000]',
     ],
     danger: [
       'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950',

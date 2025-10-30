@@ -69,23 +69,23 @@ export function InteractiveElements({
     return shapes
   }, [objectCount])
 
-  // Theme-based colors
+  // Theme-based colors - Michigan palette
   const colors = useMemo(() => {
     if (theme === 'dark') {
       return [
-        '#3b82f6', // blue-500
-        '#8b5cf6', // violet-500
-        '#ec4899', // pink-500
-        '#06b6d4', // cyan-500
-        '#10b981', // emerald-500
+        '#00274C', // Michigan Blue
+        '#E17000', // Michigan Orange
+        '#FFFFFF', // White
+        '#00385C', // Lighter Michigan Blue
+        '#FF8C00', // Lighter Orange
       ]
     } else {
       return [
-        '#1e40af', // blue-700
-        '#6d28d9', // violet-700
-        '#be185d', // pink-700
-        '#0e7490', // cyan-700
-        '#047857', // emerald-700
+        '#00274C', // Michigan Blue
+        '#E17000', // Michigan Orange
+        '#001D36', // Darker Michigan Blue
+        '#C45F00', // Darker Orange
+        '#64748b', // Slate-500 for variety
       ]
     }
   }, [theme])
@@ -319,7 +319,7 @@ export function InteractiveElements({
       <pointLight
         position={[0, 10, 0]}
         intensity={theme === 'dark' ? 0.6 : 0.8}
-        color={theme === 'dark' ? '#8b5cf6' : '#6d28d9'}
+        color={theme === 'dark' ? '#E17000' : '#00274C'}
       />
     </group>
   )

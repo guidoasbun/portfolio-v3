@@ -34,7 +34,7 @@ export default function ThankYouPageClient() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+            className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent"
           >
             Thank You!
           </motion.h1>
@@ -65,7 +65,7 @@ export default function ThankYouPageClient() {
             </div>
 
             <div className="p-4 rounded-lg glass-light">
-              <FiClock className="text-2xl text-accent-purple mb-2 mx-auto" />
+              <FiClock className="text-2xl text-[#E17000] mb-2 mx-auto" />
               <h3 className="font-semibold mb-1 text-foreground">Response Time</h3>
               <p className="text-sm text-foreground/60">
                 I typically respond within 24-48 hours.

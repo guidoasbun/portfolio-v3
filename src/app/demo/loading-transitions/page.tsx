@@ -26,7 +26,7 @@ export default function LoadingTransitionsDemo() {
         {/* Header */}
         <SectionTransition>
           <div className="text-center space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
               Loading & Transitions Demo
             </h1>
             <p className="text-lg text-foreground/70">
@@ -53,7 +53,7 @@ export default function LoadingTransitionsDemo() {
                   {showLoader1 ? (
                     <SkeletonLoader3D height="h-full" showSpinner />
                   ) : (
-                    <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg">
+                    <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#00274C]/20 to-[#E17000]/20 rounded-lg">
                       <p className="text-lg font-semibold">Content Loaded!</p>
                     </div>
                   )}
@@ -141,7 +141,7 @@ export default function LoadingTransitionsDemo() {
             >
               <div className="h-96 rounded-lg overflow-hidden">
                 <CanvasFadeIn>
-                  <div className="h-full bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center">
+                  <div className="h-full bg-gradient-to-br from-[#00274C]/10 to-[#E17000]/10 flex items-center justify-center">
                     <div className="text-center space-y-2">
                       <p className="text-2xl font-bold">Scene Loaded!</p>
                       <p className="text-foreground/70">

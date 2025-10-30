@@ -69,7 +69,7 @@ export default function LayoutComponentsDemo() {
               </GlassCard>
 
               <GlassCard className="p-6 space-y-3">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#00274C] to-[#E17000] flex items-center justify-center text-white text-2xl font-bold">
                   M
                 </div>
                 <Heading as="h3">Mobile Menu</Heading>

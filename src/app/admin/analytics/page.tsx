@@ -33,7 +33,7 @@ function AnalyticsCard({ title, description, icon: Icon, linkText, linkHref }: A
   return (
     <GlassCard className="h-full hover:glass-heavy transition-all">
       <div className="flex items-start space-x-4">
-        <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+        <div className="p-3 rounded-lg bg-gradient-to-r from-[#00274C] to-[#E17000] text-white">
           <Icon size={24} />
         </div>
         <div className="flex-1">
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
         </Heading>
         <GlassCard>
           <div className="flex items-center gap-3 mb-4">
-            <FiEye className="text-purple-500" size={24} />
+            <FiEye className="text-[#00274C]" size={24} />
             <h3 className="text-lg font-semibold">Custom Events</h3>
           </div>
           <p className="text-sm text-muted-foreground mb-6">

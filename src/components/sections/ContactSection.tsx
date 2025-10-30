@@ -188,7 +188,7 @@ export function ContactSection({ className }: ContactSectionProps) {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 lg:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
             Get In Touch
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">

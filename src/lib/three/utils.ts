@@ -22,9 +22,9 @@ export function getThemeColors(theme: ThreeTheme) {
       opacity: theme === 'dark' ? 0.9 : 0.95,
     },
     accent: {
-      primary: '#3b82f6', // blue-500
-      secondary: '#8b5cf6', // purple-500
-      tertiary: '#ec4899', // pink-500
+      primary: '#00274C', // Michigan Blue
+      secondary: '#E17000', // Michigan Orange
+      tertiary: '#FFFFFF', // White
     },
   }
 }

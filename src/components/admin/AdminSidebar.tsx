@@ -29,7 +29,7 @@ export function AdminSidebar({ navItems, onLinkClick }: AdminSidebarProps) {
       {/* User info */}
       <div className="p-4 border-b border-foreground/10">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#00274C] to-[#E17000] flex items-center justify-center text-white font-semibold">
             {user?.email?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
@@ -55,7 +55,7 @@ export function AdminSidebar({ navItems, onLinkClick }: AdminSidebarProps) {
               className={cn(
                 'flex items-center space-x-3 px-4 py-3 rounded-lg transition-all',
                 isActive
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-[#00274C] to-[#E17000] text-white shadow-lg'
                   : 'text-foreground hover:bg-foreground/5'
               )}
             >

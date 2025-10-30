@@ -24,7 +24,7 @@ export function Section({
   const backgrounds = {
     transparent: '',
     glass: 'glass-light border-y border-glass-dark',
-    gradient: 'bg-gradient-to-br from-accent-blue/10 via-transparent to-accent-purple/10'
+    gradient: 'bg-gradient-to-br from-[#00274C]/10 via-transparent to-[#00274C]/5'
   }
 
   return (

@@ -76,7 +76,7 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 opacity-70" />
+          <div className="w-full h-full bg-gradient-to-br from-[#00274C] to-[#E17000] opacity-70" />
         )}
         {/* Image Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

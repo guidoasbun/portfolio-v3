@@ -24,19 +24,19 @@ export function Button({
 
   const variants = {
     primary: [
-      'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg',
-      'hover:from-blue-600 hover:to-purple-700 hover:shadow-xl',
-      'focus-visible:ring-blue-500 focus-visible:ring-opacity-50',
+      'bg-[#E17000] text-white shadow-lg',
+      'hover:bg-[#00274C] hover:shadow-xl',
+      'focus-visible:ring-[#E17000] focus-visible:ring-opacity-50',
       'border-0'
     ],
     secondary: [
       'glass text-foreground border border-foreground/20',
       'hover:glass-heavy hover:bg-foreground/5 hover:shadow-md',
-      'focus-visible:ring-blue-500 focus-visible:ring-opacity-30'
+      'focus-visible:ring-[#E17000] focus-visible:ring-opacity-30'
     ],
     ghost: [
       'text-foreground hover:bg-foreground/10',
-      'focus-visible:ring-blue-500 focus-visible:ring-opacity-30',
+      'focus-visible:ring-[#E17000] focus-visible:ring-opacity-30',
       'border border-transparent hover:border-foreground/20'
     ]
   }
