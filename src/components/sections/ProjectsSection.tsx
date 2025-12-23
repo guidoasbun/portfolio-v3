@@ -159,8 +159,8 @@ export function ProjectsSection({
                       "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
                       "min-h-[44px] text-sm sm:text-base",
                       isActive
-                        ? "glass-heavy text-foreground shadow-lg scale-105"
-                        : "glass-light text-foreground/70 hover:text-foreground hover:glass-medium"
+                        ? "glass-heavy text-foreground shadow-lg scale-105 border-2 border-blue-500"
+                        : "glass-light text-foreground/70 hover:text-foreground hover:glass-medium border-2 border-transparent"
                     )}
                     aria-label={`Filter by ${category.label}`}
                     aria-pressed={isActive}
@@ -178,17 +178,6 @@ export function ProjectsSection({
                         {count}
                       </span>
                     </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 border-2 border-blue-500 rounded-lg -z-10"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                      />
-                    )}
                   </button>
                 );
               })}
@@ -197,18 +186,15 @@ export function ProjectsSection({
 
           {/* Projects Grid */}
           <motion.div
-            layout
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
           >
             {filteredProjects.length > 0 ? (
               filteredProjects.map(project => (
                 <motion.div
                   key={project.id}
-                  layout
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
-                  exit="hidden"
                 >
                   <ProjectCard
                     project={project}
