@@ -1,79 +1,85 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { cn } from '@/lib/utils'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { slideDown } from '@/lib/animations'
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { slideDown } from "@/lib/animations";
 
 interface NavLink {
-  label: string
-  href: string
+  label: string;
+  href: string;
 }
 
 const navLinks: NavLink[] = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' }
-]
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+];
 
 interface NavbarProps {
-  onMenuClick: () => void
+  onMenuClick: () => void;
 }
 
 export function Navbar({ onMenuClick }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
-  const { scrollY } = useScroll()
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50)
-  })
+  useMotionValueEvent(scrollY, "change", latest => {
+    setIsScrolled(latest > 50);
+  });
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navLinks.map(link => link.href.substring(1))
-      const scrollPosition = window.scrollY + 100
+      const sections = navLinks.map(link => link.href.substring(1));
+      const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
-        const element = document.getElementById(section)
+        const element = document.getElementById(section);
         if (element) {
-          const { offsetTop, offsetHeight } = element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            setActiveSection(section);
+            break;
           }
         }
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const targetId = href.substring(1)
-    const element = document.getElementById(targetId)
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const targetId = href.substring(1);
+    const element = document.getElementById(targetId);
 
     if (element) {
-      const offsetTop = element.offsetTop - 80
+      const offsetTop = element.offsetTop - 80;
       window.scrollTo({
         top: offsetTop,
-        behavior: 'smooth'
-      })
-    } else if (targetId === 'home') {
+        behavior: "smooth",
+      });
+    } else if (targetId === "home") {
       // If home link and element not found, scroll to top
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
-      })
+        behavior: "smooth",
+      });
     }
-  }
+  };
 
   return (
     <motion.nav
@@ -82,10 +88,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
       initial="hidden"
       animate="visible"
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        isScrolled
-          ? 'glass shadow-lg'
-          : 'bg-transparent'
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        isScrolled ? "glass shadow-lg" : "bg-transparent"
       )}
       role="navigation"
       aria-label="Main navigation"
@@ -95,24 +99,24 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           {/* Logo/Brand */}
           <Link
             href="/"
-            className="text-xl font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            className="text-xl font-bold text-[#059669] bg-clip-text hover:opacity-80 transition-opacity"
           >
             Portfolio
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
+                onClick={e => handleLinkClick(e, link.href)}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-                  'hover:bg-foreground/10',
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  "hover:bg-foreground/10",
                   activeSection === link.href.substring(1)
-                    ? 'text-blue-500'
-                    : 'text-foreground/80 hover:text-foreground'
+                    ? "text-blue-500"
+                    : "text-foreground/80 hover:text-foreground"
                 )}
               >
                 {link.label}
@@ -146,5 +150,5 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </div>
       </div>
     </motion.nav>
-  )
+  );
 }

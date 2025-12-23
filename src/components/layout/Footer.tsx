@@ -63,7 +63,7 @@ export function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent mb-3 sm:mb-4">
+            <h3 className="text-lg sm:text-xl font-bold text-[#059669] bg-clip-text mb-3 sm:mb-4">
               {APP_CONFIG.name}
             </h3>
             <p className="text-xs sm:text-sm text-foreground/60 mb-3 sm:mb-4">
