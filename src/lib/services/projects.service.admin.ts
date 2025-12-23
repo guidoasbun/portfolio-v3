@@ -13,10 +13,11 @@ import {
   addDocument,
   updateDocument,
   deleteDocument,
+  batchUpdateDocuments,
 } from '@/lib/firebase/db-admin'
 
 /**
- * Get all projects sorted by creation date (newest first)
+ * Get all projects sorted by custom order first, then by creation date (newest first)
  *
  * @returns Promise resolving to array of all projects
  * @throws {DatabaseError} If database operation fails
@@ -27,8 +28,16 @@ import {
  */
 export const getProjects = async (): Promise<Project[]> => {
   const projects = await getCollection<Project>(COLLECTIONS.PROJECTS)
-  // Sort by creation date, newest first
+  // Sort by custom order first (if set), then by creation date (newest first)
   return projects.sort((a, b) => {
+    // If both have order, sort by order (ascending)
+    if (a.order !== undefined && b.order !== undefined) {
+      return a.order - b.order
+    }
+    // Projects with order come before those without
+    if (a.order !== undefined) return -1
+    if (b.order !== undefined) return 1
+    // Fall back to creation date (newest first)
     const aDate = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt)
     const bDate = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt)
     return bDate.getTime() - aDate.getTime()
@@ -181,4 +190,29 @@ export const searchProjects = async (searchTerm: string): Promise<Project[]> => 
     project.description.toLowerCase().includes(lowerSearch) ||
     project.technologies.some(tech => tech.toLowerCase().includes(lowerSearch))
   )
+}
+
+/**
+ * Reorder projects by updating their order field (batch operation)
+ *
+ * @param orderedProjects - Array of project IDs with their new order values
+ * @returns Promise resolving when all updates complete
+ * @throws {DatabaseError} If database operation fails
+ *
+ * @example
+ * await reorderProjects([
+ *   { id: 'abc123', order: 0 },
+ *   { id: 'def456', order: 1 },
+ *   { id: 'ghi789', order: 2 },
+ * ])
+ */
+export const reorderProjects = async (
+  orderedProjects: { id: string; order: number }[]
+): Promise<void> => {
+  const updates = orderedProjects.map(({ id, order }) => ({
+    id,
+    data: { order },
+  }))
+
+  await batchUpdateDocuments<Project>(COLLECTIONS.PROJECTS, updates)
 }

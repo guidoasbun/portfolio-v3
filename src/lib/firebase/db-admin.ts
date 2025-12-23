@@ -180,3 +180,29 @@ export const deleteDocument = async (
     throw new Error(`Failed to delete document from ${collectionName}`)
   }
 }
+
+/**
+ * Batch update multiple documents (atomic operation)
+ */
+export const batchUpdateDocuments = async <T extends DocumentData>(
+  collectionName: CollectionName,
+  updates: { id: string; data: Partial<T> }[]
+): Promise<void> => {
+  try {
+    const batch = adminDb.batch()
+
+    for (const { id, data } of updates) {
+      const docRef = adminDb.collection(collectionName).doc(id)
+      const cleanedData = removeUndefined(data)
+      batch.update(docRef, {
+        ...cleanedData,
+        updatedAt: FieldValue.serverTimestamp(),
+      })
+    }
+
+    await batch.commit()
+  } catch (error) {
+    console.error(`Error batch updating documents in ${collectionName}:`, error)
+    throw new Error(`Failed to batch update documents in ${collectionName}`)
+  }
+}

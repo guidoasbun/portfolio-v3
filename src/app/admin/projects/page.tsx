@@ -7,7 +7,7 @@
 
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { Heading } from '@/components/ui/Heading'
 import { Button } from '@/components/ui/Button'
@@ -19,10 +19,10 @@ import { ConfirmModal } from '@/components/ui/ConfirmModal'
 import { Pagination } from '@/components/ui/Pagination'
 import { useModal } from '@/hooks/useModal'
 import { useFilterPersistence } from '@/hooks/useFilterPersistence'
-import { FiPlus, FiAlertCircle, FiCheckCircle, FiSearch, FiX } from 'react-icons/fi'
+import { FiPlus, FiAlertCircle, FiCheckCircle, FiSearch, FiX, FiSave } from 'react-icons/fi'
 import type { Project } from '@/types'
 
-type SortOption = 'date-desc' | 'date-asc' | 'title-asc' | 'title-desc' | 'featured'
+type SortOption = 'date-desc' | 'date-asc' | 'title-asc' | 'title-desc' | 'featured' | 'custom'
 
 interface ProjectFilters {
   search: string
@@ -41,6 +41,9 @@ export default function AdminProjectsPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [reorderedProjects, setReorderedProjects] = useState<Project[] | null>(null)
+  const [savingOrder, setSavingOrder] = useState(false)
+  const originalOrderRef = useRef<string[]>([])
 
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal()
 
@@ -135,6 +138,17 @@ export default function AdminProjectsPage() {
           return a.featured ? -1 : 1
         })
         break
+      case 'custom':
+        // Sort by order field (ascending), then by createdAt for projects without order
+        sorted.sort((a, b) => {
+          if (a.order !== undefined && b.order !== undefined) {
+            return a.order - b.order
+          }
+          if (a.order !== undefined) return -1
+          if (b.order !== undefined) return 1
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        })
+        break
     }
 
     return sorted
@@ -191,6 +205,91 @@ export default function AdminProjectsPage() {
       setDeleting(false)
     }
   }
+
+  // Handle reorder from drag-and-drop
+  const handleReorder = useCallback((newOrder: Project[]) => {
+    setReorderedProjects(newOrder)
+  }, [])
+
+  // Check if order has changed
+  const hasOrderChanged = useMemo(() => {
+    if (!reorderedProjects) return false
+    const currentOrder = reorderedProjects.map(p => p.id)
+    return currentOrder.some((id, index) => id !== originalOrderRef.current[index])
+  }, [reorderedProjects])
+
+  // Store original order when entering custom sort mode
+  useEffect(() => {
+    if (filters.sortBy === 'custom' && !reorderedProjects) {
+      originalOrderRef.current = filteredAndSortedProjects.map(p => p.id)
+    }
+    if (filters.sortBy !== 'custom') {
+      setReorderedProjects(null)
+      originalOrderRef.current = []
+    }
+  }, [filters.sortBy, filteredAndSortedProjects, reorderedProjects])
+
+  // Save reordered projects
+  const handleSaveOrder = async () => {
+    if (!reorderedProjects) return
+
+    try {
+      setSavingOrder(true)
+      setError(null)
+
+      const orderedData = reorderedProjects.map((project, index) => ({
+        id: project.id,
+        order: index,
+      }))
+
+      const response = await fetch('/api/projects/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projects: orderedData }),
+      })
+
+      if (!response.ok) {
+        const result = await response.json()
+        throw new Error(result.error || 'Failed to save order')
+      }
+
+      setSuccessMessage('Project order saved successfully')
+      setTimeout(() => setSuccessMessage(null), 5000)
+
+      // Refresh to get updated order from server
+      await fetchProjects()
+      setReorderedProjects(null)
+      originalOrderRef.current = []
+    } catch (err) {
+      console.error('Error saving order:', err)
+      setError(err instanceof Error ? err.message : 'Failed to save order')
+    } finally {
+      setSavingOrder(false)
+    }
+  }
+
+  // Cancel reorder changes
+  const handleCancelReorder = () => {
+    setReorderedProjects(null)
+  }
+
+  // Get the projects to display (use reordered if in custom mode and changed)
+  const displayProjects = useMemo(() => {
+    if (filters.sortBy === 'custom') {
+      // In custom mode, show all projects (no pagination) for drag-and-drop
+      if (reorderedProjects) {
+        return reorderedProjects
+      }
+      return filteredAndSortedProjects
+    }
+    return paginatedProjects
+  }, [filters.sortBy, reorderedProjects, paginatedProjects, filteredAndSortedProjects])
+
+  // Check if reorder is enabled
+  const isReorderEnabled = filters.sortBy === 'custom' &&
+    filters.search === '' &&
+    filters.category === 'all' &&
+    filters.technology === 'all'
 
   return (
     <div className="space-y-6">
@@ -314,20 +413,66 @@ export default function AdminProjectsPage() {
               <option value="title-asc">Title (A-Z)</option>
               <option value="title-desc">Title (Z-A)</option>
               <option value="featured">Featured First</option>
+              <option value="custom">Custom Order (Drag to reorder)</option>
             </Select>
           </div>
         </div>
       </GlassCard>
 
+      {/* Reorder Mode Info and Actions */}
+      {filters.sortBy === 'custom' && (
+        <GlassCard className={isReorderEnabled ? 'border-blue-500/20 bg-blue-500/5' : 'border-yellow-500/20 bg-yellow-500/5'}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              {isReorderEnabled ? (
+                <p className="text-sm text-muted-foreground">
+                  Drag the handle on each row to reorder projects. Changes will be saved when you click &quot;Save Order&quot;.
+                </p>
+              ) : (
+                <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                  Clear search and filters to enable drag-and-drop reordering.
+                </p>
+              )}
+            </div>
+            {hasOrderChanged && (
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCancelReorder}
+                  disabled={savingOrder}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSaveOrder}
+                  disabled={savingOrder}
+                >
+                  {savingOrder ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  ) : (
+                    <FiSave className="mr-2" />
+                  )}
+                  {savingOrder ? 'Saving...' : 'Save Order'}
+                </Button>
+              </div>
+            )}
+          </div>
+        </GlassCard>
+      )}
+
       {/* Projects Table */}
       <ProjectsTable
-        projects={paginatedProjects}
+        projects={displayProjects}
         onDelete={handleDeleteClick}
+        onReorder={handleReorder}
         loading={loading}
+        reorderEnabled={isReorderEnabled}
       />
 
-      {/* Pagination */}
-      {!loading && filteredAndSortedProjects.length > ITEMS_PER_PAGE && (
+      {/* Pagination - hide in custom order mode */}
+      {!loading && filteredAndSortedProjects.length > ITEMS_PER_PAGE && filters.sortBy !== 'custom' && (
         <GlassCard>
           <Pagination
             currentPage={filters.page}

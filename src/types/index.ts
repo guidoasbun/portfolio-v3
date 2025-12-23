@@ -10,6 +10,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
+  order?: number; // For custom ordering (lower = higher priority)
   createdAt: Date;
   updatedAt: Date;
 }
