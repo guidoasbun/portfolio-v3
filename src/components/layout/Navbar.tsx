@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { slideDown } from "@/lib/animations";
@@ -28,12 +28,31 @@ interface NavbarProps {
 export function Navbar({ onMenuClick }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", latest => {
-    setIsScrolled(latest > 50);
-  });
+  // Throttled scroll detection - only updates state when crossing threshold
+  useEffect(() => {
+    let ticking = false;
+    let lastScrolled = false;
 
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 50;
+          if (scrolled !== lastScrolled) {
+            lastScrolled = scrolled;
+            setIsScrolled(scrolled);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // IntersectionObserver for active section detection
   useEffect(() => {
     const sectionIds = navLinks.map(link => link.href.substring(1));
     const observerOptions: IntersectionObserverInit = {
