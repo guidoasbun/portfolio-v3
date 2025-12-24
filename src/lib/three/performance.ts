@@ -148,6 +148,16 @@ export function getDeviceCapability(): DeviceCapability {
  * Check if device should render 3D content
  */
 export function shouldRender3D(): boolean {
+  // Disable 3D on mobile devices to prevent WebGL context loss crashes
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+
+  if (isMobile) {
+    return false
+  }
+
   // Check WebGL support
   try {
     const canvas = document.createElement('canvas')
