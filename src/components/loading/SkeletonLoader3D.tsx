@@ -19,12 +19,16 @@ export function SkeletonLoader3D({
   height = 'h-full',
   showSpinner = true,
 }: SkeletonLoader3DProps) {
-  const { actualTheme } = useTheme()
+  const { actualTheme, mounted } = useTheme()
 
+  // Use neutral gradient before mount to avoid hydration mismatch
   const gradients = {
     light: 'from-slate-200 via-slate-100 to-slate-200',
     dark: 'from-slate-800 via-slate-700 to-slate-800',
   }
+
+  // Default to light theme gradient before mount for consistent SSR
+  const currentGradient = mounted ? gradients[actualTheme] : gradients.light
 
   return (
     <div
@@ -38,7 +42,7 @@ export function SkeletonLoader3D({
       <motion.div
         className={cn(
           'absolute inset-0 bg-gradient-to-r',
-          gradients[actualTheme]
+          currentGradient
         )}
         animate={{
           backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -72,7 +76,7 @@ export function SkeletonLoader3D({
           <motion.div
             className={cn(
               'h-12 w-12 rounded-full border-4',
-              actualTheme === 'dark'
+              mounted && actualTheme === 'dark'
                 ? 'border-slate-600 border-t-blue-400'
                 : 'border-slate-300 border-t-blue-500'
             )}
@@ -91,7 +95,7 @@ export function SkeletonLoader3D({
         <motion.p
           className={cn(
             'text-sm font-medium',
-            actualTheme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+            mounted && actualTheme === 'dark' ? 'text-slate-400' : 'text-slate-600'
           )}
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{
@@ -111,13 +115,13 @@ export function SkeletonLoader3D({
  * Minimal skeleton for better performance
  */
 export function MinimalSkeleton({ className = '' }: { className?: string }) {
-  const { actualTheme } = useTheme()
+  const { actualTheme, mounted } = useTheme()
 
   return (
     <div
       className={cn(
         'w-full h-full rounded-lg',
-        actualTheme === 'dark' ? 'bg-slate-800/50' : 'bg-slate-200/50',
+        mounted && actualTheme === 'dark' ? 'bg-slate-800/50' : 'bg-slate-200/50',
         className
       )}
     >
@@ -125,7 +129,7 @@ export function MinimalSkeleton({ className = '' }: { className?: string }) {
         <div
           className={cn(
             'h-8 w-8 rounded-full border-2 border-t-transparent animate-spin',
-            actualTheme === 'dark'
+            mounted && actualTheme === 'dark'
               ? 'border-slate-600'
               : 'border-slate-300'
           )}

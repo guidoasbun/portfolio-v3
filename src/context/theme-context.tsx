@@ -15,12 +15,14 @@ type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
   actualTheme: 'dark' | 'light'
+  mounted: boolean
 }
 
 const initialState: ThemeProviderState = {
   theme: 'system',
   setTheme: () => null,
-  actualTheme: 'light'
+  actualTheme: 'light',
+  mounted: false
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
@@ -31,9 +33,15 @@ export function ThemeProvider({
   storageKey = 'portfolio-theme',
   ...props
 }: ThemeProviderProps) {
+  const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState<Theme>(defaultTheme)
   const [actualTheme, setActualTheme] = useState<'dark' | 'light'>('light')
   const previousThemeRef = useRef<Theme>(defaultTheme)
+
+  // Mark as mounted after hydration
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     // Get theme from localStorage or use default
@@ -93,7 +101,8 @@ export function ThemeProvider({
       localStorage.setItem(storageKey, newTheme)
       setTheme(newTheme)
     },
-    actualTheme
+    actualTheme,
+    mounted
   }
 
   return (

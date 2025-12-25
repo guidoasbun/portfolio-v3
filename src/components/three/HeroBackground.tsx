@@ -24,7 +24,7 @@ const PerspectiveCamera = dynamic(() => import('@react-three/drei').then((mod) =
 })
 
 export function HeroBackground({ className = '' }: HeroBackgroundProps) {
-  const { actualTheme } = useTheme()
+  const { actualTheme, mounted } = useTheme()
   const { shouldLoad, isReady, performanceTier } = useLazyThree(100)
   const shouldReduceMotion = useReducedMotion()
   const [particleCount, setParticleCount] = useState<number>(1000)
@@ -46,8 +46,8 @@ export function HeroBackground({ className = '' }: HeroBackgroundProps) {
     return <div className={className} aria-hidden="true" />
   }
 
-  // Show skeleton while loading
-  if (!shouldLoad || !isReady) {
+  // Show skeleton while theme is loading to avoid hydration mismatch
+  if (!mounted || !shouldLoad || !isReady) {
     return <SkeletonLoader3D className={className} height="h-screen" showSpinner={false} />
   }
 
