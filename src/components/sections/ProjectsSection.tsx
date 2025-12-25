@@ -44,6 +44,20 @@ export function ProjectsSection({
     };
   }, []);
 
+  // Filter projects based on active category - must be before any conditional returns
+  const filteredProjects = useMemo(() => {
+    if (activeCategory === "all") {
+      return projects;
+    }
+    return projects.filter(project => project.category === activeCategory);
+  }, [activeCategory, projects]);
+
+  // Get count for each category
+  const getCategoryCount = (category: FilterCategory): number => {
+    if (category === "all") return projects.length;
+    return projects.filter(project => project.category === category).length;
+  };
+
   // Don't render content until mounted to avoid hydration mismatch
   // This ensures server and client render the same initial content
   if (!isMounted) {
@@ -71,20 +85,6 @@ export function ProjectsSection({
       </section>
     );
   }
-
-  // Filter projects based on active category
-  const filteredProjects = useMemo(() => {
-    if (activeCategory === "all") {
-      return projects;
-    }
-    return projects.filter(project => project.category === activeCategory);
-  }, [activeCategory, projects]);
-
-  // Get count for each category
-  const getCategoryCount = (category: FilterCategory): number => {
-    if (category === "all") return projects.length;
-    return projects.filter(project => project.category === category).length;
-  };
 
   const handleProjectClick = (project: Project) => {
     // Track project view
