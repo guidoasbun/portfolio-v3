@@ -34,14 +34,19 @@ export interface UseAnalyticsReturn {
 export const useAnalytics = (): UseAnalyticsReturn => {
   const pathname = usePathname()
 
+  // DEBUG: Track analytics hook usage
+  console.log("[useAnalytics] Hook called, pathname:", pathname)
+
   // Initialize analytics on mount
   useEffect(() => {
+    console.log("[useAnalytics] Initializing analytics")
     initializeAnalytics()
   }, [])
 
   // Auto-track page views when pathname changes
   useEffect(() => {
     if (pathname) {
+      console.log("[useAnalytics] Tracking page view:", pathname)
       trackPageView(pathname)
     }
   }, [pathname])

@@ -38,9 +38,16 @@ export function ThemeProvider({
   const [actualTheme, setActualTheme] = useState<'dark' | 'light'>('light')
   const previousThemeRef = useRef<Theme>(defaultTheme)
 
+  // DEBUG: Track theme provider lifecycle
+  console.log("[ThemeProvider] Render - mounted:", mounted, "theme:", theme, "actualTheme:", actualTheme)
+
   // Mark as mounted after hydration
   useEffect(() => {
+    console.log("[ThemeProvider] Mount effect - setting mounted=true")
     setMounted(true)
+    return () => {
+      console.log("[ThemeProvider] Unmounting!")
+    }
   }, [])
 
   useEffect(() => {

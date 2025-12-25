@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar } from './Navbar'
 import { MobileMenu } from './MobileMenu'
 import { Footer } from './Footer'
@@ -15,6 +15,16 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  // DEBUG: Track layout lifecycle
+  console.log("[Layout] Render")
+
+  useEffect(() => {
+    console.log("[Layout] Mounted")
+    return () => {
+      console.log("[Layout] Unmounting!")
+    }
+  }, [])
 
   const handleMenuOpen = () => {
     setIsMobileMenuOpen(true)

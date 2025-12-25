@@ -33,8 +33,15 @@ export function ProjectsSection({
   const [isMounted, setIsMounted] = useState(false);
   const { trackEvent } = useAnalytics();
 
+  // DEBUG: Track component lifecycle
+  console.log("[ProjectsSection] Render - isMounted:", isMounted, "projects:", projects.length);
+
   useEffect(() => {
+    console.log("[ProjectsSection] Mount effect running");
     setIsMounted(true);
+    return () => {
+      console.log("[ProjectsSection] Unmounting!");
+    };
   }, []);
 
   // Filter projects based on active category
