@@ -1,23 +1,10 @@
 import type { Metadata } from 'next'
-import dynamic from 'next/dynamic'
 import { createMetadata, createPersonSchema, createWebSiteSchema } from '@/lib/metadata'
 import { getProjects } from '@/lib/services/projects.service.admin'
 import { getExperiences } from '@/lib/services/experience.service.admin'
 import { getSkills } from '@/lib/services/skills.service.admin'
+import { ClientSectionsWrapper } from '@/components/ClientSectionsWrapper'
 import type { Project, Experience, Skill } from '@/types'
-
-// NUCLEAR OPTION: Disable SSR for all sections to eliminate hydration mismatches
-const ClientSections = dynamic(() => import('@/components/ClientSections'), {
-  ssr: false,
-  loading: () => (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-foreground/60">Loading...</p>
-      </div>
-    </div>
-  ),
-})
 
 // SEO Metadata
 export const metadata: Metadata = createMetadata({
@@ -72,7 +59,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
 
-      <ClientSections
+      <ClientSectionsWrapper
         projects={projects}
         experiences={experiences}
         skills={skills}
