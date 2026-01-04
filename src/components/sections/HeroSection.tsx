@@ -66,62 +66,32 @@ export function HeroSection() {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Main Content with Glass Morphism */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="glass rounded-2xl p-6 sm:p-10 lg:p-12 shadow-2xl border border-white/20 backdrop-blur-md"
-          >
+          {/* Main Content with Glass Morphism - no animations to avoid hydration mismatch */}
+          <div className="glass rounded-2xl p-6 sm:p-10 lg:p-12 shadow-2xl border border-white/20 backdrop-blur-md">
             {/* Greeting */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-base sm:text-lg lg:text-xl text-foreground/70 mb-3 sm:mb-4"
-            >
+            <p className="text-base sm:text-lg lg:text-xl text-foreground/70 mb-3 sm:mb-4">
               Hi, I&apos;m
-            </motion.p>
+            </p>
 
             {/* Name */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent leading-tight"
-            >
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent leading-tight">
               Guido Asbun
-            </motion.h1>
+            </h1>
 
             {/* Title */}
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-4 sm:mb-6"
-            >
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-4 sm:mb-6">
               Cloud Infrastructure & Software Engineering
-            </motion.h2>
+            </h2>
 
             {/* Description */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="text-base sm:text-lg lg:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0"
-            >
+            <p className="text-base sm:text-lg lg:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
               Building scalable cloud infrastructure and CI/CD pipelines while
               crafting performant web applications. Specializing in AWS, Docker,
               Kubernetes, and modern DevOps practices.
-            </motion.p>
+            </p>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mb-6 sm:mb-8"
-            >
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mb-6 sm:mb-8">
               <Button
                 size="lg"
                 onClick={scrollToProjects}
@@ -138,15 +108,10 @@ export function HeroSection() {
                 <FiMail className="mr-2" />
                 Get in Touch
               </Button>
-            </motion.div>
+            </div>
 
             {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.8 }}
-              className="flex gap-4 sm:gap-6 justify-center"
-            >
+            <div className="flex gap-4 sm:gap-6 justify-center">
               <a
                 href="https://github.com/guidoasbun"
                 target="_blank"
@@ -184,16 +149,11 @@ export function HeroSection() {
               >
                 <FiMail className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="mt-8 sm:mt-12 lg:mt-16 hidden sm:block"
-          >
+          <div className="mt-8 sm:mt-12 lg:mt-16 hidden sm:block">
             <button
               onClick={scrollToProjects}
               className="text-foreground/70 hover:text-foreground transition-colors duration-300 flex flex-col items-center gap-2 mx-auto min-h-[44px] p-2"
@@ -209,7 +169,7 @@ export function HeroSection() {
                 <FiArrowDown className="w-5 h-5 sm:w-6 sm:h-6" />
               </motion.div>
             </button>
-          </motion.div>
+          </div>
         </div>
       </div>
 
