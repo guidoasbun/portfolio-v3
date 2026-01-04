@@ -20,6 +20,7 @@ import {
 } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import type { ApiResponse, Resume } from "@/types";
 
 interface ResumeSection {
   title: string;
@@ -120,6 +121,7 @@ const mockResumeData = {
 
 export default function ResumePageClient() {
   const [isSharing, setIsSharing] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const { trackEvent } = useAnalytics();
 
   // Track resume view on page load
@@ -152,18 +154,40 @@ export default function ResumePageClient() {
     },
   };
 
-  const handleDownload = () => {
-    // Track resume download
-    trackEvent("resume_download", {
-      resume_id: "default",
-      resume_version: "1.0",
-      download_count: 1,
-    });
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      // Fetch active resume
+      const response = await fetch("/api/resume/active");
+      const result: ApiResponse<Resume | null> = await response.json();
 
-    // Placeholder - will integrate with backend
-    alert(
-      "Download functionality will be implemented when resume file is available"
-    );
+      if (!result.success || !result.data) {
+        alert("No active resume found. Please contact the administrator.");
+        return;
+      }
+
+      const activeResume = result.data;
+
+      // Track the download in database
+      await fetch(`/api/resume/${activeResume.id}/download`, {
+        method: "POST",
+      });
+
+      // Track analytics
+      trackEvent("resume_download", {
+        resume_id: activeResume.id,
+        resume_version: activeResume.version,
+        download_count: activeResume.downloadCount + 1,
+      });
+
+      // Open the resume in a new tab
+      window.open(activeResume.fileUrl, "_blank");
+    } catch (error) {
+      console.error("Error downloading resume:", error);
+      alert("Failed to download resume. Please try again later.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const handlePrint = () => {
@@ -225,10 +249,11 @@ export default function ResumePageClient() {
                   variant="primary"
                   size="md"
                   onClick={handleDownload}
+                  disabled={isDownloading}
                   className="gap-2"
                 >
                   <FiDownload />
-                  Download
+                  {isDownloading ? "Downloading..." : "Download"}
                 </Button>
                 <Button
                   variant="secondary"
