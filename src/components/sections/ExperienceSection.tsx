@@ -40,7 +40,9 @@ export function ExperienceSection({ experiences = [] }: ExperienceSectionProps) 
     return [...filtered].sort((a, b) => {
       if (a.current && !b.current) return -1
       if (!a.current && b.current) return 1
-      return b.startDate.getTime() - a.startDate.getTime()
+      const aDate = new Date(a.startDate)
+      const bDate = new Date(b.startDate)
+      return bDate.getTime() - aDate.getTime()
     })
   }, [activeFilter, experiences])
 

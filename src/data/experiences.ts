@@ -224,9 +224,10 @@ export const getExperienceById = (id: string): Experience | undefined => {
 /**
  * Format date range for display
  */
-export const formatDateRange = (startDate: Date, endDate?: Date, current?: boolean): string => {
-  const formatDate = (date: Date): string => {
-    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+export const formatDateRange = (startDate: Date | string, endDate?: Date | string, current?: boolean): string => {
+  const formatDate = (date: Date | string): string => {
+    const d = typeof date === 'string' ? new Date(date) : date
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
   }
 
   const start = formatDate(startDate)
@@ -238,9 +239,10 @@ export const formatDateRange = (startDate: Date, endDate?: Date, current?: boole
 /**
  * Calculate duration between two dates
  */
-export const calculateDuration = (startDate: Date, endDate?: Date, current?: boolean): string => {
-  const end = current || !endDate ? new Date() : endDate
-  const diffTime = Math.abs(end.getTime() - startDate.getTime())
+export const calculateDuration = (startDate: Date | string, endDate?: Date | string, current?: boolean): string => {
+  const start = typeof startDate === 'string' ? new Date(startDate) : startDate
+  const end = current || !endDate ? new Date() : (typeof endDate === 'string' ? new Date(endDate) : endDate)
+  const diffTime = Math.abs(end.getTime() - start.getTime())
   const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30))
 
   const years = Math.floor(diffMonths / 12)
