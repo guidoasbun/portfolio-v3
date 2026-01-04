@@ -55,14 +55,6 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
     return projects.filter((project) => project.category === category).length
   }
 
-  const handleProjectClick = (project: Project) => {
-    setSelectedProject(project)
-  }
-
-  const handleCloseModal = () => {
-    setSelectedProject(null)
-  }
-
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -81,28 +73,6 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
       y: 0,
       transition: {
         duration: 0.6,
-      },
-    },
-  }
-
-  const gridVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  }
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
       },
     },
   }
@@ -148,9 +118,8 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   key={category.value}
                   onClick={() => setActiveCategory(category.value)}
                   className={cn(
-                    'relative px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300',
+                    'relative px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300',
                     'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background',
-                    'min-h-[44px] text-sm sm:text-base',
                     isActive
                       ? 'glass-heavy text-foreground shadow-lg scale-105'
                       : 'glass-light text-foreground/70 hover:text-foreground hover:glass-medium'
@@ -158,12 +127,12 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   aria-label={`Filter by ${category.label}`}
                   aria-pressed={isActive}
                 >
-                  <span className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="flex items-center gap-2">
                     <Icon className="w-4 h-4" />
                     {category.label}
                     <span
                       className={cn(
-                        'text-xs px-1.5 sm:px-2 py-0.5 rounded-full',
+                        'text-xs px-2 py-0.5 rounded-full',
                         isActive
                           ? 'bg-blue-500 text-white'
                           : 'bg-foreground/10 text-foreground/60'
@@ -184,34 +153,26 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
             })}
           </motion.div>
 
-          {/* Projects Grid */}
-          {filteredProjects.length > 0 ? (
-            <motion.div
-              key={activeCategory}
-              initial="hidden"
-              animate="visible"
-              variants={gridVariants}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
-            >
-              {filteredProjects.map((project) => (
-                <motion.div key={project.id} variants={cardVariants}>
+          {/* Projects Grid - Simple structure like ExperienceSection */}
+          <motion.div variants={itemVariants} className="relative">
+            {filteredProjects.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                {filteredProjects.map((project) => (
                   <ProjectCard
+                    key={project.id}
                     project={project}
-                    onClick={() => handleProjectClick(project)}
+                    onClick={() => setSelectedProject(project)}
                   />
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={itemVariants}
-              className="text-center py-12 glass rounded-xl"
-            >
-              <p className="text-foreground/60 text-lg">
-                No projects found in this category.
-              </p>
-            </motion.div>
-          )}
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 glass rounded-xl">
+                <p className="text-foreground/60 text-lg">
+                  No projects found in this category.
+                </p>
+              </div>
+            )}
+          </motion.div>
 
           {/* Show count of filtered results */}
           {filteredProjects.length > 0 && (
@@ -235,7 +196,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
       {/* Project Details Modal */}
       <ProjectDetailsModal
         isOpen={!!selectedProject}
-        onClose={handleCloseModal}
+        onClose={() => setSelectedProject(null)}
         project={selectedProject}
       />
     </section>
