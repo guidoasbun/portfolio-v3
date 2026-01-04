@@ -28,8 +28,13 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
     category,
   } = project
 
+  // Debug logging
+  console.log('[CLIENT] ProjectCard render:', title)
+  console.log('[CLIENT] ProjectCard images array:', images)
+
   // Get first image or use fallback gradient
-  const primaryImage = images[0]
+  const primaryImage = images?.[0]
+  console.log('[CLIENT] ProjectCard primaryImage:', primaryImage ? primaryImage.substring(0, 80) + '...' : 'none')
 
   const handleCardClick = () => {
     if (onClick) {

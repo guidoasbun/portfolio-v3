@@ -26,7 +26,17 @@ import {
  * console.log(projects.length) // e.g., 10
  */
 export const getProjects = async (): Promise<Project[]> => {
+  console.log('[SERVICE] getProjects called')
   const projects = await getCollection<Project>(COLLECTIONS.PROJECTS)
+  console.log('[SERVICE] Raw projects from Firestore:', projects.length)
+
+  // Log first project structure for debugging
+  if (projects.length > 0) {
+    console.log('[SERVICE] First project keys:', Object.keys(projects[0]))
+    console.log('[SERVICE] First project images type:', typeof projects[0].images, Array.isArray(projects[0].images))
+    console.log('[SERVICE] First project createdAt type:', typeof projects[0].createdAt)
+  }
+
   // Sort by creation date, newest first
   return projects.sort((a, b) => {
     const aDate = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt)

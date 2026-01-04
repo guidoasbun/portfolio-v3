@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { mockProjects } from "@/data/projects";
 import type { Project } from "@/types";
@@ -11,6 +12,24 @@ interface ProjectsSectionProps {
 export function ProjectsSection({
   projects = mockProjects,
 }: ProjectsSectionProps) {
+  // Debug logging
+  console.log('[CLIENT] ProjectsSection render, projects count:', projects.length);
+  console.log('[CLIENT] Using mock data?', projects === mockProjects);
+
+  useEffect(() => {
+    console.log('[CLIENT] ProjectsSection mounted');
+    console.log('[CLIENT] Projects data:', projects.map(p => ({
+      id: p.id,
+      title: p.title,
+      imageCount: p.images?.length,
+      firstImage: p.images?.[0]?.substring(0, 50) + '...'
+    })));
+
+    return () => {
+      console.log('[CLIENT] ProjectsSection unmounted');
+    };
+  }, [projects]);
+
   return (
     <section id="projects" className="py-12 sm:py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
