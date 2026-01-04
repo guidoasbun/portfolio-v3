@@ -1,20 +1,13 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, type Variants } from 'framer-motion'
 import { ProjectCard } from '@/components/ui/ProjectCard'
 import { ProjectDetailsModal } from '@/components/sections/ProjectDetailsModal'
 import { mockProjects } from '@/data/projects'
 import type { Project, ProjectCategory } from '@/types'
 import { cn } from '@/lib/utils'
-import {
-  FiGrid,
-  FiGlobe,
-  FiSmartphone,
-  FiMonitor,
-  FiCpu,
-  FiMoreHorizontal,
-} from 'react-icons/fi'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 interface ProjectsSectionProps {
   projects?: Project[]
@@ -22,24 +15,25 @@ interface ProjectsSectionProps {
 
 type FilterCategory = 'all' | ProjectCategory
 
-interface CategoryFilter {
-  label: string
-  value: FilterCategory
-  icon: React.ComponentType<{ className?: string }>
-}
-
-const categories: CategoryFilter[] = [
-  { label: 'All', value: 'all', icon: FiGrid },
-  { label: 'Web', value: 'web', icon: FiGlobe },
-  { label: 'Mobile', value: 'mobile', icon: FiSmartphone },
-  { label: 'Desktop', value: 'desktop', icon: FiMonitor },
-  { label: 'AI/ML', value: 'ai', icon: FiCpu },
-  { label: 'Other', value: 'other', icon: FiMoreHorizontal },
+const categories: { label: string; value: FilterCategory }[] = [
+  { label: 'All Projects', value: 'all' },
+  { label: 'Web', value: 'web' },
+  { label: 'Mobile', value: 'mobile' },
+  { label: 'Desktop', value: 'desktop' },
+  { label: 'AI/ML', value: 'ai' },
+  { label: 'Other', value: 'other' },
 ]
 
 export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProps) {
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const { trackEvent } = useAnalytics()
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -56,11 +50,33 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
   }
 
   const handleProjectClick = (project: Project) => {
+    // Track project view
+    trackEvent('project_view', {
+      project_id: project.id,
+      project_title: project.title,
+      project_category: project.category,
+    })
+
     setSelectedProject(project)
+    setIsModalOpen(true)
+  }
+
+  const handleCategoryChange = (category: FilterCategory) => {
+    // Track filter change
+    trackEvent('project_filter_change', {
+      filter_type: 'category',
+      filter_value: category,
+    })
+
+    setActiveCategory(category)
   }
 
   const handleCloseModal = () => {
-    setSelectedProject(null)
+    setIsModalOpen(false)
+    // Delay clearing selected project until modal animation completes
+    setTimeout(() => {
+      setSelectedProject(null)
+    }, 300)
   }
 
   const containerVariants: Variants = {
@@ -85,22 +101,11 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
     },
   }
 
-  const gridVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  }
-
   const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
         duration: 0.4,
       },
@@ -129,14 +134,11 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
           </motion.div>
 
           {/* Filter Tabs */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 lg:mb-12 px-2 sm:px-0"
-          >
-            {categories.map((category) => {
+          {isMounted && (
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 lg:mb-12 px-2 sm:px-0">
+              {categories.map((category) => {
               const count = getCategoryCount(category.value)
               const isActive = activeCategory === category.value
-              const Icon = category.icon
 
               // Don't show category if there are no projects in it (except 'all')
               if (count === 0 && category.value !== 'all') {
@@ -146,10 +148,10 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
               return (
                 <button
                   key={category.value}
-                  onClick={() => setActiveCategory(category.value)}
+                  onClick={() => handleCategoryChange(category.value)}
                   className={cn(
                     'relative px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300',
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     'min-h-[44px] text-sm sm:text-base',
                     isActive
                       ? 'glass-heavy text-foreground shadow-lg scale-105'
@@ -158,8 +160,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   aria-label={`Filter by ${category.label}`}
                   aria-pressed={isActive}
                 >
-                  <span className="flex items-center gap-1.5 sm:gap-2">
-                    <Icon className="w-4 h-4" />
+                  <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
                     {category.label}
                     <span
                       className={cn(
@@ -174,44 +175,49 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
                   </span>
                   {isActive && (
                     <motion.div
-                      layoutId="activeProjectTab"
+                      layoutId="activeTab"
                       className="absolute inset-0 border-2 border-blue-500 rounded-lg -z-10"
                       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     />
                   )}
                 </button>
               )
-            })}
-          </motion.div>
+              })}
+            </div>
+          )}
 
           {/* Projects Grid */}
-          {filteredProjects.length > 0 ? (
-            <motion.div
-              key={activeCategory}
-              initial="hidden"
-              animate="visible"
-              variants={gridVariants}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
-            >
-              {filteredProjects.map((project) => (
-                <motion.div key={project.id} variants={cardVariants}>
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+          >
+            {filteredProjects.length > 0 ? (
+              filteredProjects.map((project) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                >
                   <ProjectCard
                     project={project}
                     onClick={() => handleProjectClick(project)}
                   />
                 </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={itemVariants}
-              className="text-center py-12 glass rounded-xl"
-            >
-              <p className="text-foreground/60 text-lg">
-                No projects found in this category.
-              </p>
-            </motion.div>
-          )}
+              ))
+            ) : (
+              <motion.div
+                variants={itemVariants}
+                className="col-span-full text-center py-12"
+              >
+                <p className="text-foreground/60 text-lg">
+                  No projects found in this category.
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
 
           {/* Show count of filtered results */}
           {filteredProjects.length > 0 && (
@@ -222,10 +228,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
               Showing {filteredProjects.length}{' '}
               {filteredProjects.length === 1 ? 'project' : 'projects'}
               {activeCategory !== 'all' && (
-                <>
-                  {' '}
-                  in {categories.find((c) => c.value === activeCategory)?.label.toLowerCase()}
-                </>
+                <> in {categories.find((c) => c.value === activeCategory)?.label}</>
               )}
             </motion.div>
           )}
@@ -234,7 +237,7 @@ export function ProjectsSection({ projects = mockProjects }: ProjectsSectionProp
 
       {/* Project Details Modal */}
       <ProjectDetailsModal
-        isOpen={!!selectedProject}
+        isOpen={isModalOpen}
         onClose={handleCloseModal}
         project={selectedProject}
       />
