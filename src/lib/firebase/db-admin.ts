@@ -43,12 +43,12 @@ export const getCollection = async <T extends DocumentData>(
     return snapshot.docs.map((doc) => {
       const data = doc.data()
 
-      // Convert Timestamps to Dates
+      // Convert Timestamps to ISO strings for proper serialization
       const convertedData: DocumentData = {}
       Object.keys(data).forEach((key) => {
         const value = data[key]
         if (value instanceof Timestamp) {
-          convertedData[key] = value.toDate()
+          convertedData[key] = value.toDate().toISOString()
         } else {
           convertedData[key] = value
         }
@@ -82,10 +82,11 @@ export const getDocument = async <T extends DocumentData>(
     const data = doc.data()!
     const convertedData: DocumentData = {}
 
+    // Convert Timestamps to ISO strings for proper serialization
     Object.keys(data).forEach((key) => {
       const value = data[key]
       if (value instanceof Timestamp) {
-        convertedData[key] = value.toDate()
+        convertedData[key] = value.toDate().toISOString()
       } else {
         convertedData[key] = value
       }
