@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { motion, type Variants } from "framer-motion";
 import {
   FiDownload,
+  FiEye,
   FiCode,
   FiBookOpen,
   FiMusic,
@@ -227,8 +229,8 @@ export function AboutSection({
                   ))}
                 </div>
 
-                {/* Download Resume Button */}
-                <div className="mt-5 sm:mt-6">
+                {/* Resume Buttons */}
+                <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3">
                   <Button
                     variant="primary"
                     size="lg"
@@ -241,6 +243,12 @@ export function AboutSection({
                       {isDownloading ? "Downloading..." : "Download Resume"}
                     </span>
                   </Button>
+                  <Link href="/resume">
+                    <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                      <FiEye className="mr-2" />
+                      View Resume
+                    </Button>
+                  </Link>
                 </div>
               </GlassCard>
             </motion.div>

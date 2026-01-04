@@ -7,7 +7,7 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { getResume, updateResume, deleteResume } from '@/lib/services/resume.service.admin'
-import { resumeFormSchema } from '@/lib/validations'
+import { resumeUpdateSchema } from '@/lib/validations'
 import type { ApiResponse, Resume } from '@/types'
 
 interface RouteParams {
@@ -79,7 +79,7 @@ export async function PUT(
     const body = await request.json()
 
     // Validate the request body (partial validation for updates)
-    const validatedData = await resumeFormSchema.validate(body, {
+    const validatedData = await resumeUpdateSchema.validate(body, {
       abortEarly: false,
     })
 

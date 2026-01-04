@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -41,14 +42,26 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     isActive: isOpen,
     onEscape: onClose
   }) as React.RefObject<HTMLDivElement>
+  const pathname = usePathname()
+  const router = useRouter()
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     onClose()
 
+    const targetId = href.substring(1)
+
+    // If not on home page, navigate to home page with anchor
+    if (pathname !== '/') {
+      // Small delay to allow menu to close before navigating
+      setTimeout(() => {
+        router.push(`/#${targetId}`)
+      }, 300)
+      return
+    }
+
     // Small delay to allow menu to close before scrolling
     setTimeout(() => {
-      const targetId = href.substring(1)
       const element = document.getElementById(targetId)
 
       if (element) {
