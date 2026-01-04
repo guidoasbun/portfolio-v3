@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -29,6 +30,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const { scrollY } = useScroll()
+  const pathname = usePathname()
+  const router = useRouter()
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50)
@@ -58,6 +61,13 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
     const targetId = href.substring(1)
+
+    // If not on home page, navigate to home page with anchor
+    if (pathname !== '/') {
+      router.push(`/#${targetId}`)
+      return
+    }
+
     const element = document.getElementById(targetId)
 
     if (element) {

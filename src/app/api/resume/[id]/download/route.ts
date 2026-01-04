@@ -6,7 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { incrementDownloadCount, getResume } from '@/lib/services'
+import { incrementDownloadCount, getResume } from '@/lib/services/resume.service.admin'
 import type { ApiResponse } from '@/types'
 
 interface RouteParams {

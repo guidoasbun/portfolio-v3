@@ -48,12 +48,12 @@ const mockResumeData = {
   header: {
     name: "Guido Asbun",
     title: "Full Stack Developer",
-    email: "your.email@example.com",
-    phone: "+1 (123) 456-7890",
-    location: "City, State",
-    linkedin: "linkedin.com/in/yourname",
-    github: "github.com/yourusername",
-    website: "yourwebsite.com",
+    email: "guido@asbun.io",
+    phone: "949-570-4195",
+    location: "California, USA",
+    linkedin: "linkedin.com/in/guidoasbun/",
+    github: "github.com/guidoasbun",
+    website: "guido@asbun.io",
   },
   summary:
     "Passionate Full Stack Developer with 3+ years of experience building modern web applications. Specialized in React, Next.js, and Node.js with a strong focus on user experience and performance optimization.",

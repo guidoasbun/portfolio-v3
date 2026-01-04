@@ -230,3 +230,14 @@ export const resumeFormSchema = yup.object({
 })
 
 export type ResumeFormValues = yup.InferType<typeof resumeFormSchema>
+
+// Resume Update Schema (partial - for PATCH/PUT updates)
+export const resumeUpdateSchema = yup.object({
+  filename: yup.string().min(1, 'Filename must not be empty').trim().optional(),
+  originalName: yup.string().min(1, 'Original name must not be empty').trim().optional(),
+  fileUrl: yup.string().url('Must be a valid URL').optional(),
+  version: yup.string().min(1, 'Version must not be empty').trim().optional(),
+  active: yup.boolean().optional(),
+})
+
+export type ResumeUpdateValues = yup.InferType<typeof resumeUpdateSchema>
