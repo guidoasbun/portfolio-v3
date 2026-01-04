@@ -10,7 +10,7 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, mounted } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = React.useRef<HTMLDivElement>(null)
 
@@ -73,6 +73,15 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className={cn('relative', className)}>
+        <div className="glass flex items-center gap-2 px-3 py-2 rounded-lg w-[100px] h-[36px]" />
+      </div>
+    )
+  }
 
   return (
     <div ref={dropdownRef} className={cn('relative', className)}>

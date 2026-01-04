@@ -15,12 +15,14 @@ type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
   actualTheme: 'dark' | 'light'
+  mounted: boolean
 }
 
 const initialState: ThemeProviderState = {
   theme: 'system',
   setTheme: () => null,
-  actualTheme: 'light'
+  actualTheme: 'light',
+  mounted: false
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
@@ -31,19 +33,27 @@ export function ThemeProvider({
   storageKey = 'portfolio-theme',
   ...props
 }: ThemeProviderProps) {
+  const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState<Theme>(defaultTheme)
   const [actualTheme, setActualTheme] = useState<'dark' | 'light'>('light')
   const previousThemeRef = useRef<Theme>(defaultTheme)
 
+  // Handle mounting - only run browser APIs after hydration
   useEffect(() => {
+    setMounted(true)
+
     // Get theme from localStorage or use default
     const storedTheme = localStorage.getItem(storageKey) as Theme
     if (storedTheme) {
       setTheme(storedTheme)
+      previousThemeRef.current = storedTheme
     }
   }, [storageKey])
 
   useEffect(() => {
+    // Only run after mounting to avoid hydration mismatch
+    if (!mounted) return
+
     const updateActualTheme = () => {
       let resolvedTheme: 'dark' | 'light'
 
@@ -73,11 +83,13 @@ export function ThemeProvider({
       mediaQuery.addEventListener('change', handleChange)
       return () => mediaQuery.removeEventListener('change', handleChange)
     }
-  }, [theme])
+  }, [theme, mounted])
 
   const value = {
     theme,
     setTheme: (newTheme: Theme) => {
+      if (!mounted) return
+
       const previousTheme = previousThemeRef.current
 
       // Track theme change
@@ -93,7 +105,8 @@ export function ThemeProvider({
       localStorage.setItem(storageKey, newTheme)
       setTheme(newTheme)
     },
-    actualTheme
+    actualTheme,
+    mounted
   }
 
   return (
