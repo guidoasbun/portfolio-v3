@@ -28,15 +28,9 @@ export default async function Home() {
   // Fetch projects from Firebase
   let projects: Project[] = []
   try {
-    console.log('[SERVER] Fetching projects from Firebase...')
     projects = await getProjects()
-    console.log('[SERVER] Projects fetched:', projects.length)
-    if (projects.length > 0) {
-      console.log('[SERVER] First project data:', JSON.stringify(projects[0], null, 2))
-      console.log('[SERVER] First project images:', projects[0].images)
-    }
   } catch (error) {
-    console.error('[SERVER] Failed to fetch projects:', error)
+    console.error('Failed to fetch projects:', error)
     // Projects will fall back to empty array or mockProjects in component
   }
 

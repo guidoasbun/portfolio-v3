@@ -2,7 +2,6 @@
 
 import React, { memo } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Button } from '@/components/ui/Button'
 import type { Project } from '@/types'
@@ -28,13 +27,8 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
     category,
   } = project
 
-  // Debug logging
-  console.log('[CLIENT] ProjectCard render:', title)
-  console.log('[CLIENT] ProjectCard images array:', images)
-
   // Get first image or use fallback gradient
   const primaryImage = images?.[0]
-  console.log('[CLIENT] ProjectCard primaryImage:', primaryImage ? primaryImage.substring(0, 80) + '...' : 'none')
 
   const handleCardClick = () => {
     if (onClick) {
@@ -55,15 +49,10 @@ function ProjectCardComponent({ project, onClick, className }: ProjectCardProps)
       {/* Featured Badge */}
       {featured && (
         <div className="absolute top-4 right-4 z-10">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold shadow-lg"
-          >
+          <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-semibold shadow-lg">
             <FiStar className="w-3 h-3" />
             Featured
-          </motion.div>
+          </div>
         </div>
       )}
 
