@@ -85,7 +85,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const adminUid = process.env.NEXT_PUBLIC_ADMIN_UID
-    setIsAdmin(currentUser.uid === adminUid)
+    const isMatch = currentUser.uid === adminUid
+
+    // Debug logging - remove after fixing
+    console.log('[Auth] Admin check:', {
+      userUid: currentUser.uid,
+      adminUid,
+      isMatch
+    })
+
+    setIsAdmin(isMatch)
   }, [])
 
   /**
