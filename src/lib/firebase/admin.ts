@@ -60,6 +60,8 @@ const getAdminCredentials = (): ServiceAccount => {
     endsCorrectly: formattedPrivateKey.trim().endsWith('-----END PRIVATE KEY-----'),
     length: privateKey.length,
     formattedLength: formattedPrivateKey.length,
+    projectId,
+    clientEmail: clientEmail?.substring(0, 20) + '...',
   })
 
   return {
