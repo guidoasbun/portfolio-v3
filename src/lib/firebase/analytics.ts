@@ -22,6 +22,15 @@ export const initializeAnalytics = async (): Promise<Analytics | null> => {
     return null
   }
 
+  // TEMPORARY: Disable analytics on App Hosting due to CORS issues
+  // TODO: Re-enable after configuring API key restrictions in Google Cloud Console
+  const isAppHosting = typeof window !== 'undefined' &&
+    window.location.hostname.includes('.hosted.app')
+  if (isAppHosting) {
+    console.log('Analytics disabled on App Hosting domain (CORS configuration pending)')
+    return null
+  }
+
   // Return existing instance if already initialized
   if (isInitialized && analyticsInstance) {
     return analyticsInstance
