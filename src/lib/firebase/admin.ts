@@ -41,8 +41,24 @@ const getAdminCredentials = (): ServiceAccount => {
     )
   }
 
-  // Replace escaped newlines in private key
-  const formattedPrivateKey = privateKey.replace(/\\n/g, '\n')
+  // Handle private key format - could be:
+  // 1. Real newlines (from Secret Manager)
+  // 2. Escaped \n (from .env files)
+  // 3. JSON-escaped \\n
+  let formattedPrivateKey = privateKey
+
+  // If the key contains literal \n (escaped), replace with real newlines
+  if (privateKey.includes('\\n')) {
+    formattedPrivateKey = privateKey.replace(/\\n/g, '\n')
+  }
+
+  // Log key format for debugging (without exposing the key)
+  console.log('[Firebase Admin] Private key format check:', {
+    hasRealNewlines: privateKey.includes('\n') && !privateKey.includes('\\n'),
+    hasEscapedNewlines: privateKey.includes('\\n'),
+    startsCorrectly: privateKey.startsWith('-----BEGIN'),
+    length: privateKey.length,
+  })
 
   return {
     projectId,
