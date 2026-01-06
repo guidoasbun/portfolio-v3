@@ -78,17 +78,8 @@ export default function AdminLoginPage() {
     }
   }
 
-  // Show loading spinner while checking auth
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    )
-  }
-
-  // Don't show login form if already authenticated
-  if (user) {
+  // Don't show login form if already authenticated (and auth has finished loading)
+  if (!authLoading && user) {
     return null
   }
 
@@ -118,7 +109,7 @@ export default function AdminLoginPage() {
                 type="email"
                 placeholder="admin@example.com"
                 autoComplete="email"
-                disabled={isSubmitting}
+                disabled={authLoading || isSubmitting}
                 {...register('email')}
               />
             </FormField>
@@ -132,7 +123,7 @@ export default function AdminLoginPage() {
                 type="password"
                 placeholder="Enter your password"
                 autoComplete="current-password"
-                disabled={isSubmitting}
+                disabled={authLoading || isSubmitting}
                 {...register('password')}
               />
             </FormField>
@@ -146,10 +137,15 @@ export default function AdminLoginPage() {
             <Button
               type="submit"
               variant="primary"
-              disabled={isSubmitting}
+              disabled={authLoading || isSubmitting}
               className="w-full"
             >
-              {isSubmitting ? (
+              {authLoading ? (
+                <>
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  Loading...
+                </>
+              ) : isSubmitting ? (
                 <>
                   <LoadingSpinner size="sm" className="mr-2" />
                   Signing in...
