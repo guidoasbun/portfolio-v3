@@ -52,18 +52,6 @@ const getAdminCredentials = (): ServiceAccount => {
     formattedPrivateKey = privateKey.replace(/\\n/g, '\n')
   }
 
-  // Log key format for debugging (without exposing the key)
-  console.log('[Firebase Admin] Private key format check:', {
-    hasRealNewlines: privateKey.includes('\n') && !privateKey.includes('\\n'),
-    hasEscapedNewlines: privateKey.includes('\\n'),
-    startsCorrectly: formattedPrivateKey.startsWith('-----BEGIN'),
-    endsCorrectly: formattedPrivateKey.trim().endsWith('-----END PRIVATE KEY-----'),
-    length: privateKey.length,
-    formattedLength: formattedPrivateKey.length,
-    projectId,
-    clientEmail: clientEmail?.substring(0, 20) + '...',
-  })
-
   return {
     projectId,
     clientEmail,

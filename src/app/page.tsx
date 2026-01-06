@@ -28,34 +28,25 @@ export default async function Home() {
   // Fetch projects from Firebase
   let projects: Project[] = []
   try {
-    console.log('[page.tsx] Fetching projects...')
     projects = await getProjects()
-    console.log(`[page.tsx] Fetched ${projects.length} projects`)
   } catch (error) {
-    console.error('[page.tsx] Failed to fetch projects:', error)
-    // Projects will fall back to empty array or mockProjects in component
+    console.error('Failed to fetch projects:', error)
   }
 
   // Fetch experiences from Firebase
   let experiences: Experience[] = []
   try {
-    console.log('[page.tsx] Fetching experiences...')
     experiences = await getExperiences()
-    console.log(`[page.tsx] Fetched ${experiences.length} experiences`)
   } catch (error) {
-    console.error('[page.tsx] Failed to fetch experiences:', error)
-    // Experiences will fall back to empty array in component
+    console.error('Failed to fetch experiences:', error)
   }
 
   // Fetch skills from Firebase
   let skills: Skill[] = []
   try {
-    console.log('[page.tsx] Fetching skills...')
     skills = await getSkills()
-    console.log(`[page.tsx] Fetched ${skills.length} skills`)
   } catch (error) {
-    console.error('[page.tsx] Failed to fetch skills:', error)
-    // Skills will fall back to empty array in component
+    console.error('Failed to fetch skills:', error)
   }
 
   return (
