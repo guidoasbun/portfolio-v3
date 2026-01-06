@@ -1,0 +1,140 @@
+# Firebase App Hosting Configuration
+# https://firebase.google.com/docs/app-hosting/configure
+
+# Cloud Run service configuration
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  maxInstances: 10
+  minInstances: 0
+  concurrency: 80
+
+# Environment variables and secrets
+env:
+  # ============================================
+  # Client-side Firebase Configuration (Public)
+  # ============================================
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    secret: NEXT_PUBLIC_FIREBASE_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    secret: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    secret: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    secret: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    secret: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    secret: NEXT_PUBLIC_FIREBASE_APP_ID
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    secret: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # ============================================
+  # Admin Configuration (Public)
+  # ============================================
+  - variable: NEXT_PUBLIC_ADMIN_UID
+    secret: NEXT_PUBLIC_ADMIN_UID
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://guido-asbun.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # ============================================
+  # reCAPTCHA Configuration (Public Site Key)
+  # ============================================
+  - variable: NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+    secret: NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
+  # ============================================
+  # Server-side Firebase Admin SDK (Secret)
+  # ============================================
+  - variable: FIREBASE_ADMIN_PROJECT_ID
+    secret: FIREBASE_ADMIN_PROJECT_ID
+    availability:
+      - RUNTIME
+
+  - variable: FIREBASE_ADMIN_CLIENT_EMAIL
+    secret: FIREBASE_ADMIN_CLIENT_EMAIL
+    availability:
+      - RUNTIME
+
+  - variable: FIREBASE_ADMIN_PRIVATE_KEY
+    secret: FIREBASE_ADMIN_PRIVATE_KEY
+    availability:
+      - RUNTIME
+
+  # ============================================
+  # Email Configuration (Secret)
+  # ============================================
+  - variable: EMAIL_HOST
+    secret: EMAIL_HOST
+    availability:
+      - RUNTIME
+
+  - variable: EMAIL_PORT
+    secret: EMAIL_PORT
+    availability:
+      - RUNTIME
+
+  - variable: EMAIL_SECURE
+    secret: EMAIL_SECURE
+    availability:
+      - RUNTIME
+
+  - variable: EMAIL_USER
+    secret: EMAIL_USER
+    availability:
+      - RUNTIME
+
+  - variable: EMAIL_PASSWORD
+    secret: EMAIL_PASSWORD
+    availability:
+      - RUNTIME
+
+  - variable: ADMIN_EMAIL
+    secret: ADMIN_EMAIL
+    availability:
+      - RUNTIME
+
+  # ============================================
+  # reCAPTCHA Secret Key (Server-side)
+  # ============================================
+  - variable: RECAPTCHA_SECRET_KEY
+    secret: RECAPTCHA_SECRET_KEY
+    availability:
+      - RUNTIME
