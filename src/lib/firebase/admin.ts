@@ -56,8 +56,10 @@ const getAdminCredentials = (): ServiceAccount => {
   console.log('[Firebase Admin] Private key format check:', {
     hasRealNewlines: privateKey.includes('\n') && !privateKey.includes('\\n'),
     hasEscapedNewlines: privateKey.includes('\\n'),
-    startsCorrectly: privateKey.startsWith('-----BEGIN'),
+    startsCorrectly: formattedPrivateKey.startsWith('-----BEGIN'),
+    endsCorrectly: formattedPrivateKey.trim().endsWith('-----END PRIVATE KEY-----'),
     length: privateKey.length,
+    formattedLength: formattedPrivateKey.length,
   })
 
   return {
