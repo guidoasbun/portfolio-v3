@@ -63,7 +63,7 @@ export function Footer() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent mb-3 sm:mb-4">
+            <h3 className="text-xl sm:text-xl font-bold text-[#048f58] bg-clip-text mb-3 sm:mb-4">
               {APP_CONFIG.name}
             </h3>
             <p className="text-xs sm:text-sm text-foreground/60 mb-3 sm:mb-4">
@@ -145,7 +145,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-foreground/10 pt-6 sm:pt-8">
+        {/* <div className="border-t border-foreground/10 pt-6 sm:pt-8">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 gap-2">
             <p className="text-xs sm:text-sm text-foreground/60 text-center sm:text-left">
               &copy; {currentYear} {APP_CONFIG.name}. All rights reserved.
@@ -156,7 +156,7 @@ export function Footer() {
               using Next.js & Three.js
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

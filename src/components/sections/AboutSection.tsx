@@ -207,7 +207,7 @@ export function AboutSection({
             variants={itemVariants}
             className="text-center mb-8 sm:mb-10 lg:mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 text-[#048f58] bg-clip-text">
               About Me
             </h2>
             <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
@@ -224,9 +224,12 @@ export function AboutSection({
                   Introduction
                 </h3>
                 <div className="text-sm sm:text-base text-foreground/80 leading-relaxed space-y-3 sm:space-y-4">
-                  {bio.split("\n\n").filter(p => p.trim()).map((paragraph, index) => (
-                    <p key={index}>{paragraph.trim()}</p>
-                  ))}
+                  {bio
+                    .split("\n\n")
+                    .filter(p => p.trim())
+                    .map((paragraph, index) => (
+                      <p key={index}>{paragraph.trim()}</p>
+                    ))}
                 </div>
 
                 {/* Resume Buttons */}
@@ -244,7 +247,11 @@ export function AboutSection({
                     </span>
                   </Button>
                   <Link href="/resume">
-                    <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="w-full sm:w-auto"
+                    >
                       <FiEye className="mr-2" />
                       View Resume
                     </Button>

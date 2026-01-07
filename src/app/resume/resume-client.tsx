@@ -10,13 +10,15 @@ import {
   FiBriefcase,
   FiBook,
   FiCode,
-  FiUser,
   FiMail,
   FiPhone,
   FiMapPin,
   FiLinkedin,
   FiGithub,
   FiGlobe,
+  FiFolder,
+  FiAward,
+  FiStar,
 } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useAnalytics } from "@/hooks/useAnalytics";
@@ -44,79 +46,136 @@ interface Skill {
   items: string[];
 }
 
-// Mock data - will be replaced with real data from backend
+interface Project {
+  name: string;
+  technologies: string;
+  description: string[];
+}
+
+// Resume data from Guido Asbun's actual resume
 const mockResumeData = {
   header: {
     name: "Guido Asbun",
-    title: "Full Stack Developer",
+    title: "Software Engineer",
     email: "guido@asbun.io",
-    phone: "949-570-4195",
+    phone: "949-239-4144",
     location: "California, USA",
-    linkedin: "linkedin.com/in/guidoasbun/",
+    linkedin: "linkedin.com/in/guidoasbun",
     github: "github.com/guidoasbun",
-    website: "guido@asbun.io",
+    website: "guido-asbun.com",
   },
   summary:
-    "Passionate Full Stack Developer with 3+ years of experience building modern web applications. Specialized in React, Next.js, and Node.js with a strong focus on user experience and performance optimization.",
+    "Software engineer with full-stack and DevOps experience, recently graduated with a B.S. in Computer Science (Cybersecurity concentration). Built production applications using Next.js, FastAPI, and enterprise AWS infrastructure with Terraform IaC. Former Axios intern with proven ability to ship features that improve performance. U.S. Navy veteran with strong leadership and problem-solving skills.",
   experience: [
     {
-      title: "Senior Full Stack Developer",
-      company: "Tech Company",
-      location: "City, State",
-      date: "Jan 2023 - Present",
+      title: "Software Engineering Intern",
+      company: "Axios Media",
+      location: "Remote",
+      date: "Jun – Aug 2022",
       description: [
-        "Led development of scalable web applications using Next.js and React",
-        "Implemented CI/CD pipelines reducing deployment time by 40%",
-        "Mentored junior developers and conducted code reviews",
+        "Developed production front-end features using React, Next.js, and TypeScript, reducing page load times by 15%",
+        "Utilized Docker and CircleCI for CI/CD pipelines, improving development workflow efficiency",
+        "Collaborated cross-functionally using GitHub, Jira, and Agile methodologies",
       ],
-      technologies: ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL"],
+      technologies: ["React", "Next.js", "TypeScript", "Docker", "CircleCI"],
     },
     {
-      title: "Full Stack Developer",
-      company: "Startup Inc",
-      location: "City, State",
-      date: "Jun 2021 - Dec 2022",
+      title: "Software Engineering Pre-Intern",
+      company: "Snap Engineering Academy",
+      location: "Remote",
+      date: "Jun – Aug 2021",
       description: [
-        "Built and maintained RESTful APIs serving 10K+ daily users",
-        "Developed responsive UI components with React and Tailwind CSS",
-        "Optimized database queries improving performance by 60%",
+        "Built full-stack mobile app with React Native and Firebase, integrating map APIs for geolocation features",
+        "Implemented AR features and ML frameworks (P5.js, ML5.js) for enhanced user experiences",
+        "Led team in developing innovative AR applications, demonstrating technical leadership",
       ],
-      technologies: ["React", "Node.js", "MongoDB", "AWS"],
+      technologies: ["React Native", "Firebase", "P5.js", "ML5.js"],
     },
   ] as ResumeSection[],
   education: [
     {
-      degree: "Bachelor of Science in Computer Science",
-      institution: "University Name",
-      location: "City, State",
-      date: "2017 - 2021",
-      gpa: "3.8/4.0",
+      degree: "B.S. Computer Science, Cybersecurity Concentration",
+      institution: "California State University, Fullerton",
+      location: "Fullerton, CA",
+      date: "Dec 2025",
+    },
+    {
+      degree: "A.S. Computer Science",
+      institution: "Santa Ana College",
+      location: "Santa Ana, CA",
+      date: "Dec 2023",
     },
   ] as Education[],
   skills: [
     {
-      category: "Frontend",
+      category: "Languages",
+      items: ["TypeScript", "JavaScript", "Python", "Java", "C++", "Swift"],
+    },
+    {
+      category: "Frameworks",
       items: [
         "React",
         "Next.js",
-        "TypeScript",
+        "FastAPI",
+        "Node.js",
+        "SwiftUI",
+        "Spring Boot",
         "Tailwind CSS",
-        "Framer Motion",
       ],
     },
     {
-      category: "Backend",
-      items: ["Node.js", "Express", "Python", "Django", "REST APIs"],
+      category: "Cloud & DevOps",
+      items: [
+        "AWS (ECS, RDS, S3, Cognito, CloudFront, WAF)",
+        "Terraform",
+        "Docker",
+        "Kubernetes",
+        "CI/CD (GitHub Actions, CircleCI)",
+        "Linux",
+      ],
     },
     {
-      category: "Database",
-      items: ["PostgreSQL", "MongoDB", "Redis", "Firebase"],
-    },
-    {
-      category: "Tools & Others",
-      items: ["Git", "Docker", "AWS", "CI/CD", "Agile/Scrum"],
+      category: "Databases",
+      items: ["PostgreSQL", "MongoDB", "DynamoDB", "Redis"],
     },
   ] as Skill[],
+  projects: [
+    {
+      name: "Party-Time Event Platform",
+      technologies: "Next.js 15, TypeScript, FastAPI, PostgreSQL, Redis, AWS, Terraform",
+      description: [
+        "Developed full-stack SaaS application for event planning with venue discovery, guest management, and budget tracking",
+        "Deployed enterprise AWS infrastructure (ECS, RDS, CloudFront, WAF) with Terraform IaC and CI/CD pipelines",
+      ],
+    },
+    {
+      name: "AI-Powered Recipe Generator",
+      technologies: "Next.js, OpenAI API, AWS Cognito, DynamoDB, S3, Terraform",
+      description: [
+        "Built full-stack app with GPT-3.5-turbo and DALL-E 3 integration for AI-generated recipes and images",
+        "Implemented Google OAuth authentication and deployed on ECS Fargate using infrastructure as code",
+      ],
+    },
+    {
+      name: "iOS Recipe Generator",
+      technologies: "SwiftUI, iOS 17+, OpenAI API, MVVM, Combine",
+      description: [
+        "Developed native iOS app with AI-powered recipe generation using Swift async/await and TaskGroup",
+      ],
+    },
+    {
+      name: "Java Compiler",
+      technologies: "Java, GPU Cloud Clusters",
+      description: [
+        "Built and tested compiler leveraging GPU cloud clusters for efficient parallel processing",
+      ],
+    },
+  ] as Project[],
+  certifications: ["CompTIA Security+ — Certified"],
+  additional: [
+    "U.S. Navy Veteran — Developed leadership, discipline, and problem-solving skills in high-pressure environments",
+    "Code 2040 — Mentored and reviewed prospective fellows' applications to promote diversity in technology",
+  ],
 };
 
 export default function ResumePageClient() {
@@ -235,7 +294,7 @@ export default function ResumePageClient() {
           <motion.div variants={itemVariants} className="mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
-                <h1 className="text-4xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
+                <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-[#048f58] bg-clip-text">
                   Resume
                 </h1>
                 <p className="text-foreground/70">
@@ -343,15 +402,47 @@ export default function ResumePageClient() {
                 </div>
               </div>
 
-              {/* Summary */}
+              {/* Education & Certification */}
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-foreground mb-3 flex items-center gap-2">
-                  <FiUser className="text-blue-500" />
-                  Professional Summary
+                <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                  <FiBook className="text-blue-500" />
+                  Education & Certification
                 </h2>
-                <p className="text-foreground/80 leading-relaxed">
-                  {mockResumeData.summary}
-                </p>
+                {/* Certifications */}
+                {mockResumeData.certifications.map((cert, index) => (
+                  <div key={index} className="flex items-center gap-2 mb-3">
+                    <FiAward className="w-4 h-4 text-blue-500" />
+                    <span className="text-foreground/80">{cert}</span>
+                  </div>
+                ))}
+                {/* Education */}
+                <div className="space-y-4 mt-4">
+                  {mockResumeData.education.map((edu, index) => (
+                    <div
+                      key={index}
+                      className="pb-4 border-b border-foreground/10 last:border-0"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                        <div>
+                          <h3 className="text-lg font-semibold text-foreground">
+                            {edu.degree}
+                          </h3>
+                          <p className="text-foreground/70">
+                            {edu.institution} · {edu.location}
+                          </p>
+                          {edu.gpa && (
+                            <p className="text-sm text-foreground/60 mt-1">
+                              GPA: {edu.gpa}
+                            </p>
+                          )}
+                        </div>
+                        <p className="text-sm text-foreground/60 mt-1 sm:mt-0">
+                          {edu.date}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Experience */}
@@ -403,46 +494,43 @@ export default function ResumePageClient() {
                 </div>
               </div>
 
-              {/* Education */}
+              {/* Projects */}
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <FiBook className="text-blue-500" />
-                  Education
+                  <FiFolder className="text-blue-500" />
+                  Projects
                 </h2>
-                <div className="space-y-4">
-                  {mockResumeData.education.map((edu, index) => (
+                <div className="space-y-6">
+                  {mockResumeData.projects.map((project, index) => (
                     <div
                       key={index}
-                      className="pb-4 border-b border-foreground/10 last:border-0"
+                      className="pb-6 border-b border-foreground/10 last:border-0"
                     >
-                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
-                        <div>
-                          <h3 className="text-lg font-semibold text-foreground">
-                            {edu.degree}
-                          </h3>
-                          <p className="text-foreground/70">
-                            {edu.institution} · {edu.location}
-                          </p>
-                          {edu.gpa && (
-                            <p className="text-sm text-foreground/60 mt-1">
-                              GPA: {edu.gpa}
-                            </p>
-                          )}
-                        </div>
-                        <p className="text-sm text-foreground/60 mt-1 sm:mt-0">
-                          {edu.date}
+                      <div className="mb-2">
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm text-foreground/60">
+                          {project.technologies}
                         </p>
                       </div>
+                      <ul className="list-disc list-inside space-y-1 text-foreground/80">
+                        {project.description.map((item, idx) => (
+                          <li key={idx} className="leading-relaxed">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Skills */}
-              <div>
+              {/* Technical Skills */}
+              <div className="mb-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
                   <FiCode className="text-blue-500" />
-                  Skills
+                  Technical Skills
                 </h2>
                 <div className="space-y-4">
                   {mockResumeData.skills.map((skillGroup, index) => (
@@ -463,6 +551,25 @@ export default function ResumePageClient() {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Additional */}
+              <div>
+                <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                  <FiStar className="text-blue-500" />
+                  Additional
+                </h2>
+                <ul className="space-y-2">
+                  {mockResumeData.additional.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start gap-2 text-foreground/80"
+                    >
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </GlassCard>
           </motion.div>

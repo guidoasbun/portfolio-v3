@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import React, { useState, useMemo, useEffect } from 'react'
-import { motion, type Variants } from 'framer-motion'
-import { SkillCard } from '@/components/ui/SkillCard'
-import type { Skill, SkillCategory } from '@/types'
-import { cn } from '@/lib/utils'
+import React, { useState, useMemo, useEffect } from "react";
+import { motion, type Variants } from "framer-motion";
+import { SkillCard } from "@/components/ui/SkillCard";
+import type { Skill, SkillCategory } from "@/types";
+import { cn } from "@/lib/utils";
 import {
   FiCode,
   FiServer,
@@ -12,81 +12,81 @@ import {
   FiTool,
   FiLayout,
   FiGrid,
-} from 'react-icons/fi'
+} from "react-icons/fi";
 
 interface SkillsSectionProps {
-  skills?: Skill[]
+  skills?: Skill[];
 }
 
-type FilterType = 'all' | SkillCategory
+type FilterType = "all" | SkillCategory;
 
 interface CategoryFilter {
-  label: string
-  value: FilterType
-  icon: React.ComponentType<{ className?: string }>
-  description: string
+  label: string;
+  value: FilterType;
+  icon: React.ComponentType<{ className?: string }>;
+  description: string;
 }
 
 const categories: CategoryFilter[] = [
   {
-    label: 'All',
-    value: 'all',
+    label: "All",
+    value: "all",
     icon: FiGrid,
-    description: 'All skills',
+    description: "All skills",
   },
   {
-    label: 'Frontend',
-    value: 'frontend',
+    label: "Frontend",
+    value: "frontend",
     icon: FiCode,
-    description: 'UI & client-side',
+    description: "UI & client-side",
   },
   {
-    label: 'Backend',
-    value: 'backend',
+    label: "Backend",
+    value: "backend",
     icon: FiServer,
-    description: 'Server & APIs',
+    description: "Server & APIs",
   },
   {
-    label: 'Database',
-    value: 'database',
+    label: "Database",
+    value: "database",
     icon: FiDatabase,
-    description: 'Data management',
+    description: "Data management",
   },
   {
-    label: 'Tools',
-    value: 'tools',
+    label: "Tools",
+    value: "tools",
     icon: FiTool,
-    description: 'Dev tools & platforms',
+    description: "Dev tools & platforms",
   },
   {
-    label: 'Design',
-    value: 'design',
+    label: "Design",
+    value: "design",
     icon: FiLayout,
-    description: 'UI/UX design',
+    description: "UI/UX design",
   },
-]
+];
 
 export function SkillsSection({ skills = [] }: SkillsSectionProps) {
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all')
-  const [isMounted, setIsMounted] = useState(false)
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   // Filter skills by category
   const filteredSkills = useMemo(() => {
-    if (activeFilter === 'all') {
-      return skills
+    if (activeFilter === "all") {
+      return skills;
     }
-    return skills.filter((skill) => skill.category === activeFilter)
-  }, [activeFilter, skills])
+    return skills.filter(skill => skill.category === activeFilter);
+  }, [activeFilter, skills]);
 
   // Get count for each category
   const getCategoryCount = (filter: FilterType): number => {
-    if (filter === 'all') return skills.length
-    return skills.filter((skill) => skill.category === filter).length
-  }
+    if (filter === "all") return skills.length;
+    return skills.filter(skill => skill.category === filter).length;
+  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -97,7 +97,7 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
         delayChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -108,7 +108,7 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
         duration: 0.5,
       },
     },
-  }
+  };
 
   return (
     <section id="skills" className="relative py-12 sm:py-20 lg:py-32">
@@ -116,72 +116,80 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
           className="max-w-7xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#00274C] to-[#E17000] bg-clip-text text-transparent">
+          <motion.div
+            variants={itemVariants}
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 text-[#048f58] bg-clip-text">
               Skills & Technologies
             </h2>
             <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">
-              Technologies and tools I work with to build modern web applications
+              Technologies and tools I work with to build modern web
+              applications
             </p>
           </motion.div>
 
           {/* Filter Tabs */}
           {isMounted && (
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 lg:mb-12 px-2 sm:px-0">
-              {categories.map((category) => {
-              const count = getCategoryCount(category.value)
-              const isActive = activeFilter === category.value
-              const Icon = category.icon
+              {categories.map(category => {
+                const count = getCategoryCount(category.value);
+                const isActive = activeFilter === category.value;
+                const Icon = category.icon;
 
-              // Don't show category if there are no items in it (except 'all')
-              if (count === 0 && category.value !== 'all') {
-                return null
-              }
+                // Don't show category if there are no items in it (except 'all')
+                if (count === 0 && category.value !== "all") {
+                  return null;
+                }
 
-              return (
-                <button
-                  key={category.value}
-                  onClick={() => setActiveFilter(category.value)}
-                  className={cn(
-                    'relative px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300',
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background',
-                    'min-h-[44px] text-sm sm:text-base',
-                    isActive
-                      ? 'glass-heavy text-foreground shadow-lg scale-105'
-                      : 'glass-light text-foreground/70 hover:text-foreground hover:glass-medium'
-                  )}
-                  aria-label={`Filter by ${category.label}`}
-                  aria-pressed={isActive}
-                  title={category.description}
-                >
-                  <span className="flex items-center gap-1.5 sm:gap-2">
-                    <Icon className="w-4 h-4" />
-                    {category.label}
-                    <span
-                      className={cn(
-                        'text-xs px-1.5 sm:px-2 py-0.5 rounded-full',
-                        isActive
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-foreground/10 text-foreground/60'
-                      )}
-                    >
-                      {count}
+                return (
+                  <button
+                    key={category.value}
+                    onClick={() => setActiveFilter(category.value)}
+                    className={cn(
+                      "relative px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300",
+                      "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background",
+                      "min-h-[44px] text-sm sm:text-base",
+                      isActive
+                        ? "glass-heavy text-foreground shadow-lg scale-105"
+                        : "glass-light text-foreground/70 hover:text-foreground hover:glass-medium"
+                    )}
+                    aria-label={`Filter by ${category.label}`}
+                    aria-pressed={isActive}
+                    title={category.description}
+                  >
+                    <span className="flex items-center gap-1.5 sm:gap-2">
+                      <Icon className="w-4 h-4" />
+                      {category.label}
+                      <span
+                        className={cn(
+                          "text-xs px-1.5 sm:px-2 py-0.5 rounded-full",
+                          isActive
+                            ? "bg-blue-500 text-white"
+                            : "bg-foreground/10 text-foreground/60"
+                        )}
+                      >
+                        {count}
+                      </span>
                     </span>
-                  </span>
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeSkillTab"
-                      className="absolute inset-0 border-2 border-blue-500 rounded-lg -z-10"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </button>
-              )
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeSkillTab"
+                        className="absolute inset-0 border-2 border-blue-500 rounded-lg -z-10"
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                  </button>
+                );
               })}
             </div>
           )}
@@ -219,12 +227,15 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
               variants={itemVariants}
               className="text-center text-sm text-foreground/60"
             >
-              Showing {filteredSkills.length}{' '}
-              {filteredSkills.length === 1 ? 'skill' : 'skills'}
-              {activeFilter !== 'all' && (
+              Showing {filteredSkills.length}{" "}
+              {filteredSkills.length === 1 ? "skill" : "skills"}
+              {activeFilter !== "all" && (
                 <>
-                  {' '}
-                  in {categories.find((c) => c.value === activeFilter)?.label.toLowerCase()}
+                  {" "}
+                  in{" "}
+                  {categories
+                    .find(c => c.value === activeFilter)
+                    ?.label.toLowerCase()}
                 </>
               )}
             </motion.div>
@@ -232,5 +243,5 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
