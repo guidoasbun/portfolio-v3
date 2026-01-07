@@ -6,6 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { getProject, updateProject, deleteProject } from '@/lib/services/projects.service.admin'
 import { projectFormSchema } from '@/lib/validations'
 import type { ApiResponse, Project } from '@/types'
@@ -105,6 +106,9 @@ export async function PUT(
     // Update the project
     await updateProject(id, updateData)
 
+    // Revalidate the home page to show updated data
+    revalidatePath('/')
+
     return NextResponse.json({
       success: true,
       data: null,
@@ -169,6 +173,9 @@ export async function DELETE(
 
     // Delete the project
     await deleteProject(id)
+
+    // Revalidate the home page to reflect deletion
+    revalidatePath('/')
 
     return NextResponse.json({
       success: true,
