@@ -10,6 +10,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   featured: boolean;
+  order: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -82,7 +83,7 @@ export interface ContactFormData {
   message: string;
 }
 
-export interface ProjectFormData extends Omit<Project, "id" | "createdAt" | "updatedAt"> {
+export interface ProjectFormData extends Omit<Project, "id" | "createdAt" | "updatedAt" | "order"> {
   id?: string;
 }
 

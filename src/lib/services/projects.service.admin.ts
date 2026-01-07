@@ -13,10 +13,11 @@ import {
   addDocument,
   updateDocument,
   deleteDocument,
+  batchUpdateDocuments,
 } from '@/lib/firebase/db-admin'
 
 /**
- * Get all projects sorted by creation date (newest first)
+ * Get all projects sorted by order field (ascending), then by creation date (newest first)
  *
  * @returns Promise resolving to array of all projects
  * @throws {DatabaseError} If database operation fails
@@ -27,8 +28,16 @@ import {
  */
 export const getProjects = async (): Promise<Project[]> => {
   const projects = await getCollection<Project>(COLLECTIONS.PROJECTS)
-  // Sort by creation date, newest first
+  // Sort by order field (ascending), then by creation date (newest first) as fallback
   return projects.sort((a, b) => {
+    // If both have order field, sort by order
+    if (typeof a.order === 'number' && typeof b.order === 'number') {
+      return a.order - b.order
+    }
+    // If only one has order, prioritize the one with order
+    if (typeof a.order === 'number') return -1
+    if (typeof b.order === 'number') return 1
+    // Fallback to creation date (newest first)
     const aDate = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt)
     const bDate = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt)
     return bDate.getTime() - aDate.getTime()
@@ -107,6 +116,12 @@ export const getProjectsByCategory = async (category: string): Promise<Project[]
  * })
  */
 export const addProject = async (data: ProjectFormData): Promise<string> => {
+  // Get current max order to place new project at the end
+  const existingProjects = await getProjects()
+  const maxOrder = existingProjects.reduce((max, p) => {
+    return typeof p.order === 'number' ? Math.max(max, p.order) : max
+  }, -1)
+
   const projectData = {
     title: data.title,
     description: data.description,
@@ -117,6 +132,7 @@ export const addProject = async (data: ProjectFormData): Promise<string> => {
     liveUrl: data.liveUrl, // Will be filtered out if undefined
     githubUrl: data.githubUrl, // Will be filtered out if undefined
     featured: data.featured,
+    order: maxOrder + 1, // Place new project at the end
   }
 
   const id = await addDocument(COLLECTIONS.PROJECTS, projectData)
@@ -181,4 +197,24 @@ export const searchProjects = async (searchTerm: string): Promise<Project[]> => 
     project.description.toLowerCase().includes(lowerSearch) ||
     project.technologies.some(tech => tech.toLowerCase().includes(lowerSearch))
   )
+}
+
+/**
+ * Reorder projects by updating their order field
+ *
+ * @param projectIds - Array of project IDs in the desired order
+ * @returns Promise resolving when reorder completes
+ * @throws {DatabaseError} If database operation fails
+ *
+ * @example
+ * await reorderProjects(['id1', 'id2', 'id3'])
+ * // id1 will have order: 0, id2 will have order: 1, etc.
+ */
+export const reorderProjects = async (projectIds: string[]): Promise<void> => {
+  const updates = projectIds.map((id, index) => ({
+    id,
+    data: { order: index },
+  }))
+
+  await batchUpdateDocuments<Project>(COLLECTIONS.PROJECTS, updates)
 }

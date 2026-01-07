@@ -69,6 +69,12 @@ export const getProjectsByCategory = async (category: string): Promise<Project[]
  * Add a new project
  */
 export const addProject = async (data: ProjectFormData): Promise<string> => {
+  // Get current max order to place new project at the end
+  const existingProjects = await getProjects()
+  const maxOrder = existingProjects.reduce((max, p) => {
+    return typeof p.order === 'number' ? Math.max(max, p.order) : max
+  }, -1)
+
   const projectData: Omit<Project, 'id'> = {
     title: data.title,
     description: data.description,
@@ -79,6 +85,7 @@ export const addProject = async (data: ProjectFormData): Promise<string> => {
     liveUrl: data.liveUrl,
     githubUrl: data.githubUrl,
     featured: data.featured,
+    order: maxOrder + 1,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
