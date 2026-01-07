@@ -19,7 +19,8 @@ import { ConfirmModal } from '@/components/ui/ConfirmModal'
 import { Pagination } from '@/components/ui/Pagination'
 import { useModal } from '@/hooks/useModal'
 import { useFilterPersistence } from '@/hooks/useFilterPersistence'
-import { FiPlus, FiAlertCircle, FiCheckCircle, FiSearch, FiX } from 'react-icons/fi'
+import { FiPlus, FiAlertCircle, FiCheckCircle, FiSearch, FiX, FiMove } from 'react-icons/fi'
+import { SortableProjectList } from '@/components/admin/SortableProjectList'
 import type { Project } from '@/types'
 
 type SortOption = 'date-desc' | 'date-asc' | 'title-asc' | 'title-desc' | 'featured'
@@ -41,6 +42,7 @@ export default function AdminProjectsPage() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [isReorderMode, setIsReorderMode] = useState(false)
 
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useModal()
 
@@ -192,6 +194,32 @@ export default function AdminProjectsPage() {
     }
   }
 
+  // Handle reorder
+  const handleReorder = async (projectIds: string[]) => {
+    try {
+      setError(null)
+      const response = await fetch('/api/projects/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectIds }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to reorder projects')
+      }
+
+      setSuccessMessage('Projects reordered successfully')
+      setTimeout(() => setSuccessMessage(null), 5000)
+
+      // Refresh projects and exit reorder mode
+      await fetchProjects()
+      setIsReorderMode(false)
+    } catch (err) {
+      console.error('Error reordering projects:', err)
+      setError(err instanceof Error ? err.message : 'Failed to reorder projects')
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -204,12 +232,22 @@ export default function AdminProjectsPage() {
             Manage your portfolio projects
           </p>
         </div>
-        <Link href="/admin/projects/new">
-          <Button>
-            <FiPlus className="mr-2" />
-            Create Project
+        <div className="flex gap-3">
+          <Button
+            variant={isReorderMode ? 'primary' : 'secondary'}
+            onClick={() => setIsReorderMode(!isReorderMode)}
+            disabled={loading || projects.length < 2}
+          >
+            <FiMove className="mr-2" />
+            {isReorderMode ? 'Exit Reorder' : 'Reorder'}
           </Button>
-        </Link>
+          <Link href="/admin/projects/new">
+            <Button>
+              <FiPlus className="mr-2" />
+              Create Project
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Success Message */}
@@ -235,31 +273,33 @@ export default function AdminProjectsPage() {
         </GlassCard>
       )}
 
-      {/* Search */}
-      <GlassCard>
-        <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search by title, description, or technology..."
-            value={filters.search}
-            onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))}
-            className="pl-10 pr-10"
-          />
-          {filters.search && (
-            <button
-              onClick={() => setFilters((prev) => ({ ...prev, search: '', page: 1 }))}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Clear search"
-            >
-              <FiX size={18} />
-            </button>
-          )}
-        </div>
-      </GlassCard>
+      {/* Search - hidden in reorder mode */}
+      {!isReorderMode && (
+        <GlassCard>
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search by title, description, or technology..."
+              value={filters.search}
+              onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }))}
+              className="pl-10 pr-10"
+            />
+            {filters.search && (
+              <button
+                onClick={() => setFilters((prev) => ({ ...prev, search: '', page: 1 }))}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear search"
+              >
+                <FiX size={18} />
+              </button>
+            )}
+          </div>
+        </GlassCard>
+      )}
 
-      {/* Filters and Sort */}
-      <GlassCard>
+      {/* Filters and Sort - hidden in reorder mode */}
+      {!isReorderMode && <GlassCard>
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Category Filter */}
           <div className="flex items-center gap-3 flex-wrap">
@@ -317,26 +357,38 @@ export default function AdminProjectsPage() {
             </Select>
           </div>
         </div>
-      </GlassCard>
+      </GlassCard>}
 
-      {/* Projects Table */}
-      <ProjectsTable
-        projects={paginatedProjects}
-        onDelete={handleDeleteClick}
-        loading={loading}
-      />
-
-      {/* Pagination */}
-      {!loading && filteredAndSortedProjects.length > ITEMS_PER_PAGE && (
+      {/* Projects Table or Reorder Mode */}
+      {isReorderMode ? (
         <GlassCard>
-          <Pagination
-            currentPage={filters.page}
-            totalPages={totalPages}
-            totalItems={filteredAndSortedProjects.length}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+          <SortableProjectList
+            projects={projects}
+            onReorder={handleReorder}
+            onCancel={() => setIsReorderMode(false)}
           />
         </GlassCard>
+      ) : (
+        <>
+          <ProjectsTable
+            projects={paginatedProjects}
+            onDelete={handleDeleteClick}
+            loading={loading}
+          />
+
+          {/* Pagination */}
+          {!loading && filteredAndSortedProjects.length > ITEMS_PER_PAGE && (
+            <GlassCard>
+              <Pagination
+                currentPage={filters.page}
+                totalPages={totalPages}
+                totalItems={filteredAndSortedProjects.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+              />
+            </GlassCard>
+          )}
+        </>
       )}
 
       {/* Delete Confirmation Modal */}
