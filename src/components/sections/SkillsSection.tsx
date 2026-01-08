@@ -2,9 +2,11 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
+import Image from "next/image";
 import { SkillCard } from "@/components/ui/SkillCard";
 import type { Skill, SkillCategory } from "@/types";
 import { cn } from "@/lib/utils";
+import { FiExternalLink } from "react-icons/fi";
 import {
   FiCode,
   FiServer,
@@ -26,6 +28,17 @@ interface CategoryFilter {
   icon: React.ComponentType<{ className?: string }>;
   description: string;
 }
+
+const certifications = [
+  {
+    id: "comptia-secplus",
+    name: "CompTIA Security+",
+    issuer: "CompTIA",
+    image: "/certifications/comptia-secplus.png",
+    credentialUrl:
+      "https://www.credly.com/badges/1ad2a200-c83f-4da2-9e17-8f7ec0d375a9/public_url",
+  },
+];
 
 const categories: CategoryFilter[] = [
   {
@@ -132,6 +145,47 @@ export function SkillsSection({ skills = [] }: SkillsSectionProps) {
               Technologies and tools I work with to build modern web
               applications
             </p>
+          </motion.div>
+
+          {/* Certifications */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-wrap justify-center gap-4 mb-8 sm:mb-10 lg:mb-12"
+          >
+            {certifications.map(cert => (
+              <a
+                key={cert.id}
+                href={cert.credentialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group glass-light hover:glass-medium rounded-xl p-4 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background"
+                title={`Verify ${cert.name} certification`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
+                    <Image
+                      src={cert.image}
+                      alt={`${cert.name} certification badge`}
+                      fill
+                      className="object-contain"
+                      sizes="80px"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm text-foreground/60">
+                      {cert.issuer}
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      {cert.name}
+                    </span>
+                    <span className="text-xs text-blue-500 flex items-center gap-1 group-hover:underline">
+                      Verify credential
+                      <FiExternalLink className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
           </motion.div>
 
           {/* Filter Tabs */}
