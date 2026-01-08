@@ -72,7 +72,10 @@ export function ProjectDetailsModal({
       <ModalBody>
         {/* Image Carousel */}
         {images.length > 0 && (
-          <div className="relative w-full h-64 sm:h-80 rounded-lg overflow-hidden mb-6">
+          <div className={cn(
+            "relative w-full h-64 sm:h-80 rounded-lg overflow-hidden mb-6",
+            category === 'mobile' && "bg-foreground/5"
+          )}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentImageIndex}
@@ -86,7 +89,7 @@ export function ProjectDetailsModal({
                   src={images[currentImageIndex]}
                   alt={`${title} - Image ${currentImageIndex + 1}`}
                   fill
-                  className="object-cover"
+                  className={category === 'mobile' ? 'object-contain' : 'object-cover'}
                   sizes="(max-width: 768px) 100vw, 800px"
                   priority={currentImageIndex === 0}
                 />

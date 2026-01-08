@@ -6,6 +6,7 @@
 
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { getProjects, addProject, getFeaturedProjects, getProjectsByCategory } from '@/lib/services/projects.service.admin'
 import { projectFormSchema } from '@/lib/validations'
 import type { ApiResponse, Project } from '@/types'
@@ -81,6 +82,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
 
       // Add the project to the database
       const id = await addProject(projectData)
+
+      // Revalidate the home page to show new project
+      revalidatePath('/')
 
       return NextResponse.json({
         success: true,
